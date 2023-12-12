@@ -1,5 +1,5 @@
 import {connect,connection} from "mongoose";
-//conection db 
+//conection db
 
 const conn = {
     isConnected:false
