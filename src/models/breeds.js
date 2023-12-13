@@ -1,5 +1,5 @@
 //agregar mas informacion de la raza,
-import { Schema,model } from "mongoose";
+import { Schema,model,models } from "mongoose";
 
 
 const breedSchemma = new Schema({
@@ -10,4 +10,4 @@ const breedSchemma = new Schema({
     }
 })
 
-export default model('Breed',breedSchemma);
+export default models.Breed || model('Breed',breedSchemma);

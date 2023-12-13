@@ -1,4 +1,4 @@
-import { Schema,Types,model } from "mongoose";
+import { Schema,Types,model,models } from "mongoose";
 
 
 const animalSchemma = new Schema({
@@ -25,8 +25,7 @@ const animalSchemma = new Schema({
     image:{
         type:String
     }
-
 })
 
 
-export default model('Animal',animalSchemma);
+export default models.Animal || model('Animal',animalSchemma);
