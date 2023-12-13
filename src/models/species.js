@@ -1,6 +1,6 @@
 //agregar mas informacion sobre la especie.
 
-import { Schema,model } from "mongoose";
+import { Schema,model,models } from "mongoose";
 
 
 const specieSchemma = new Schema({
@@ -11,4 +11,4 @@ const specieSchemma = new Schema({
     }
 })
 
-export default model('Specie',specieSchemma);
+export default models.Specie || model('Specie',specieSchemma);

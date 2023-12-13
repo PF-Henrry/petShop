@@ -1,4 +1,4 @@
-import { Schema,model,Types } from "mongoose";
+import { Schema,model,Types,models } from "mongoose";
 
 
 const favoriteSchemma = new Schema({
@@ -7,9 +7,10 @@ const favoriteSchemma = new Schema({
         required:[true,'UserID is required']
      },
      products:{
-        type: Types.Array
+        type: [Types.ObjectId]
      }
 })
 
 
-export default model('Favorite',favoriteSchemma);
+
+export default models.Favorite || model('Favorite',favoriteSchemma);

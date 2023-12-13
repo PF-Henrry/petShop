@@ -1,4 +1,4 @@
-import { Types, Schema, model } from "mongoose";
+import { Types, Schema, model ,models} from "mongoose";
 
 const productSchema = new Schema({
     name: {
@@ -27,4 +27,4 @@ const productSchema = new Schema({
 })
 
 
-export default model('Products', productSchema);
+export default models.Products || model('Products', productSchema);

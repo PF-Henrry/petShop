@@ -1,4 +1,4 @@
-import { Schema,model } from "mongoose";
+import { Schema,model,models } from "mongoose";
 
 
 const provinceSchemma = new Schema({
@@ -9,4 +9,4 @@ const provinceSchemma = new Schema({
     }
 })
 
-export default model('Province',provinceSchemma);
+export default models.Province || model('Province',provinceSchemma);

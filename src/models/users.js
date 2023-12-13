@@ -5,7 +5,13 @@ const userSchemma = new Schema({
     name:{
         type: String,
         required:[true, 'Name is required'],
+        maxlength: [10, 'The name is too long'],
         trim: true,
+    },
+    username:{
+        type: String,
+        required:[true, 'Enter an username'],
+        unique:[true,'Username is Already']
     },
     lastname:{
         type:String
@@ -42,5 +48,6 @@ const userSchemma = new Schema({
 
 
 export default models.Users || model('Users',userSchemma) ;
+
 
 
