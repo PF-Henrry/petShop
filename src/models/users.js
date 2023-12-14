@@ -1,3 +1,4 @@
+import { encrypt } from "@/libs/crypt";
 import { Types, Schema, model, models} from "mongoose";
 
 const userSchemma = new Schema({
@@ -23,6 +24,10 @@ const userSchemma = new Schema({
         type: Types.ObjectId,
         ref: "City",
     },
+    province:{
+        type: Types.ObjectId,
+        ref: "Province"
+    },
     role:{
         type: Number,
         require:true,
@@ -45,6 +50,19 @@ const userSchemma = new Schema({
     }
 });
 
+
+userSchemma.pre('save', async function (next){
+    const user = this;
+    if(!user.isModified('password')) return next();
+
+    try {
+        const hashedPassword = await encrypt(user.password)
+        user.password = hashedPassword;
+        next();
+    } catch (error) {
+        return next(error);
+    }
+})
 
 
 export default models.Users || model('Users',userSchemma) ;

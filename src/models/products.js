@@ -22,7 +22,7 @@ const productSchema = new Schema({
         type: Types.ObjectId,
     },
     category:{
-        type: Types.Array
+        type: [Types.ObjectId]
     }
 })
 
