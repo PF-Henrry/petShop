@@ -9,10 +9,11 @@ import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { useFormik } from "formik"
 import * as Yup from "yup"
+import { EMAIL_FILLED_CHECKED, SIMPLE_PASSWORD_CHECKED } from '/src/utils/regex'
 
 
 
-function Login() {
+const Login = () => {
 
     const [showPassword, setShowPassword] = React.useState(false);
 
@@ -29,6 +30,7 @@ function Login() {
 
   const handleOnSubmit = (event) =>{
     console.log(event);
+    event.preventDefault()
     
     
       }
@@ -39,7 +41,7 @@ function Login() {
         }
       }
 
-      
+
   const { handleSubmit, handleChange, errors } = useFormik({
     initialValues,
     onSubmit: handleOnSubmit,
@@ -47,13 +49,13 @@ function Login() {
       email: Yup.string()
         .required("El e-mail es requerido")
         .matches(
-          /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$/,
+         EMAIL_FILLED_CHECKED,
           "Formato de e-mail no válido"
         ),
       password: Yup.string()
         .required("La contraseña es requerida")
         .matches(
-          /^(?=.*[A-Za-z])(?=.*\d).{8,}$/,
+          SIMPLE_PASSWORD_CHECKED,
           "La contraseña debe contener al menos una letra, un número y tener una longitud mínima de 8 caracteres"
         ),
     }),
@@ -137,7 +139,7 @@ function Login() {
         <button type="submit" class="border border-slate-600 bg-primary hover:bg-secondary
          text-black 
         py-2 px-4 rounded focus:outline-none focus:shadow-outline
-        active:shadow-md active:translate-y-1">
+        active:shadow-md active:translate-y-1 ">
   Iniciar Sesión
 </button>
 
