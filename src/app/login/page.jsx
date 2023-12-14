@@ -7,6 +7,7 @@ import OutlinedInput from '@mui/material/OutlinedInput'
 import FormControl from '@mui/material/FormControl'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import { Button } from "@mui/material"
 import { useFormik } from "formik"
 import * as Yup from "yup"
 import { EMAIL_FILLED_CHECKED, SIMPLE_PASSWORD_CHECKED } from '/src/utils/regex'
@@ -29,20 +30,15 @@ const Login = () => {
   }
 
   const handleOnSubmit = (event) =>{
-    console.log(event);
     event.preventDefault()
     
     
       }
 
-      const handleKeyDown = (event) => {
-        if (event.key === 'Enter') {
-          handleSubmit(); 
-        }
-      }
+      
 
 
-  const { handleSubmit, handleChange, errors } = useFormik({
+  const { handleSubmit, handleChange, errors, isSubmitting, isValid } = useFormik({
     initialValues,
     onSubmit: handleOnSubmit,
     validationSchema: Yup.object({
@@ -59,10 +55,13 @@ const Login = () => {
           "La contraseña debe contener al menos una letra, un número y tener una longitud mínima de 8 caracteres"
         ),
     }),
-    
   });
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSubmit(); 
+    }
+  }
 
-  
 
   return (
     <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} >
@@ -136,12 +135,17 @@ const Login = () => {
   )}
         </FormControl>
 
-        <button type="submit" class="border border-slate-600 bg-primary hover:bg-secondary
-         text-black 
-        py-2 px-4 rounded focus:outline-none focus:shadow-outline
-        active:shadow-md active:translate-y-1 ">
+        <Button
+  type="submit"
+  className="border border-slate-600 bg-primary hover:bg-secondary
+    text-black py-2 px-4 rounded focus:outline-none focus:shadow-outline
+    active:shadow-md active:translate-y-1"
+    disabled={isSubmitting || !isValid}
+
+>
   Iniciar Sesión
-</button>
+</Button>
+
 
 
         </div>

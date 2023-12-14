@@ -36,10 +36,6 @@ export const AREA_CODE_CHECKED = /^\d{2,4}$/
 //valida el numero de celular
 export const CEL_CHECKED = /^\d{8,9}$/
 
-
-//validacion para nombres de calles
-export const STREET_CHECKED = /^[a-zA-Z0-9\s.'_-]*$/
-
 //validacion cod postal arg
 export const ZIP_CHECKED = /^\d{4}$/
 

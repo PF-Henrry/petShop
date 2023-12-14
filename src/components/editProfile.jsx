@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Formik, Form, Field } from 'formik'
+import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
@@ -32,8 +32,8 @@ const validationSchema = Yup.object({
         EMAIL_FILLED_CHEKED,
         'El e-mail ingresado no es válido'),  
 
-    street: Yup.string().matches(STREET_CHECKED),
-    numStreet: Yup.string().matches(ID_CHECKED),
+    street: Yup.string(),
+    numStreet: Yup.string().matches(ID_CHECKED, 'Ingrese un número válido'),
     neighborhood: Yup.string(),
     floor: Yup.string().length(2),
     apartment: Yup.string(),
@@ -43,7 +43,7 @@ const validationSchema = Yup.object({
     ),
   
     cardName: Yup.string().required('Campo requerido'),
-    ID: Yup.string().matches(ID_CHECKED),
+    ID: Yup.string().required('Campo requerido').matches(ID_CHECKED),
     cardNumber: Yup.string().required('Campo requerido').matches(
       CARD_CHECKED
     ),
@@ -79,6 +79,7 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
             fullWidth
             disabled={!editable}
           />
+       <ErrorMessage name="name" component="div" style={{ color: 'red' }} />
 
           <Field
             name="lastname"
@@ -87,6 +88,7 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
             fullWidth
             disabled={!editable}
           />
+<ErrorMessage name="name" component="div" style={{ color: 'red' }} />
 
         <Field
     name="password"
@@ -96,7 +98,8 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
     fullWidth
     disabled={!editable}
   />
-  
+  <ErrorMessage name="password" component="div" style={{ color: 'red' }} />
+
   <Field
     name="confirmPassword"
     type="password"
@@ -105,6 +108,7 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
     fullWidth
     disabled={!editable}
   />
+  <ErrorMessage name="confirmPassword" component="div" style={{ color: 'red' }} />
  </div>
           
        </div>
@@ -119,6 +123,7 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
               fullWidth
               disabled={!editable}
             />
+            <ErrorMessage name="areaCode" component="div" style={{ color: 'red' }} />
 
             <Field
               name="phoneNumber"
@@ -127,6 +132,7 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
               fullWidth
               disabled={!editable}
             />
+        <ErrorMessage name="phoneNumber" component="div" style={{ color: 'red' }} />
 
           <Field
             name="email"
@@ -135,12 +141,15 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
             fullWidth
             disabled={!editable}
           />
+        <ErrorMessage name="email" component="div" style={{ color: 'red' }} />  
           </div>
           </div>
 
           <div class="mb-4" >
-          <p class="text-xl font-bold mb-4">Dirección de Envíos:</p>
+          <p class="text-xl font-bold mb-1">Dirección de Envíos:</p>
+          <p class="text-sm text-gray-500 mt-1 mb-3">Para envíos fuera de CABA, contactar al vendedor</p>
           <div class="grid grid-cols-2 gap-4">
+
           <Field
             name="street"
             label="Calle"
@@ -156,6 +165,7 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
             fullWidth
             disabled={!editable}
           />
+        <ErrorMessage name="numStreet" component="div" style={{ color: 'red' }} />
 
           <Field
             name="neighborhood"
@@ -187,6 +197,8 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
             fullWidth
             disabled={!editable}
           />
+       <ErrorMessage name="ZIP" component="div" style={{ color: 'red' }} />
+
           </div>
           </div>
 
@@ -201,6 +213,7 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
             fullWidth
             disabled={!editable}
           />
+       <ErrorMessage name="cardName" component="div" style={{ color: 'red' }} />
 
           <Field
             name="ID"
@@ -209,6 +222,7 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
             fullWidth
             disabled={!editable}
           />
+        <ErrorMessage name="ID" component="div" style={{ color: 'red' }} />
 
           <Field
             name="cardNumber"
@@ -217,6 +231,7 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
             fullWidth
             disabled={!editable}
           />
+       <ErrorMessage name="cardNumber" component="div" style={{ color: 'red' }} />
 
           <Field
             name="date"
@@ -227,14 +242,17 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
             fullWidth
             disabled={!editable}
           />
+        <ErrorMessage name="date" component="div" style={{ color: 'red' }} />
 
            <Field
             name="CVV"
-            label="CVV"
+            label="CVV (los tres números ubicados al dorso"
             as={TextField}
             fullWidth
             disabled={!editable}
           />
+       <ErrorMessage name="CVV" component="div" style={{ color: 'red' }} />
+
          </div>
          </div>
 
