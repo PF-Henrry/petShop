@@ -10,7 +10,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { Button } from "@mui/material"
 import { useFormik } from "formik"
 import * as Yup from "yup"
-import { EMAIL_FILLED_CHECKED, SIMPLE_PASSWORD_CHECKED } from '/src/utils/regex'
+import { EMAIL_CHECKED, SIMPLE_PASSWORD_CHECKED } from '/src/utils/regex'
 
 
 
@@ -45,7 +45,7 @@ const Login = () => {
       email: Yup.string()
         .required("El e-mail es requerido")
         .matches(
-         EMAIL_FILLED_CHECKED,
+         EMAIL_CHECKED,
           "Formato de e-mail no válido"
         ),
       password: Yup.string()
@@ -76,7 +76,9 @@ const Login = () => {
                 <span class="text-gray-700 font-medium">Continuar con Google</span>
                 </button>
 
-                <button class="flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2 bg-white border border-slate-600 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 focus:ring-opacity-50">
+                <button class="flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
+                 bg-white border border-slate-600 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2
+                  focus:ring-gray-600 focus:ring-opacity-50">
                 <svg width="24" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#3b5998" >
         <path d="M480,257.35c0-123.7-100.3-224-224-224s-224,100.3-224,224c0,111.8,81.9,204.47,189,221.29V322.12H164.11V257.35H221V208c0-56.13,33.45-87.16,84.61-87.16,24.51,0,50.15,4.38,50.15,4.38v55.13H327.5c-27.81,0-36.51,17.26-36.51,35v42h62.12l-9.92,64.77H291V478.66C398.1,461.85,480,369.18,480,257.35Z" fill-rule="evenodd"></path>
     </svg>
@@ -137,10 +139,10 @@ const Login = () => {
 
         <Button
   type="submit"
-  className="border border-slate-600 bg-primary hover:bg-secondary
+  className="border border-slate-600 bg-customPrimary hover:bg-customSecondary
     text-black py-2 px-4 rounded focus:outline-none focus:shadow-outline
     active:shadow-md active:translate-y-1"
-    disabled={isSubmitting || !isValid}
+    disabled={isSubmitting || !isValid  }
 
 >
   Iniciar Sesión

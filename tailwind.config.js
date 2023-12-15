@@ -13,9 +13,9 @@ module.exports = {
             'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
         },
         colors: {
-            primary: '#FBECE7',
-            secondary: '#DABEB6',
-            backgroud: '#FFFAF2',
+            customPrimary: '#FBECE7',
+            customSecondary: '#DABEB6',
+            customBackgroud: '#FFFAF2',
           },
       },
     },
