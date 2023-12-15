@@ -9,13 +9,13 @@ const userSchemma = new Schema({
         maxlength: [10, 'The name is too long'],
         trim: true,
     },
+    lastname:{
+        type:String
+    },
     username:{
         type: String,
         required:[true, 'Enter an username'],
-        unique:[true,'Username is Already']
-    },
-    lastname:{
-        type:String
+        unique:true,
     },
     adress:{
         type:String,
@@ -36,10 +36,10 @@ const userSchemma = new Schema({
         type: String
     },
     email:{
-        type:String,
+        type: String,
         unique:true,
         required:[true,'Please enter an email'],
-        lowercase:true,
+        
     },
     password:{
         type:String,
