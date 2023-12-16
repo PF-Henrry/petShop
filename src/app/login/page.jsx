@@ -1,74 +1,74 @@
 'use client'
-import React from "react";
-import Link from 'next/link'
-import InputAdornment from '@mui/material/InputAdornment'
-import IconButton from '@mui/material/IconButton'
-import InputLabel from '@mui/material/InputLabel'
-import OutlinedInput from '@mui/material/OutlinedInput'
-import FormControl from '@mui/material/FormControl'
-import Visibility from '@mui/icons-material/Visibility'
-import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { Button } from "@mui/material"
-import { useFormik } from "formik"
-import * as Yup from "yup"
-import { EMAIL_CHECKED, PASSWORD_CHECKED } from '/src/utils/regex'
+import React, { useState } from 'react';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import Link from 'next/link';
+import * as Yup from 'yup';
+import Router from 'next/router';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 
+import { EMAIL_CHECKED, PASSWORD_CHECKED } from '@/utils/regex';
 
+const validationSchema = Yup.object({
+  email: Yup.string()
+    .required("El e-mail es requerido")
+    .matches(
+      EMAIL_CHECKED,
+      "Formato de e-mail no válido"
+    ),
+  
+  password: Yup.string()
+    .required("La contraseña es requerida")
+    .matches(
+      PASSWORD_CHECKED,
+      "La contraseña debe contener al menos una mayuscula, un numero, un caracter especial y tiene que tener un min de 8 y un maximo de 15. No admite espacios"
+    ),
+  
+});
 
-const Login = () => {
+const Login = ({ initialValues, onSubmit }) => {
 
-    const [showPassword, setShowPassword] = React.useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  let initialValues= {
-    email: '',
-    password: '',
-  }
-
-  const handleOnSubmit = (event) =>{
-    event.preventDefault()
-    
-    
-      }
-
-      
-
-
-  const { handleSubmit, handleChange, errors, isSubmitting, isValid } = useFormik({
-    initialValues,
-    onSubmit: handleOnSubmit,
-    validationSchema: Yup.object({
-      email: Yup.string()
-        .required("El e-mail es requerido")
-        .matches(
-         EMAIL_CHECKED,
-          "Formato de e-mail no válido"
-        ),
-      password: Yup.string()
-        .required("La contraseña es requerida")
-        .matches(
-          PASSWORD_CHECKED,
-          "La contraseña debe contener al menos una letra, un número y tener una longitud mínima de 8 caracteres"
-        ),
-    }),
-  });
-  const handleKeyDown = (event) => {
-    if (event.key === 'Enter') {
-      handleSubmit(); 
+    const handleTogglePassword = () => {
+      setShowPassword(!showPassword);
     }
-  }
+   
 
+  const handleOnSubmit = (values) => {
+    console.log("Formulario enviado con los siguientes valores:", values);
+    // Falta lógica para enviar los datos al back
+    Router.push('/');
+  };
+  const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+          handleOnSubmit(); 
+         }
+       }
 
   return (
-    <form onSubmit={handleSubmit} onKeyDown={handleKeyDown} >
-    <div class="flex flex-col items-center justify-center space-y-6 mt-14 gap-1">
+    <Formik
+    initialValues={{
+        email: '',  
+        password: '',  
+      }}
+      validationSchema={validationSchema}
+      onSubmit={onSubmit || handleOnSubmit}
+      onKeyDown={handleKeyDown}
+     
+    >
+      {({ isSubmitting, isValid }) => (
+        <Form className="max-w-2xl mx-auto my-8 p-8 rounded shadow border border-gray-300 bg-customPrimary">
+          <div className="text-center mb-4">
+            <h1 className="text-xl font-bold">Iniciá Sesión para Comenzar:</h1>
+          </div>
+
+          <div className="grid gap-2">
+          <div class="flex flex-col items-center justify-center space-y-6 mt-14 gap-1">
       <button class="flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
-       bg-white border border-slate-600 rounded-md hover:bg-gray-100 
+        bg-white border border-slate-600 rounded-md hover:bg-gray-100 
       focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 focus:ring-opacity-50 ">
 
                 <svg viewBox="0 0 48 48" width="35" height="24" version="1.1" xmlns="http://www.w3.org/2000/svg" 
@@ -85,79 +85,61 @@ const Login = () => {
     </svg>
                 <span class="text-gray-700 font-medium">Continuar con Facebook</span>
                 </button>
-            
-{/* 
-                <TextField
-          required
-          id="outlined-required"
-          label="Required"
-          defaultValue="Ingrese su e-mail"
-          
-        /> */}
-
-<FormControl sx={{ m: 1, width: '30ch' }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment">E-mail</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-email"           
-            label="Email"
-            name="email"
-            onChange={handleChange}
-            error={errors.email}                      
-             />
-              {errors.email && (
-    <div style={{ color: 'red' }}>{errors.email}</div>
-  )}
            
-        </FormControl>
+            <Field 
+              name="email"
+              label="Email"
+              as={TextField}
+              fullWidth
+              required
+            />
+            <ErrorMessage name="email" component="div" style={{ color: 'red' }} />
 
+            <Field
+                name="password"
+                type={showPassword ? 'text' : 'password'}
+                label="Contraseña"
+                as={TextField}
+                fullWidth
+                required
+                InputProps={{
+                  endAdornment: (
+                    <div
+                      onClick={handleTogglePassword}
+                      style={{ cursor: 'pointer', marginLeft: '8px' }}
+                    >
+                      {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                    </div>
+                  ),
+                }}
+              />
+              <ErrorMessage name="password" component="div" style={{ color: 'red' }} />
 
-<FormControl sx={{ m: 1, width: '30ch' }} variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Contraseña</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={showPassword ? 'text' : 'password'}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-            name="password"
-            onChange={handleChange}
-            error={errors.password} 
-          />
-           {errors.password && (
-    <div style={{ color: 'red' }}>{errors.password}</div>
-  )}
-        </FormControl>
-        <div class="flex gap-4 font-semibold">
-        <p>¿No tienes cuenta?</p> <Link class="hover:text-customSecondary 
-        transition-colors duration-300"href="/signup">Regístrate aquí</Link>
-        </div>
+          </div>
+          </div>
 
-        <Button
-  type="submit"
-  className="border border-slate-600 bg-customPrimary hover:bg-customSecondary
-    text-black py-2 px-4 rounded focus:outline-none focus:shadow-outline
-    active:shadow-md active:translate-y-1"
-    disabled={isSubmitting || !isValid  }
+          <div className="flex justify-center gap-4 font-semibold mt-2">
+            <p>¿No tienes cuenta?</p>
+            <Link className="hover:text-customSecondary transition-colors duration-300" href="/signup">
+              Iniciá Sesión
+            </Link>
+          </div>
 
->
-  Iniciar Sesión
-</Button>
-
-
-
-        </div>
-        </form>
-  )
-}
+          <Button
+            type="submit"
+            variant="outlined"
+            disabled={isSubmitting || !isValid}
+            style={{ borderColor: 'grey' }}
+            className={`text-black
+              py-2 px-4 rounded focus:outline-none focus:shadow-outline
+              active:shadow-md active:translate-y-1 block mx-auto w-1/4 mt-8 hover:bg-customSecondary`}
+          >
+           Iniciar Sesión
+          </Button>
+        </Form>
+      )}
+    </Formik>
+  );
+};
 
 export default Login
