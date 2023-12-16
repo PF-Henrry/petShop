@@ -47,6 +47,9 @@ const userSchemma = new Schema({
     },
     codeP:{
         type:Number
+    },
+    favorite:{
+        type: Types.ObjectId
     }
 });
 

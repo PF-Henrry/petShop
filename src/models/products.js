@@ -15,14 +15,15 @@ const productSchema = new Schema({
     image:{
         type:String,
     },
-    make: {
+    brand: {
         type: Types.ObjectId,
+        ref:"Brands"
     },
     discount:{
         type: Types.ObjectId,
     },
     category:{
-        type: [Types.ObjectId]
+        type: [{type: Types.ObjectId, ref:'Category'}]
     }
 })
 
