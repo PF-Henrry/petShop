@@ -18,7 +18,7 @@ const validationSchema = Yup.object({
       "Formato de e-mail no válido"
     ),
   confirmEmail: Yup.string().required('Campo requerido')
-    .oneOf([Yup.ref('email'), null], 'El email debe coincidir deben coincidir'),
+    .oneOf([Yup.ref('email'), null], 'El email debe coincidir'),
   password: Yup.string()
     .required("La contraseña es requerida")
     .matches(
@@ -38,7 +38,13 @@ const Signup = ({ initialValues, onSubmit }) => {
 
   return (
     <Formik
-      initialValues={initialValues}
+    initialValues={{
+      username: '',
+      email: '',  
+      confirmEmail: '',
+      password: '',  
+      confirmPassword: ''
+    }}
       validationSchema={validationSchema}
       onSubmit={onSubmit || handleOnSubmit}
       enableReinitialize
