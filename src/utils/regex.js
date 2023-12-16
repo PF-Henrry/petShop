@@ -15,7 +15,7 @@ export const INPUT_NAME_CHECKED= /^(?=.{2,11}$)[a-zA-ZÀ-ÿ]+$/
 
 // regex para validar correos bajo los estanderes de hotmail. gmail, y yahoo.
 
-export const EMAIL_CHEKED = /^[a-zA-Z0-9._%+-]+@(?:hotmail|gmail|yahoo)\.(?:com|com\.mx|es|net)$/
+export const EMAIL_CHECKED = /^[a-zA-Z0-9._%+-]+@(?:hotmail|gmail|yahoo)\.(?:com|com\.mx|es|net)$/
 
 
 
