@@ -18,6 +18,11 @@ module.exports = {
             customBackgroud: '#FFFAF2',
           },
       },
+      colors: {
+        customPrimary: '#FBECE7',
+        customSecondary: '#DABEB6',
+        customBackgroud: '#FFFAF2',
+      },
     },
     plugins: [],
   }

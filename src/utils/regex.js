@@ -1,6 +1,6 @@
 // regex para validar que sea una url.
 
-export const URL_CHECKED = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/ig
+export const URL_CHECKED = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/
 // regex para validar que sea una contraseña segura.
 
 
@@ -18,7 +18,7 @@ export const INPUT_NAME_CHECKED = /^(?=.{2,50}$)[a-zA-ZÀ-ÿ ]+$/;
 
 // regex para validar correos bajo los estanderes de hotmail. gmail, y yahoo.
 
-export const EMAIL_CHEKED = /^[a-zA-Z0-9._%+-]+@(?:hotmail|gmail|yahoo)\.(?:com|com\.mx|es|net)$/
+export const EMAIL_CHECKED = /^[a-zA-Z0-9._%+-]+@(?:hotmail|gmail|yahoo)\.(?:com|com\.mx|es|net)$/
 
 
 
