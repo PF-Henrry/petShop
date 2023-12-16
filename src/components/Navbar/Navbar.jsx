@@ -55,7 +55,7 @@ export default function Navbar() {
           <li>
             <Link href="/shop">
               <PawPrint size={20} className="icon-list" />
-              Adopta
+              Adopciones
             </Link>
           </li>
           <li>
