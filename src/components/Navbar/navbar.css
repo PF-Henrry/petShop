@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.nav-links {
+  & li {
+    @apply inline-block leading-10;
+
+    .link {
+      @apply text-xl font-semibold duration-300 hover:text-[#265577] uppercase;
+    }
+  }
+}
