@@ -41,11 +41,8 @@ const Login = ({ initialValues, onSubmit }) => {
    
 
   const handleOnSubmit = async (values) => {
-    console.log("Formulario enviado con los siguientes valores:", values);
-    // Falta lógica para enviar los datos al back
     try {
       const res = await signIn("credentials",{...values,redirect: false});
-      console.log(res)
       
      if(res.ok) router.push("/");
      else alert(res.error)
