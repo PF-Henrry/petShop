@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-
+import { useRouter } from 'next/navigation';
 import { EMAIL_CHECKED, PASSWORD_CHECKED } from '@/utils/regex'
 import {signIn} from 'next-auth/react';
 
@@ -31,6 +31,7 @@ const validationSchema = Yup.object({
 });
 
 const Login = ({ initialValues, onSubmit }) => {
+  const router = useRouter();
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -42,7 +43,15 @@ const Login = ({ initialValues, onSubmit }) => {
   const handleOnSubmit = async (values) => {
     console.log("Formulario enviado con los siguientes valores:", values);
     // Falta lógica para enviar los datos al back
-      await signIn("credentials",{...values})
+    try {
+      const res = await signIn("credentials",{...values,redirect: false});
+      console.log(res)
+      
+     if(res.ok) router.push("/");
+     else alert(res.error)
+    } catch (error) {
+        alert(error.message)
+    }
   };
   const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
