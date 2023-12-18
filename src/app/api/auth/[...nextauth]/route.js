@@ -29,10 +29,6 @@ const authOptions = {
         ],
         callbacks: {
             async signIn({ user, account, profile, email, credentials }) {
-                console.log(account)
-                console.log(user)
-                console.log(credentials)
-                
               if (account?.provider === 'credentials') {
                 // Realizas tu lógica de redirección aquí
                 return true // Redirigir al home después del inicio de sesión
