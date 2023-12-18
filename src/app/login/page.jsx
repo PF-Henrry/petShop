@@ -10,7 +10,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { useRouter } from 'next/navigation';
 import { EMAIL_CHECKED, PASSWORD_CHECKED } from '@/utils/regex'
 import {signIn} from 'next-auth/react';
-
+import toastNotify from '@/libs/toast';
 
 
 const validationSchema = Yup.object({
@@ -32,6 +32,7 @@ const validationSchema = Yup.object({
 
 const Login = ({ initialValues, onSubmit }) => {
   const router = useRouter();
+  const {showNotify,ToastContainer} = toastNotify();
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -40,14 +41,17 @@ const Login = ({ initialValues, onSubmit }) => {
     }
    
 
+
   const handleOnSubmit = async (values) => {
     try {
       const res = await signIn("credentials",{...values,redirect: false});
       
-     if(res.ok) router.push("/");
-     else alert(res.error)
+     if(res.ok){
+      localStorage.setItem('ToasNotify',JSON.stringify({type:"success",message:"login success"}))
+      router.push("/");}
+     else showNotify("error",res.error)
     } catch (error) {
-        alert(error.message)
+      showNotify("error",error.message)
     }
   };
   const handleKeyDown = (event) => {
@@ -57,6 +61,7 @@ const Login = ({ initialValues, onSubmit }) => {
        }
 
   return (
+    <>
     <Formik
     initialValues={{
         email: '',  
@@ -147,6 +152,8 @@ const Login = ({ initialValues, onSubmit }) => {
         </Form>
       )}
     </Formik>
+    <ToastContainer/>
+    </>
   );
 };
 
