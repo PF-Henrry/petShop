@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getProductById, getAllProducts } from "@/libs/bringProductsWhitRelarion";
 import { addProduct } from "@/libs/createProductWithRelation";
 import { deletedProductByID } from "@/libs/deletedProductById";
 import { updateProductById } from "@/libs/updateProductWhitRelation";
@@ -7,35 +8,24 @@ import products from "@/models/products";
 export async function GET(request){
    try {
       const { productId } = request.query;
-
+  
       if (productId) {
-         const findProduct = await products.findOne({ _id: productId }).populate('brand', {
-            name: 1,
-            _id: 0
-         }).populate('category', {
-            name: 1,
-            _id: 0
-         });
-
-         if (findProduct) {
-            return NextResponse.json(findProduct, { status: 200 });
-         } else {
-            return NextResponse.json({ error: "Producto no encontrado" }, { status: 404 });
-         }
-
+        // Obtener un producto específico por ID
+        const findProduct = await getProductById(productId);
+  
+        if (findProduct) {
+          return NextResponse.json(findProduct, { status: 200 });
+        } else {
+          return NextResponse.json({ error: "Product not found" }, { status: 404 });
+        }
       } else {
-         const allProducts = await products.find().populate('brand', {
-            name: 1,
-            _id: 0
-         }).populate('category', {
-            name: 1,
-            _id: 0
-         });
-         return NextResponse.json(allProducts, { status: 200 });
+        // Obtener todos los productos
+        const allProducts = await getAllProducts();
+        return NextResponse.json(allProducts, { status: 200 });
       }
-   } catch (error) {
+    } catch (error) {
       return NextResponse.json(error, { status: 500 });
-   }
+    }
 }
 
 export async function POST(request){
