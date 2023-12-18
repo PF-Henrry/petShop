@@ -15,25 +15,23 @@ const authOptions = {
                     if(!conn.isConnected) connectDB();
 
                     const findUser = await Users.findOne({email:credentials.email});
-                    if(!findUser) return null
+                    if(!findUser) throw new Error("Credenciales incorrectas")
                     const matchPassword = await findUser.comparePassword(credentials.password);
-                    if(!matchPassword) return null
+                    if(!matchPassword)  throw new Error("Credenciales incorrectas")
                     return {
                         id: findUser._id,
                         name: findUser.username,
-                        email: findUser.email
+                        email: findUser.email,
+                        callbackUrl: '/'
                     }
                 }
             })
         ],
         callbacks: {
             async signIn({ user, account, profile, email, credentials }) {
-                console.log(account)
-                console.log(user)
-                
               if (account?.provider === 'credentials') {
                 // Realizas tu lógica de redirección aquí
-                return "/"; // Redirigir al home después del inicio de sesión
+                return true // Redirigir al home después del inicio de sesión
               }
             }
         },
@@ -41,7 +39,7 @@ const authOptions = {
         pages: {
             signIn: '/login',
             signOut: '/auth/signout',
-            error: '/auth/error', // Error code passed in query string as ?error=
+            error: '/auth/custom-error-page', // Error code passed in query string as ?error=
             verifyRequest: '/auth/verify-request', // (used for check email message)
             newUser: '/auth/new-user' // New users will be directed here on first sign in (leave the property out if not of interest)
           }
