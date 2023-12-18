@@ -1,4 +1,4 @@
-import { encrypt } from "@/libs/crypt";
+import { encrypt,isEqual } from "@/libs/crypt";
 import { Types, Schema, model, models} from "mongoose";
 
 const userSchemma = new Schema({
@@ -53,6 +53,9 @@ const userSchemma = new Schema({
     }
 });
 
+userSchemma.methods.comparePassword  =  function(inputPassword){
+    if(inputPassword) return  isEqual(this.password,inputPassword);
+}
 
 userSchemma.pre('save', async function (next){
     const user = this;
