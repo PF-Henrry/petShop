@@ -95,11 +95,11 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
       enableReinitialize // Permite reinicializar los valores cuando cambia la propiedad initialValues
     >
       {({ isSubmitting, isValid }) => (
-       <Form class="max-w-5xl mx-auto my-8 p-8 rounded shadow border border-gray-300 bg-customPrimary">
+       <Form className="max-w-5xl mx-auto my-8 p-8 rounded shadow border border-gray-300 bg-customPrimary">
 
-            <div class="mb-4"  >
-          <p class="text-xl font-bold mb-4">Datos Personales:</p>
-          <div class="grid grid-cols-2 gap-4" >
+            <div className="mb-4"  >
+          <p className="text-xl font-bold mb-4">Datos Personales:</p>
+          <div className="grid grid-cols-2 gap-4" >
           <Field
             name="name"
             label="Nombre"
@@ -145,9 +145,9 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
           
        </div>
 
-       <div class="mb-4" >
-          <p class="text-xl font-bold mb-4" >Datos de Contacto:</p>
-          <div class="grid grid-cols-2 gap-4">
+       <div className="mb-4" >
+          <p className="text-xl font-bold mb-4" >Datos de Contacto:</p>
+          <div className="grid grid-cols-2 gap-4">
           <Field
               name="areaCode"
               label="Código de Área"
@@ -180,10 +180,10 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
           </div>
           </div>
 
-          <div class="mb-4" >
-          <p class="text-xl font-bold mb-1">Dirección de Envío:</p>
-          <p class="text-sm text-gray-500 mt-1 mb-3">Para envíos fuera de CABA, contactar al vendedor</p>
-          <div class="grid grid-cols-2 gap-4">
+          <div className="mb-4" >
+          <p className="text-xl font-bold mb-1">Dirección de Envío:</p>
+          <p className="text-sm text-gray-500 mt-1 mb-3">Para envíos fuera de CABA, contactar al vendedor</p>
+          <div className="grid grid-cols-2 gap-4">
 
           <Field
             name="street"
@@ -242,7 +242,7 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
           </div>
           </div>
 
-          <div class="mb-4" >
+          <div className="mb-4" >
          
          </div>
          <div>
