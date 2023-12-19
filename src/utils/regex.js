@@ -18,4 +18,13 @@ export const INPUT_NAME_CHECKED= /^(?=.{2,11}$)[a-zA-ZÀ-ÿ]+$/
 export const EMAIL_CHECKED = /^[a-zA-Z0-9._%+-]+@(?:hotmail|gmail|yahoo)\.(?:com|com\.mx|es|net)$/
 
 
+//Valida que haya solo números
+export const ONLYNUMBERS_CHECKED = /^\d{3}-\d{3}-\d{4}$/
+
+//Valida que el codigo de area tenga de 1 a 4 digitos para validar todos los codigo de area de sudamerica, en caso inmigrantes
+export const AREA_CODE_CHECKED = /^\d{1,4}$/
+
+//valida que el código de área tenga 5 digitos
+export const ZIP_CHECKED = /^\d{5}$/
+
 
