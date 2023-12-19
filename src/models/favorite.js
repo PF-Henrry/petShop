@@ -7,7 +7,7 @@ const favoriteSchemma = new Schema({
         required:[true,'UserID is required']
      },
      products:{
-        type: Types.ObjectId
+        type: [Types.ObjectId]
      }
 })
 
