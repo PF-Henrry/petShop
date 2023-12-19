@@ -19,7 +19,7 @@ const ModalBackdrop = styled.div`
 `;
 
 
-function Logout() {
+const Logout = () => {
  
   //const {showNotify,ToastContainer} = toastNotify();
   const [isModalOpen, setModalOpen] = useState(true);
