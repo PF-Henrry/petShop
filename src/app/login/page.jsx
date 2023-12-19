@@ -73,7 +73,7 @@ const Login = ({ initialValues, onSubmit }) => {
      
     >
       {({ isSubmitting, isValid }) => (
-        <Form className="max-w-2xl mx-auto my-8 p-8 rounded shadow border border-gray-300 bg-customPrimary">
+        <Form className="max-w-2xl mx-auto my-8 p-8 rounded shadow border border-gray-300 bg-customPrimary text-gray-700 ">
           <div className="text-center mb-4">
             <h1 className="text-xl font-bold">Iniciá Sesión para Comenzar:</h1>
           </div>
