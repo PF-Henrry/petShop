@@ -7,8 +7,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
-import {  EMAIL_CHEKED, ID_CHECKED, PASSWORD_CHECKED, INPUT_NAME_CHECKED,
-     ZIP_CHECKED,AREA_CODE_CHECKED,CEL_CHECKED} from '@/utils/regex'
+import {  EMAIL_CHEKED, PASSWORD_CHECKED, INPUT_NAME_CHECKED,
+     ZIP_CHECKED,AREA_CODE_CHECKED,ONLYNUMBERS_CHECKED} from '@/utils/regex'
 
 const validationSchema = Yup.object({
     name: Yup.string().required('Campo requerido').matches(
@@ -31,13 +31,13 @@ const validationSchema = Yup.object({
     
   
     areaCode: Yup.string().matches(AREA_CODE_CHECKED, 'Ingrese un código de área válido').required('Campo requerido'),
-    phoneNumber: Yup.string().matches(CEL_CHECKED, 'Ingrese un número de teléfono válido').required('Campo requerido'),
+    phoneNumber: Yup.string().matches(ONLYNUMBERS_CHECKED, 'Ingrese un número de teléfono válido').required('Campo requerido'),
     email: Yup.string().required('Campo requerido').matches(
         EMAIL_CHEKED,
         'El e-mail ingresado no es válido'),  
 
     street: Yup.string().required('Campo requerido'),
-    numStreet: Yup.string().required('Campo requerido').matches(ID_CHECKED, 'Ingrese un número válido'),
+    numStreet: Yup.string().required('Campo requerido').matches(ONLYNUMBERS_CHECKED, 'Ingrese un número válido'),
     neighborhood: Yup.string().required('Campo requerido'),
     floor: Yup.string().length(2),
     apartment: Yup.string(),
