@@ -15,6 +15,7 @@ const authOptions = {
                     if(!conn.isConnected) connectDB();
 
                     const findUser = await Users.findOne({email:credentials.email});
+                    console.log(findUser?.img)
                     if(!findUser) throw new Error("Credenciales incorrectas")
                     const matchPassword = await findUser.comparePassword(credentials.password);
                     if(!matchPassword)  throw new Error("Credenciales incorrectas")
@@ -22,7 +23,7 @@ const authOptions = {
                         id: findUser._id,
                         name: findUser.username,
                         email: findUser.email,
-                        callbackUrl: '/'
+                        image: findUser.img,
                     }
                 }
             })
@@ -33,7 +34,21 @@ const authOptions = {
                 // Realizas tu lógica de redirección aquí
                 return true // Redirigir al home después del inicio de sesión
               }
-            }
+            },
+            async jwt({ token, account }) {
+                if (account) { 
+                    console.log(token)
+                    console.log(account)
+                  token.accessToken = account.access_token
+                }
+                return token
+              },
+              async session({ session, token, user }) {
+                console.log(session)
+                console.log(token)
+                session.accessToken = token.accessToken
+                return session
+              }
         },
 
         pages: {
