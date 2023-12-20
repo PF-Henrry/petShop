@@ -6,6 +6,7 @@ import Card from "@/public/assets/tarjeta.png";
 import Cash from "@/public/assets/efectivo.png";
 
 const InfoSection = () => {
+  
   return (
     <div className="flex gap-8 border-b pb-8 mb-8 border-slate-400">
       <div className="border-r pr-8  border-slate-400">

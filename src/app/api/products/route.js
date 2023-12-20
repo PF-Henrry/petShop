@@ -6,6 +6,7 @@ import { updateProductById } from "@/libs/updateProductWhitRelation";
 import products from "@/models/products";
 
 export async function GET(request){
+
    try {
       const { productId } = request.query;
   

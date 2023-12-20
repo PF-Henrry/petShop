@@ -8,5 +8,4 @@ const provinceSchemma = new Schema({
         validated:[true,'Please enter an name']
     }
 })
-
 export default models.Province || model('Province',provinceSchemma);

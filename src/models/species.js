@@ -10,5 +10,4 @@ const specieSchemma = new Schema({
         validated:[true,'Please enter an name']
     }
 })
-
 export default models.Specie || model('Specie',specieSchemma);

@@ -1,6 +1,5 @@
 import { Schema,Types,model,models } from "mongoose";
 
-
 const animalSchemma = new Schema({
     name:{
         type:String,

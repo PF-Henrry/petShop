@@ -8,5 +8,4 @@ const newBrand = new Schema({
     }
 })
 
-
 export default models.Brands || model('Brands',newBrand);

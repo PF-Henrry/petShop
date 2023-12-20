@@ -8,5 +8,4 @@ const citySchemma = new Schema({
         validated:[true,'Please enter an name']
     }
 })
-
 export default models.City || model('City',citySchemma);

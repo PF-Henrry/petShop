@@ -1,7 +1,6 @@
 //agregar mas informacion de la raza,
 import { Schema,model,models } from "mongoose";
 
-
 const breedSchemma = new Schema({
     name:{
         type: String,
