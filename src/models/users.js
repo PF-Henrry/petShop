@@ -50,6 +50,9 @@ const userSchemma = new Schema({
     },
     favorite:{
         type: Types.ObjectId
+    },
+    token:{
+        type: String
     }
 });
 
