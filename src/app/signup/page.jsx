@@ -32,7 +32,7 @@ const validationSchema = Yup.object({
 const Signup = ({ initialValues, onSubmit }) => {
   const handleOnSubmit = (values) => {
     console.log("Formulario enviado con los siguientes valores:", values);
-    // Falta lógica para enviar los datos al back
+    // Falta lógica para enviar los datos al back 
     Router.push('/profile');
   };
 
