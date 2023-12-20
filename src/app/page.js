@@ -16,6 +16,7 @@ export default function Home() {
       showNotify(toastParse.type,toastParse.message)
       localStorage.removeItem('ToasNotify');
     }
+
   },[showNotify]);
 
 

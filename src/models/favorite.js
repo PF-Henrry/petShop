@@ -11,4 +11,6 @@ const favoriteSchemma = new Schema({
      }
 })
 
+
+
 export default models.Favorite || model('Favorite',favoriteSchemma);

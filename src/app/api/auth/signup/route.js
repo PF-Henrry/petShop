@@ -5,6 +5,7 @@ import { URL_CHECKED,EMAIL_CHEKED,PASSWORD_CHECKED } from "@/utils/regex";
 
 export async function POST(request) {
   const dataUser = await request.json();
+
    const {email,password,img} = dataUser;
    let errors = {};
  
@@ -15,21 +16,22 @@ export async function POST(request) {
     
     else{
       
-       if(!EMAIL_CHEKED.test(email)) {
-        errors.email = 'Email is invalid'
-       }
-       if(!PASSWORD_CHECKED.test(password)){
-        errors.password = 'Password is invalid'
-       }
-       if(!URL_CHECKED.test(img)){
-         errors.image = 'Image url is invalid'
-       }
+      //  if(!EMAIL_CHEKED.test(email)) {
+      //   errors.email = 'Email is invalid'
+      //  }
+      //  if(!PASSWORD_CHECKED.test(password)){
+      //   errors.password = 'Password is invalid'
+      //  }
+      //  if(!URL_CHECKED.test(img)){
+      //    errors.image = 'Image url is invalid'
+      //  }
        
        
        if(Object.keys(errors).length) return NextResponse.json({Error:{...errors}},{status:400})
-        await addUser(dataUser)
+       const res = await addUser(dataUser)
         return NextResponse.json({
-            message:'User is created'   
+            message:'User is created',
+            userid: res._id
            },{
             status:200
         });

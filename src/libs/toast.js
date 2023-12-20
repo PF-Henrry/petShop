@@ -1,6 +1,7 @@
 import 'react-toastify/dist/ReactToastify.css';
 import {ToastContainer, toast } from 'react-toastify';
 
+
 export default function toastNotify(){
   const showNotify = (type,message) =>{
     const showToast = () => {

@@ -7,7 +7,6 @@ export default function ToTopBtnFooter() {
       behavior: "smooth",
     });
   };
-
   return ( 
     <div>
       <button className="backToTop-btn" onClick={backToTop}>

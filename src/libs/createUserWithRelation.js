@@ -5,6 +5,7 @@ import Favorite from "@/models/favorite"
 import { findOrCreateModel } from "./dbmethods";
 import { connectDB } from "@/libs/mongodb";
 
+
 export  async function addUser(user) {
   console.log(user)
   try {

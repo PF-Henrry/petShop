@@ -11,7 +11,7 @@ import {
   CaretDown,
 } from "@phosphor-icons/react/dist/ssr";
 import "./footer.css";
-
+ 
 export default function Footer() {
   return (
     <footer className="bottom-0 w-full text-black flex flex-col items-center justify-center mt-4">
