@@ -15,22 +15,21 @@ export async function POST(request) {
     
     else{
       
-      //  if(!EMAIL_CHEKED.test(email)) {
-      //   errors.email = 'Email is invalid'
-      //  }
-      //  if(!PASSWORD_CHECKED.test(password)){
-      //   errors.password = 'Password is invalid'
-      //  }
-      //  if(!URL_CHECKED.test(img)){
-      //    errors.image = 'Image url is invalid'
-      //  }
+       if(!EMAIL_CHEKED.test(email)) {
+        errors.email = 'Email is invalid'
+       }
+       if(!PASSWORD_CHECKED.test(password)){
+        errors.password = 'Password is invalid'
+       }
+       if(!URL_CHECKED.test(img)){
+         errors.image = 'Image url is invalid'
+       }
        
        
        if(Object.keys(errors).length) return NextResponse.json({Error:{...errors}},{status:400})
-       const res = await addUser(dataUser)
+        await addUser(dataUser)
         return NextResponse.json({
-            message:'User is created',
-            userid: res._id
+            message:'User is created'   
            },{
             status:200
         });

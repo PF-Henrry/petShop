@@ -5,6 +5,7 @@ export const URL_CHECKED = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\
 // regex para validar que sea una url de imagen.
 
 export const URLIMG_CHECKED = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*\.(jpg|jpeg|png|gif|bmp|svg|webp)$/;
+
 // regex para validar que sea una contraseña segura.
 
 

@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 import Router from 'next/router';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+
 import { EMAIL_CHECKED, PASSWORD_CHECKED } from '@/utils/regex';
 
 const validationSchema = Yup.object({
@@ -31,7 +32,7 @@ const validationSchema = Yup.object({
 const Signup = ({ initialValues, onSubmit }) => {
   const handleOnSubmit = (values) => {
     console.log("Formulario enviado con los siguientes valores:", values);
-    // Falta lógica para enviar los datos al back
+    // Falta lógica para enviar los datos al back 
     Router.push('/profile');
   };
 
