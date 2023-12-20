@@ -12,7 +12,7 @@ import {
   Scissors,
 } from "@phosphor-icons/react/dist/ssr";
 import "./Navbar.css";
-
+  
 export default function Navbar() {
   return (
     <nav>

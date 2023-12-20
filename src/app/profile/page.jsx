@@ -5,7 +5,7 @@ import EditProfileForm from '../../components/EditProfile/EditProfileForm';
 const Profile = () => {
     const [editable, setEditable] = useState(false);
     
-
+ 
     const initialValues = {
       name: '',
       lastname: '',
@@ -37,7 +37,7 @@ const Profile = () => {
   
     return (
       <div>
-        <h1 class="text-3xl font-bold mb-6 flex items-center justify-center">Datos del Perfil</h1>
+        <h1 className="text-3xl font-bold mb-6 flex items-center justify-center">Datos del Perfil</h1>
         <button
     className={`block mx-auto py-2 px-4 rounded ${
       editable ? 'bg-red-500' : 'bg-green-500'

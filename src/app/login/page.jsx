@@ -3,13 +3,15 @@ import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Link from 'next/link';
 import * as Yup from 'yup';
-import Router from 'next/router';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-
-import { EMAIL_CHECKED, PASSWORD_CHECKED } from '@/utils/regex';
+import {  useRouter } from 'next/navigation';
+import { EMAIL_CHECKED, PASSWORD_CHECKED } from '@/utils/regex'
+import {signIn} from 'next-auth/react';
+import toastNotify from '@/libs/toast';
+ 
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -29,6 +31,8 @@ const validationSchema = Yup.object({
 });
 
 const Login = ({ initialValues, onSubmit }) => {
+  const router = useRouter();
+  const {showNotify,ToastContainer} = toastNotify();
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -37,12 +41,19 @@ const Login = ({ initialValues, onSubmit }) => {
     }
    
 
-  const handleOnSubmit = (values) => {
-    console.log("Formulario enviado con los siguientes valores:", values);
-    // Falta lógica para enviar los datos al back
-    Router.push('/');
+
+  const handleOnSubmit = async (values) => {
+    try {
+      const res = await signIn("credentials",{...values,redirect: false});
+      
+     if(res.ok){
+      localStorage.setItem('ToasNotify',JSON.stringify({type:"success",message:"login success"}))
+      router.push("/");}
+     else showNotify("error",res.error)
+    } catch (error) {
+      showNotify("error",error.message)
+    }
   };
-  
   const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
           handleOnSubmit(); 
@@ -150,6 +161,7 @@ return (
           </Form>
         )}
       </Formik>
+      <ToastContainer/>
     </div>
   );
 };
