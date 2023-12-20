@@ -10,7 +10,7 @@ return(
     {children}
 </SessionProvider>
 )
-}
+} 
 
 export default SessionAuthProvider
 

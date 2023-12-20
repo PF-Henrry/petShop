@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
 import {  EMAIL_CHEKED, PASSWORD_CHECKED, INPUT_NAME_CHECKED,
      ZIP_CHECKED,AREA_CODE_CHECKED,ONLYNUMBERS_CHECKED} from '@/utils/regex'
-
+ 
 const validationSchema = Yup.object({
     name: Yup.string().required('Campo requerido').matches(
         INPUT_NAME_CHECKED,

@@ -6,13 +6,11 @@ const userSchemma = new Schema({
 
     name:{
         type: String,
-        required:[true, 'Name is required'],
         trim: true,
         match: INPUT_NAME_CHECKED
     },
     lastname:{
         type:String,
-        required:[true, 'Name is required'],
         trim: true,
         match: INPUT_NAME_CHECKED
     },
@@ -26,7 +24,6 @@ const userSchemma = new Schema({
     },
     adress:{
         type:String,
-        required:[true, 'Enter an username'],
         trim: true,
         minlength: 5,
         maxlength: 100,
@@ -46,8 +43,6 @@ const userSchemma = new Schema({
     },
     img:{
         type: String,
-        required:[true,'Image is required'],
-        trim: true,
     },
     email:{
         type: String,
@@ -63,7 +58,6 @@ const userSchemma = new Schema({
     },
     codeP:{
         type:Number,
-        required:[true,'Please enter a valid email'],
         match: POSTAL_CHECKED
     },
     favorite:{

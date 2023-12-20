@@ -8,7 +8,7 @@ export async function POST(request) {
 
    const {email,password,img} = dataUser;
    let errors = {};
-
+ 
   try {
 
 

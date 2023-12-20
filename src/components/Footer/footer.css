@@ -10,7 +10,7 @@
   list-style: none;
 }
 
-footer {
+footer { 
   @apply bg-[#DABEB6];
 
   .backToTop {

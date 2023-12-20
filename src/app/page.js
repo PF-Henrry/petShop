@@ -2,7 +2,7 @@
 
 import { useEffect } from "react"
 import toastNotify from '@/libs/toast';
-
+ 
 
 export default function Home() {
   const {showNotify,ToastContainer} = toastNotify();
