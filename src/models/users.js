@@ -33,7 +33,13 @@ const userSchemma = new Schema({
         require:true,
     },
     img:{
+<<<<<<< HEAD
         type: String
+=======
+        type: String,
+        required:[true,'Image is required'],
+        trim: true,
+>>>>>>> 4cd9854ebfab1a4c951472b2054afa15b6c931ad
     },
     email:{
         type: String,
@@ -50,6 +56,9 @@ const userSchemma = new Schema({
     },
     favorite:{
         type: Types.ObjectId
+    },
+    token:{
+        type: String
     }
 });
 
