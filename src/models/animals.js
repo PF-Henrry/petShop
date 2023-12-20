@@ -1,7 +1,6 @@
 import { Schema,Types,model,models } from "mongoose";
 import { GOOD_GRAMMAR_CHECKED, URLIMG_CHECKED} from '@/utils/regex';
 
-
 const animalSchemma = new Schema({
     name:{
         type:String,

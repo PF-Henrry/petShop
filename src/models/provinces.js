@@ -10,5 +10,4 @@ const provinceSchemma = new Schema({
         match: GOOD_GRAMMAR_CHECKED
     }
 })
-
 export default models.Province || model('Province',provinceSchemma);

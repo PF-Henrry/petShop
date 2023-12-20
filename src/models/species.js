@@ -12,5 +12,4 @@ const specieSchemma = new Schema({
         match: GOOD_GRAMMAR_CHECKED
     }
 })
-
 export default models.Specie || model('Specie',specieSchemma);

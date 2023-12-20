@@ -10,5 +10,4 @@ const citySchemma = new Schema({
         match: GOOD_GRAMMAR_CHECKED
     }
 })
-
 export default models.City || model('City',citySchemma);

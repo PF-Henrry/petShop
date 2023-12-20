@@ -4,7 +4,6 @@ import {connect,connection} from "mongoose";
 export const conn = {
     isConnected:false
 }
-
 const {DB_URI} = process.env 
 export async function connectDB(){
     if(conn.isConnected) return;

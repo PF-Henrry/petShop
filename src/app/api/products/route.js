@@ -3,7 +3,6 @@ import { addProduct } from "@/libs/createProductWithRelation";
 import products from "@/models/products";
 
 export async function GET(request){
-
 }
 
 export async function POST(request){

@@ -3,7 +3,6 @@ import { Types, Schema, model, models} from "mongoose";
 import {INPUT_NAME_CHECKED, ADDRESS_CHECKED, URLIMG_CHECKED, EMAIL_CHECKED, PASSWORD_CHECKED, POSTAL_CHECKED} from '@/utils/regex';
 
 const userSchemma = new Schema({
-
     name:{
         type: String,
         trim: true,

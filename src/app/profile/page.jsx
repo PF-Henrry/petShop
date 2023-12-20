@@ -5,7 +5,6 @@ import EditProfileForm from '../../components/EditProfile/EditProfileForm';
 const Profile = () => {
     const [editable, setEditable] = useState(false);
     
- 
     const initialValues = {
       name: '',
       lastname: '',

@@ -2,7 +2,6 @@ import { Schema,model,models } from "mongoose";
 import { GOOD_GRAMMAR_CHECKED } from '@/utils/regex';
 
 
-
 const breedSchemma = new Schema({
     name:{
         type: String,
