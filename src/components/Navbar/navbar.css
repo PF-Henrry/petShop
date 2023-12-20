@@ -11,7 +11,7 @@
 }
  
 nav {
-  @apply bg-[#DABEB6] w-full h-24 fixed top-0 left-0 px-5 py-2 flex justify-between z-50;
+  @apply bg-[#DABEB6] w-full h-24 fixed top-0 left-0 px-8 py-2 flex justify-between z-50;
 
   .btn-container {
     @apply hidden;
@@ -44,15 +44,28 @@ nav {
       @apply flex items-center gap-8;
       & li {
         & a {
-          @apply text-xl font-semibold text-[#143146] duration-300 flex items-center gap-1;
+          @apply relative text-lg font-semibold text-[#143146] duration-300 flex items-center gap-1 overflow-hidden;
 
-          &:hover {
-            @apply text-[#2d638b];
+          &::after {
+            content: "";
+            @apply absolute w-full h-[2px] bg-[#143146] bottom-0 left-0 translate-y-[-2rem] duration-200;
+          }
+        }
+
+        &:hover a {
+          @apply text-[#2d638b];
+
+          &::after {
+            @apply bg-[#2d638b] translate-y-0;
           }
         }
 
         &:last-child a {
           @apply ml-5 text-base bg-[#E3D4D0] px-3 py-4 rounded-[15px] shadow-[0_4px_4px_0_rgba(0,0,0,0.25)];
+
+          &::after {
+            @apply hidden;
+          }
 
           &:hover {
             @apply bg-[#eee0dd];
@@ -97,7 +110,11 @@ nav {
             @apply hidden;
           }
           & a {
-            @apply text-2xl font-semibold text-[#DABEB6] uppercase gap-5 w-full flex translate-x-[-500%] transition-transform duration-[.5s] opacity-0;
+            @apply text-2xl font-semibold text-[#DABEB6] uppercase gap-5 w-full flex translate-x-[-500%] transition-transform duration-[.5s] opacity-0 overflow-visible;
+
+            &::after {
+              @apply hidden;
+            }
 
             .icon-list {
               @apply scale-150;
