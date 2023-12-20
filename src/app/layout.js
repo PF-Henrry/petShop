@@ -1,6 +1,7 @@
 import { Inter, Jomhuria } from "next/font/google";
 import favicon from "../public/favicon.ico";
 import "./globals.css";
+import SessionAuthProvider from "@/context/SessionAuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 export const jomhuria = Jomhuria({
@@ -14,12 +15,18 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+
   return (
     <html lang="en">
       <head>
         <link rel="icon" href={favicon.src} />
       </head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <SessionAuthProvider>
+        {children}
+        </SessionAuthProvider>
+        
+        </body>
     </html>
   );
 }

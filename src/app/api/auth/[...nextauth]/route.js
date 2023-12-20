@@ -119,6 +119,8 @@ const authOptions = {
                     });
                 }
                 return true
+
+                    return true
             }
 
             },
