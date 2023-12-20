@@ -1,24 +1,33 @@
-import { encrypt } from "@/libs/crypt";
+import { encrypt,isEqual } from "@/libs/crypt";
 import { Types, Schema, model, models} from "mongoose";
+import {INPUT_NAME_CHECKED, ADDRESS_CHECKED, URLIMG_CHECKED, EMAIL_CHECKED, PASSWORD_CHECKED, POSTAL_CHECKED} from '@/utils/regex';
 
 const userSchemma = new Schema({
 
     name:{
         type: String,
-        required:[true, 'Name is required'],
-        maxlength: [10, 'The name is too long'],
         trim: true,
+        match: INPUT_NAME_CHECKED
     },
     lastname:{
-        type:String
+        type:String,
+        trim: true,
+        match: INPUT_NAME_CHECKED
     },
     username:{
         type: String,
         required:[true, 'Enter an username'],
         unique:true,
+        trim: true,
+        minlength: 3,
+        maxlength: 20
     },
     adress:{
         type:String,
+        trim: true,
+        minlength: 5,
+        maxlength: 100,
+        match: ADDRESS_CHECKED
     },
     city:{
         type: Types.ObjectId,
@@ -33,26 +42,23 @@ const userSchemma = new Schema({
         require:true,
     },
     img:{
-<<<<<<< HEAD
-        type: String
-=======
         type: String,
-        required:[true,'Image is required'],
-        trim: true,
->>>>>>> 4cd9854ebfab1a4c951472b2054afa15b6c931ad
     },
     email:{
         type: String,
         unique:true,
         required:[true,'Please enter an email'],
-        
+        trim: true,
+        match: EMAIL_CHECKED
     },
     password:{
         type:String,
-        required:[true,'Please enter a valid email']
+        required:[true,'Please enter a valid email'],
+        match: PASSWORD_CHECKED
     },
     codeP:{
-        type:Number
+        type:Number,
+        match: POSTAL_CHECKED
     },
     favorite:{
         type: Types.ObjectId
@@ -62,6 +68,9 @@ const userSchemma = new Schema({
     }
 });
 
+userSchemma.methods.comparePassword  =  function(inputPassword){
+    if(inputPassword) return  isEqual(this.password,inputPassword);
+}
 
 userSchemma.pre('save', async function (next){
     const user = this;

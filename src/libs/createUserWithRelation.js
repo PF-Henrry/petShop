@@ -23,7 +23,6 @@ export  async function addUser(user) {
       });
 
       const newFavorite = await Favorite.create({userID:savedUser._id,products:[]});
-      console.log(newFavorite)
     
       return savedUser
     
