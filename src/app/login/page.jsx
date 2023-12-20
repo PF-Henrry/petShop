@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-import { useRouter } from 'next/navigation';
+import {  useRouter } from 'next/navigation';
 import { EMAIL_CHECKED, PASSWORD_CHECKED } from '@/utils/regex'
 import {signIn} from 'next-auth/react';
 import toastNotify from '@/libs/toast';
@@ -80,7 +80,7 @@ const Login = ({ initialValues, onSubmit }) => {
 
           <div className="grid gap-2">
           <div className="flex flex-col items-center justify-center space-y-6 mt-14 gap-1">
-      <button className="flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
+      <button onClick={()=> signIn('google',{redirect:false})} className="flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
         bg-white border border-slate-600 rounded-md hover:bg-gray-100 
       focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 focus:ring-opacity-50 ">
 
@@ -90,7 +90,7 @@ const Login = ({ initialValues, onSubmit }) => {
                 <span className="text-gray-700 font-medium">Continuar con Google</span>
                 </button>
 
-                <button className="flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
+                <button onClick={()=> signIn('facebook',{redirect:false})} className="flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
                  bg-white border border-slate-600 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2
                   focus:ring-gray-600 focus:ring-opacity-50">
                 <svg width="24" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#3b5998" >
