@@ -1,7 +1,7 @@
 import { Inter, Jomhuria } from "next/font/google";
 import favicon from "../public/favicon.ico";
+
 import SessionAuthProvider from "@/context/SessionAuthProvider";
-import Navbar from "@/components/Navbar/Navbar";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,7 +20,6 @@ export default function RootLayout({ children }) {
         <link rel="icon" href={favicon.src} />
       </head>
       <body className={inter.className}>
-        <Navbar />
         <SessionAuthProvider>{children}</SessionAuthProvider>
       </body>
     </html>
