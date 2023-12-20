@@ -1,7 +1,10 @@
 import NextAuth from "next-auth/next";
 import CredentialsProvider  from "next-auth/providers/credentials";
+import FacebookProvider from "next-auth/providers/facebook"
+import GoogleProvider from "next-auth/providers/google";
 import { conn,connectDB } from "@/libs/mongodb";
 import Users from "@/models/users";
+import { addUser } from "@/libs/createUserWithRelation";
 
 const authOptions = {
         providers: [
@@ -15,8 +18,11 @@ const authOptions = {
                     if(!conn.isConnected) connectDB();
 
                     const findUser = await Users.findOne({email:credentials.email});
+
                     console.log(findUser?.img)
                     if(!findUser) throw new Error("Credenciales incorrectas")
+                    if(findUser?.auth3rd) throw new Error('Account requires access through 3rd party');
+
                     const matchPassword = await findUser.comparePassword(credentials.password);
                     if(!matchPassword)  throw new Error("Credenciales incorrectas")
                     return {
@@ -26,26 +32,107 @@ const authOptions = {
                         image: findUser.img,
                     }
                 }
-            })
+            }),
+            FacebookProvider({
+                clientId: process.env.FACEBOOK_CLIENT_ID,
+                clientSecret: process.env.FACEBOOK_CLIENT_SECRET
+              }),
+
+            GoogleProvider({
+                  clientId: process.env.GOOGLE_CLIENT_ID,
+                  clientSecret: process.env.GOOGLE_CLIENT_SECRET
+                })
+
         ],
         callbacks: {
             async signIn({ user, account, profile, email, credentials }) {
-              if (account?.provider === 'credentials') {
+                console.log(user)
+                console.log(account)
+                console.log(profile)
+                console.log(email)
+                console.log(credentials)
+
+            if (account?.provider === 'credentials') {
                 // Realizas tu lógica de redirección aquí
                 return true // Redirigir al home después del inicio de sesión
               }
+
+            if(account?.provider === 'facebook'){
+                if(!conn.isConnected) connectDB()
+                const findUser = await Users.findOne({email: user.email});
+                if(findUser){
+                    findUser.password = account.access_token
+                    findUser.img = user.image
+                    await findUser.save();
+                } else {
+                    const splitName = user.name.split(" ");
+                    const name = splitName[0];
+                    const lastname = splitName[1];
+                    const username = user.email.split("@")[0];
+                    const img = user.image
+                   await addUser({
+                        "name":name,
+                        "lastname":lastname,
+                        "img":img,
+                        username:username,
+                        password:'Predeter123!',
+                        email: user.email,
+                        city:'Unknown',
+                        codeP:0,
+                        province:'Unknown',
+                        adress:'Unknown',
+                        role:1,
+                        auth3rd:true,
+                        token:account.access_token,
+                    });
+                }
+                return true
+            }
+
+            if(account?.provider === 'google'){
+                if(!conn.isConnected) connectDB()
+                const findUser = await Users.findOne({email: user.email});
+                if(findUser){
+                    findUser.password = account.access_token
+                    findUser.img = user.image
+                    await findUser.save();
+                } else {
+                    const splitName = user.name.split(" ");
+                    const name = splitName[0];
+                    const lastname = splitName[1];
+                    const username = user.email.split("@")[0];
+                    const img = user.image
+                   await addUser({
+                        "name":name,
+                        "lastname":lastname,
+                        "img":img,
+                        username,
+                        password:'Predeter123!',
+                        email: user.email,
+                        city:'Unknown',
+                        codeP:0,
+                        province:'Unknown',
+                        adress:'Unknown',
+                        role:1,
+                        auth3rd:true,
+                        token:account.access_token,
+                    });
+                }
+                return true
+
+                    return true
+            }
+
             },
             async jwt({ token, account }) {
                 if (account) { 
-                    console.log(token)
-                    console.log(account)
+                   
                   token.accessToken = account.access_token
                 }
                 return token
               },
               async session({ session, token, user }) {
-                console.log(session)
-                console.log(token)
+               
                 session.accessToken = token.accessToken
                 return session
               }

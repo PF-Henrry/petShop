@@ -17,7 +17,7 @@ export default function Home() {
       localStorage.removeItem('ToasNotify');
     }
 
-  },[]);
+  },[showNotify]);
 
 
   return (

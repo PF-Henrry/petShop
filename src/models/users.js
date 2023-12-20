@@ -48,7 +48,6 @@ const userSchemma = new Schema({
         type: String,
         required:[true,'Image is required'],
         trim: true,
-        match: URLIMG_CHECKED
     },
     email:{
         type: String,
@@ -69,6 +68,9 @@ const userSchemma = new Schema({
     },
     favorite:{
         type: Types.ObjectId
+    },
+    token:{
+        type: String
     }
 });
 
