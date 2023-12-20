@@ -2,9 +2,9 @@ import { Schema,model,models } from "mongoose";
 
 const newBrand = new Schema({
     name:{
-        type: String,
+        type : String,
         unique:true,
-        required:[true,'Name is required'],
+        required:true,
     }
 })
 
