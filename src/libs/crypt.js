@@ -7,4 +7,4 @@ export const encrypt = async (pass) =>{
     return newPass
 }
 
-export const isEqual =  (hash,pass) =>   compare(pass,hash) 
+export const isEqual = async (hash,pass) => await compare(pass,hash) 

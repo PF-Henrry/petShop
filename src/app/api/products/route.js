@@ -1,9 +1,31 @@
 import { NextResponse } from "next/server";
+import { getProductById, getAllProducts } from "@/libs/bringProductsWhitRelarion";
 import { addProduct } from "@/libs/createProductWithRelation";
+import { deletedProductByID } from "@/libs/deletedProductById";
+import { updateProductById } from "@/libs/updateProductWhitRelation";
 import products from "@/models/products";
 
 export async function GET(request){
-
+   try {
+      const { productId } = request.query;
+  
+      if (productId) {
+        // Obtener un producto específico por ID
+        const findProduct = await getProductById(productId);
+  
+        if (findProduct) {
+          return NextResponse.json(findProduct, { status: 200 });
+        } else {
+          return NextResponse.json({ error: "Product not found" }, { status: 404 });
+        }
+      } else {
+        // Obtener todos los productos
+        const allProducts = await getAllProducts();
+        return NextResponse.json(allProducts, { status: 200 });
+      }
+    } catch (error) {
+      return NextResponse.json(error, { status: 500 });
+    }
 }
 
 export async function POST(request){
@@ -42,10 +64,40 @@ export async function POST(request){
     }
 }
 
-export function DELETE(request){
+export async function DELETE(request){
+   try {
+      const { productId } = request.query;
 
+      if(!productId){
+         return NextResponse.json({error: 'Product ID is requiered'}, {status:400});
+      }
+      const deletedProduct = await deletedProductByID(productId);
+
+      if(deletedProduct){
+         return NextResponse.json({message: 'Product deleted successfully'}, {status:200})
+      }else{
+         return NextResponse.json({error: 'Product not found'}, {status:404})
+      }
+   } catch (error) {
+      return NextResponse.json(error, {status:500})
+   }
 }
 
-export function PUT(request){
+export async function PUT(request){
+   try {
+      const { productId } = request.query;
+      const updateData = await request.json();
 
+      if(!productId){
+         return NextResponse.json({error: 'Product ID is required'}, {status:400});
+      }
+      const updateProduct = await updateProductById(productId, updateData);
+      if(updateProduct){
+         return NextResponse.json(updateProduct, {status: 200});
+      }else{
+         return NextResponse.json({error:'Product not found' }, {status:404});
+      }
+   } catch (error) {
+      return NextResponse.json(error, {status:500})
+   }
 }

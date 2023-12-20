@@ -1,10 +1,7 @@
-'use client'
-
-import { useEffect } from "react"
-import toastNotify from '@/libs/toast';
-
 
 export default function Home() {
+<<<<<<< HEAD
+=======
   const {showNotify,ToastContainer} = toastNotify();
 
   useEffect(()=>{
@@ -20,11 +17,10 @@ export default function Home() {
   },[showNotify]);
 
 
+>>>>>>> 4cd9854ebfab1a4c951472b2054afa15b6c931ad
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <h1>HOLA MUNDO</h1>
-       
-        <ToastContainer/>
     </main>
   )
 }
