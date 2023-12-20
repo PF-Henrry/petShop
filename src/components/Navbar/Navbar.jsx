@@ -16,7 +16,7 @@ import {
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import "./Navbar.css";
-
+  
 export default function Navbar() {
   return (
     <nav>

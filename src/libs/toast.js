@@ -12,7 +12,7 @@ export default function toastNotify(){
           closeOnClick: true, // Cerrar al hacer clic
           pauseOnHover: true, // Pausar al pasar el ratón sobre la notificación
           draggable: true, // Permitir arrastrar la notificación
-        });
+        }); 
       };
       showToast()
   }

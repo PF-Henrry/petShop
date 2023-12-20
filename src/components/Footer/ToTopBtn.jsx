@@ -7,7 +7,7 @@ export default function ToTopBtnFooter() {
       behavior: "smooth",
     });
   };
-  return (
+  return ( 
     <div>
       <button className="backToTop-btn" onClick={backToTop}>
         Inicio de p&aacute;gina

@@ -1,11 +1,13 @@
 import Users from "@/models/users";
 import Citys from "@/models/city";
 import Provinces from "@/models/provinces";
+import Favorite from "@/models/favorite"
 import { findOrCreateModel } from "./dbmethods";
 import { connectDB } from "@/libs/mongodb";
 
 
 export  async function addUser(user) {
+  console.log(user)
   try {
     const { city, province } = user;
     connectDB();
@@ -19,6 +21,8 @@ export  async function addUser(user) {
         city: newCity._id,
         province: newProvince._id,
       });
+
+      const newFavorite = await Favorite.create({userID:savedUser._id,products:[]});
     
       return savedUser
     

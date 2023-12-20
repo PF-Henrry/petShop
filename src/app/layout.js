@@ -4,6 +4,7 @@ import favicon from "../public/favicon.ico";
 import Footer from "@/components/Footer/Footer";
 import Navbar from "@/components/Navbar/NavBar";
 import "./globals.css";
+import SessionAuthProvider from "@/context/SessionAuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 export const jomhuria = Jomhuria({
@@ -23,6 +24,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <Navbar />
         {children}
+        <SessionAuthProvider>{children}</SessionAuthProvider>
         <Footer />
       </body>
     </html>
