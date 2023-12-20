@@ -23,7 +23,6 @@ export default function RootLayout({ children }) {
       </head>
       <body className={inter.className}>
         <Navbar />
-        {children}
         <SessionAuthProvider>{children}</SessionAuthProvider>
         <Footer />
       </body>
