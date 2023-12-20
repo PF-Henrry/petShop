@@ -10,7 +10,7 @@ const InfoSection = () => {
     <div className="flex gap-8 border-b pb-8 mb-8 border-slate-400">
       <div className="border-r pr-8  border-slate-400">
         <p className="mb-4">Todos los medios de pago:</p>
-
+ 
         <div className="flex items-center justify-center  gap-4">
           <Image
             src={MP}

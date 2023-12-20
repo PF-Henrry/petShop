@@ -6,7 +6,7 @@ import brandsDB from "@/models/brands";
 
 export const addProduct = async (dataProduct) => {
 
-    try {
+    try { 
         connectDB();
 
         const {brand,discount,category,name,price} = dataProduct;

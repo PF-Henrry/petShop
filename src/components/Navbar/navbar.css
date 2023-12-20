@@ -9,7 +9,7 @@
   text-decoration: none;
   list-style: none;
 }
-
+ 
 nav {
   @apply bg-[#DABEB6] w-full h-24 fixed top-0 left-0 px-5 py-2 flex justify-between z-50;
 

@@ -11,7 +11,7 @@ import {  useRouter } from 'next/navigation';
 import { EMAIL_CHECKED, PASSWORD_CHECKED } from '@/utils/regex'
 import {signIn} from 'next-auth/react';
 import toastNotify from '@/libs/toast';
-
+ 
 
 const validationSchema = Yup.object({
   email: Yup.string()

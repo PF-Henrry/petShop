@@ -8,7 +8,7 @@ export async function GET(request){
 
 export async function POST(request){
     try {
-        
+         
         const dataProduct = await request.json();
         /*
          {
