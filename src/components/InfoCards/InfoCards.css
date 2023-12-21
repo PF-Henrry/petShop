@@ -1,0 +1,35 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@media (max-width: 500px) {
+  .infoDiv {
+    flex-direction: column;
+  }
+
+  .infoDiv > div {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .infoDiv img {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 200px) {
+  .infoDiv {
+    flex-direction: column;
+  }
+
+  .infoDiv > div {
+    width: 50%;
+    margin-bottom: 5px;
+  }
+
+  .infoDiv img {
+    width: 40px;
+    height: 40px;
+  }
+}
