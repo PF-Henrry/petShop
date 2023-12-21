@@ -70,7 +70,7 @@ const Login = ({ initialValues, onSubmit }) => {
         
         
                 <div className="flex flex-col items-center justify-center space-y-6 mt-14 gap-1">
-                <button type="button" className="max-w-md flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
+                <button  onClick={()=> signIn('google')} type="button" className="max-w-md flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
          bg-white border border-slate-600 rounded-md hover:bg-gray-100  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 focus:ring-opacity-50 ">
         
                  <svg viewBox="0 0 48 48" width="35" height="24" version="1.1" xmlns="http://www.w3.org/2000/svg" 
@@ -83,7 +83,7 @@ const Login = ({ initialValues, onSubmit }) => {
                 <span className="text-gray-700 font-medium">Continuar con Google</span>
                 </button>
         
-                <button type="button" className="max-w-md flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
+                <button onCLick= { ()=> signIn('facebook')}type="button" className="max-w-md flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
                  bg-white border border-slate-600 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2
                   focus:ring-gray-600 focus:ring-opacity-50">
                 <svg width="24" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#3b5998" >

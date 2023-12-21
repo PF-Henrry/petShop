@@ -61,7 +61,6 @@ const authOptions = {
                 if(!conn.isConnected) connectDB()
                 const findUser = await Users.findOne({email: user.email});
                 if(findUser){
-                    findUser.password = account.access_token
                     findUser.img = user.image
                     await findUser.save();
                     return true
@@ -95,7 +94,6 @@ const authOptions = {
                 if(!conn.isConnected) connectDB()
                 const findUser = await Users.findOne({email: user.email});
                 if(findUser){
-                    findUser.password = account.access_token
                     findUser.img = user.image
                     await findUser.save();
                     return true
