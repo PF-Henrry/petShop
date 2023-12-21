@@ -7,9 +7,9 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
-import {  EMAIL_CHEKED, ID_CHECKED, PASSWORD_CHECKED, INPUT_NAME_CHECKED,
-     ZIP_CHECKED,AREA_CODE_CHECKED,CEL_CHECKED} from '@/utils/regex'
-
+import {  EMAIL_CHEKED, PASSWORD_CHECKED, INPUT_NAME_CHECKED,
+     ZIP_CHECKED,AREA_CODE_CHECKED,ONLYNUMBERS_CHECKED} from '@/utils/regex'
+ 
 const validationSchema = Yup.object({
     name: Yup.string().required('Campo requerido').matches(
         INPUT_NAME_CHECKED,
@@ -31,13 +31,13 @@ const validationSchema = Yup.object({
     
   
     areaCode: Yup.string().matches(AREA_CODE_CHECKED, 'Ingrese un código de área válido').required('Campo requerido'),
-    phoneNumber: Yup.string().matches(CEL_CHECKED, 'Ingrese un número de teléfono válido').required('Campo requerido'),
+    phoneNumber: Yup.string().matches(ONLYNUMBERS_CHECKED, 'Ingrese un número de teléfono válido').required('Campo requerido'),
     email: Yup.string().required('Campo requerido').matches(
         EMAIL_CHEKED,
         'El e-mail ingresado no es válido'),  
 
     street: Yup.string().required('Campo requerido'),
-    numStreet: Yup.string().required('Campo requerido').matches(ID_CHECKED, 'Ingrese un número válido'),
+    numStreet: Yup.string().required('Campo requerido').matches(ONLYNUMBERS_CHECKED, 'Ingrese un número válido'),
     neighborhood: Yup.string().required('Campo requerido'),
     floor: Yup.string().length(2),
     apartment: Yup.string(),
@@ -95,11 +95,11 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
       enableReinitialize // Permite reinicializar los valores cuando cambia la propiedad initialValues
     >
       {({ isSubmitting, isValid }) => (
-       <Form class="max-w-5xl mx-auto my-8 p-8 rounded shadow border border-gray-300 bg-customPrimary">
+       <Form className="max-w-5xl mx-auto my-8 p-8 rounded shadow border border-gray-300 bg-customPrimary">
 
-            <div class="mb-4"  >
-          <p class="text-xl font-bold mb-4">Datos Personales:</p>
-          <div class="grid grid-cols-2 gap-4" >
+            <div className="mb-4"  >
+          <p className="text-xl font-bold mb-4">Datos Personales:</p>
+          <div className="grid grid-cols-2 gap-4" >
           <Field
             name="name"
             label="Nombre"
@@ -145,9 +145,9 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
           
        </div>
 
-       <div class="mb-4" >
-          <p class="text-xl font-bold mb-4" >Datos de Contacto:</p>
-          <div class="grid grid-cols-2 gap-4">
+       <div className="mb-4" >
+          <p className="text-xl font-bold mb-4" >Datos de Contacto:</p>
+          <div className="grid grid-cols-2 gap-4">
           <Field
               name="areaCode"
               label="Código de Área"
@@ -180,10 +180,10 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
           </div>
           </div>
 
-          <div class="mb-4" >
-          <p class="text-xl font-bold mb-1">Dirección de Envío:</p>
-          <p class="text-sm text-gray-500 mt-1 mb-3">Para envíos fuera de CABA, contactar al vendedor</p>
-          <div class="grid grid-cols-2 gap-4">
+          <div className="mb-4" >
+          <p className="text-xl font-bold mb-1">Dirección de Envío:</p>
+          <p className="text-sm text-gray-500 mt-1 mb-3">Para envíos fuera de CABA, contactar al vendedor</p>
+          <div className="grid grid-cols-2 gap-4">
 
           <Field
             name="street"
@@ -242,7 +242,7 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
           </div>
           </div>
 
-          <div class="mb-4" >
+          <div className="mb-4" >
          
          </div>
          <div>
