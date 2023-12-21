@@ -32,12 +32,19 @@ const productSchema = new Schema({
         type: Types.ObjectId,
         ref:"Brands"
     },
+    specie:{
+        type: [Types.ObjectId]
+    },
     discount:{
         type: Types.ObjectId,
     },
     category:{
         type: Types.ObjectId, 
         ref:"Category"
+    },
+    productAge:{
+        type: String,
+        
     }
 })
 

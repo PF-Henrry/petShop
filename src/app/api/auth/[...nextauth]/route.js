@@ -61,41 +61,9 @@ const authOptions = {
                 if(!conn.isConnected) connectDB()
                 const findUser = await Users.findOne({email: user.email});
                 if(findUser){
-                    findUser.password = account.access_token
                     findUser.img = user.image
                     await findUser.save();
-                } else {
-                    const splitName = user.name.split(" ");
-                    const name = splitName[0];
-                    const lastname = splitName[1];
-                    const username = user.email.split("@")[0];
-                    const img = user.image
-                   await addUser({
-                        "name":name,
-                        "lastname":lastname,
-                        "img":img,
-                        username:username,
-                        password:'Predeter123!',
-                        email: user.email,
-                        city:'Unknown',
-                        codeP:0,
-                        province:'Unknown',
-                        adress:'Unknown',
-                        role:1,
-                        auth3rd:true,
-                        token:account.access_token,
-                    });
-                }
-                return true
-            }
-
-            if(account?.provider === 'google'){
-                if(!conn.isConnected) connectDB()
-                const findUser = await Users.findOne({email: user.email});
-                if(findUser){
-                    findUser.password = account.access_token
-                    findUser.img = user.image
-                    await findUser.save();
+                    return true
                 } else {
                     const splitName = user.name.split(" ");
                     const name = splitName[0];
@@ -119,8 +87,40 @@ const authOptions = {
                     });
                 }
                 return true
+            }
 
+            if(account?.provider === 'google'){
+                console.log('entro aca')
+                if(!conn.isConnected) connectDB()
+                const findUser = await Users.findOne({email: user.email});
+                if(findUser){
+                    findUser.img = user.image
+                    await findUser.save();
                     return true
+                } else {
+                    const splitName = user.name.split(" ");
+                    const name = splitName[0];
+                    const lastname = splitName[1];
+                    const username = user.email.split("@")[0];
+                    const img = user.image
+                   await addUser({
+                        "name":name,
+                        "lastname":lastname,
+                        "img":img,
+                        username,
+                        password:'Predeter123!',
+                        email: user.email,
+                        city:'Unknown',
+                        codeP:0,
+                        province:'Unknown',
+                        adress:'Unknown',
+                        role:1,
+                        auth3rd:true,
+                        token:account.access_token,
+                    });
+                }
+                
+                return true
             }
 
             },
