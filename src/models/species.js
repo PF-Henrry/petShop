@@ -10,6 +10,12 @@ const specieSchemma = new Schema({
         minlength: 2,
         maxlength: 50,
         match: GOOD_GRAMMAR_CHECKED
+    },
+    age:{
+        type: String,
+    },
+    size:{
+        type: String,
     }
 })
 
