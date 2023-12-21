@@ -1,0 +1,55 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+@media (max-width: 500px) {
+  .categoryDiv {
+    display: grid;
+    flex-direction: column;
+  }
+
+  .categoryDiv > div {
+    width: 20px;
+    height: 100px;
+    margin-bottom: 10px;
+  }
+
+  .categoryDiv img {
+    width: 50%;
+    height: auto;
+  }
+}
+
+@media (max-width: 650px) {
+  .categoryDiv {
+    display: grid;
+    flex-direction: column;
+  }
+
+  .categoryDiv > div {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .categoryDiv img {
+    width: 100px;
+    height: 100px;
+    min-width: 100px;
+  }
+}
+
+@media (max-width: 200px) {
+  .categoryDiv {
+    flex-direction: column;
+  }
+
+  .categoryDiv > div {
+    width: 50%;
+    margin-bottom: 5px;
+  }
+
+  .categoryDiv img {
+    width: 40px;
+    height: 40px;
+  }
+}
