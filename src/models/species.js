@@ -13,10 +13,12 @@ const specieSchemma = new Schema({
     },
     age:{
         type: String,
+        enum: ['adult','puppy/kitten']
     },
     size:{
         type: String,
+        enum: ['small','big','medium']
     }
 })
 
-export default models.Specie || model('Specie',specieSchemma);
+export default models.Species || model('Species',specieSchemma);
