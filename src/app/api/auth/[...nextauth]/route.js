@@ -51,17 +51,23 @@ const authOptions = {
                 console.log(profile)
                 console.log(email)
                 console.log(credentials)
+                if(!conn.isConnected) connectDB()
+                const findUser = await Users.findOne({email: user.email});
 
             if (account?.provider === 'credentials') {
                 // Realizas tu lógica de redirección aquí
+                if(findUser){
+                    findUser.token = account.access_token
+                    await findUser.save();
+                }
                 return true // Redirigir al home después del inicio de sesión
               }
 
             if(account?.provider === 'facebook'){
-                if(!conn.isConnected) connectDB()
-                const findUser = await Users.findOne({email: user.email});
+               
                 if(findUser){
                     findUser.img = user.image
+                    findUser.token =  account.access_token
                     await findUser.save();
                     return true
                 } else {
@@ -90,10 +96,8 @@ const authOptions = {
             }
 
             if(account?.provider === 'google'){
-                console.log('entro aca')
-                if(!conn.isConnected) connectDB()
-                const findUser = await Users.findOne({email: user.email});
                 if(findUser){
+                    findUser.token =  account.access_token
                     findUser.img = user.image
                     await findUser.save();
                     return true
@@ -108,7 +112,7 @@ const authOptions = {
                         "lastname":lastname,
                         "img":img,
                         username,
-                        password:'Predeter123!',
+                        password:'Primkimei123!',
                         email: user.email,
                         city:'Unknown',
                         codeP:0,
