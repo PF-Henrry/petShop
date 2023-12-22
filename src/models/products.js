@@ -8,13 +8,11 @@ const productSchema = new Schema({
         trim: true,
         minlength: 2,
         maxlength: 20,
-        match: PRODUCT_NAME_CHECKED
     },
     price:{
         type: Number,
         required: [true, 'Please price is required'],
-        min: 0.01,
-        max: 1000000
+        min: 0.01
     },
     detail:{
         type: String,
@@ -26,25 +24,16 @@ const productSchema = new Schema({
     image:{
         type:String,
         trim: true,
-        match: URLIMG_CHECKED
     },
     brand: {
         type: Types.ObjectId,
         ref:"Brands"
     },
-    specie:{
-        type: [Types.ObjectId]
-    },
-    discount:{
-        type: Types.ObjectId,
+    species:{
+        type: [{type:Types.ObjectId,ref:'Species'}],
     },
     category:{
-        type: Types.ObjectId, 
-        ref:"Category"
-    },
-    productAge:{
-        type: String,
-        
+        type: [{type:Types.ObjectId,ref:'Category'}]
     }
 })
 
