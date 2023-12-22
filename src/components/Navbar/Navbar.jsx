@@ -1,3 +1,5 @@
+"use client";
+
 import logo from "@/public/assets/logoNav.png";
 import { jomhuria } from "@/app/layout";
 import Image from "next/image";
@@ -5,12 +7,14 @@ import Link from "next/link";
 import {
   List,
   X,
-  User,
   House,
   Storefront,
   PawPrint,
   Scissors,
+  SignIn,
 } from "@phosphor-icons/react/dist/ssr";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
 import "./Navbar.css";
   
 export default function Navbar() {
@@ -29,7 +33,7 @@ export default function Navbar() {
       <input type="checkbox" id="check-menu" />
       <span className="btn-container">
         <Link href="/login" className="login-btn">
-          <User size={25} weight="bold" />
+          <SignIn size={25} weight="bold" />
         </Link>
 
         <label htmlFor="check-menu" className="checkbtn">
@@ -65,7 +69,12 @@ export default function Navbar() {
             </Link>
           </li>
           <li>
-            <Link href="/login">Entrar/Registrar</Link>
+            <Tippy content="Entrar/Registrarse">
+              <Link href="/login" className="signin">
+                <SignIn size={20} weight="bold" />
+                Entrar
+              </Link>
+            </Tippy>
           </li>
         </div>
       </ul>
