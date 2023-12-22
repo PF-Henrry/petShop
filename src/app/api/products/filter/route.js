@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import products from "@/models/products";
 import mongoose from "mongoose";
-
+import { connectDB,conn } from "@/libs/mongodb";
 export async function POST(request){
    try {
+      if(!conn.isConnected) connectDB()
+
       const data = await request.json();
       const {query} = data;
       const SearchCriteria = {}
