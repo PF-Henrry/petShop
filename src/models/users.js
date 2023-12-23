@@ -53,8 +53,7 @@ const userSchemma = new Schema({
     },
     password:{
         type:String,
-        required:[true,'Please enter a valid email'],
-        match: PASSWORD_CHECKED
+        required:[true,'Please enter a valid password'],
     },
     codeP:{
         type:Number,

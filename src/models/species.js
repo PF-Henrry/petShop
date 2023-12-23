@@ -10,7 +10,15 @@ const specieSchemma = new Schema({
         minlength: 2,
         maxlength: 50,
         match: GOOD_GRAMMAR_CHECKED
+    },
+    age:{
+        type: String,
+        enum: ['adult','puppy/kitten']
+    },
+    size:{
+        type: String,
+        enum: ['small','big','medium']
     }
 })
 
-export default models.Specie || model('Specie',specieSchemma);
+export default models.Species || model('Species',specieSchemma);
