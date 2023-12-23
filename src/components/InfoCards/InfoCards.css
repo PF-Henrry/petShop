@@ -2,34 +2,52 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-@media (max-width: 500px) {
-  .infoDiv {
-    flex-direction: column;
+.info-container {
+  @apply bg-white p-14 mb-4 shadow-md gap-4 w-[80%] rounded-xl;
+
+  .cards-info-container {
+    @apply flex flex-col flex-wrap items-center gap-3 rounded-lg overflow-hidden;
+
+    & section {
+      @apply flex items-center gap-3;
+
+      & div {
+        @apply flex items-center justify-center w-full;
+      }
+      & img {
+        @apply aspect-video object-cover w-full;
+      }
+    }
+
+    .card-register-container {
+      @apply relative w-full;
+
+      & img {
+        @apply object-cover w-full;
+      }
+    }
   }
 
-  .infoDiv > div {
-    width: 100%;
-    margin-bottom: 10px;
+  @media (max-width: 1020px) {
+    @apply p-10;
   }
 
-  .infoDiv img {
-    width: 80px;
-    height: 80px;
+  @media (max-width: 952px) {
+    @apply p-8;
   }
-}
-
-@media (max-width: 200px) {
-  .infoDiv {
-    flex-direction: column;
+  @media (max-width: 858px) {
+    @apply p-6;
   }
+  @media (max-width: 768px) {
+    @apply p-4;
+    .cards-info-container {
+      & section {
+        @apply flex-col w-full;
 
-  .infoDiv > div {
-    width: 50%;
-    margin-bottom: 5px;
-  }
-
-  .infoDiv img {
-    width: 40px;
-    height: 40px;
+        & img {
+          @apply object-cover w-full;
+        }
+      }
+    }
   }
 }
