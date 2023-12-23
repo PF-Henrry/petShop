@@ -1,2 +1,14 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
+.userRate-container {
+  @apply flex flex-col items-start gap-3 w-[80%];
 
+  & p {
+    @apply text-[#7A8D9B] text-base;
+  }
+  .userRate-info-container {
+    @apply bg-white p-7 shadow-md flex flex-row items-center w-full rounded-xl;
+  }
+}
