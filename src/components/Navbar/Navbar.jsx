@@ -15,7 +15,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
-import "./Navbar.css";
+import "./navbar.css";
   
 export default function Navbar() {
   return (

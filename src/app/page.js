@@ -1,30 +1,32 @@
-'use client'
+"use client";
 
-import { useEffect } from "react"
-import toastNotify from '@/libs/toast';
- 
+import { useEffect } from "react";
+import toastNotify from "@/libs/toast";
+import Carousel from "@/components/Carousel/Carousel";
+import CategoryCards from "@/components/CategoryCards/CategoryCards";
+import InfoCards from "@/components/InfoCards/InfoCards";
+import UserRate from "@/components/UserRate/UserRate";
 
 export default function Home() {
-  const {showNotify,ToastContainer} = toastNotify();
+  const { showNotify, ToastContainer } = toastNotify();
 
-  useEffect(()=>{
-    var toastMessage = localStorage.getItem('ToasNotify');
-
+  useEffect(() => {
+    var toastMessage = localStorage.getItem("ToasNotify");
 
     if (toastMessage) {
       const toastParse = JSON.parse(toastMessage);
-      showNotify(toastParse.type,toastParse.message)
-      localStorage.removeItem('ToasNotify');
+      showNotify(toastParse.type, toastParse.message);
+      localStorage.removeItem("ToasNotify");
     }
-
-  },[showNotify]);
-
+  }, [showNotify]);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <h1>HOLA MUNDO</h1>
-       
-        <ToastContainer/>
+    <main className="main-container flex min-h-screen flex-col items-center justify-between px-24 py-8 mt-24 gap-10">
+      <ToastContainer />
+      <Carousel />
+      <CategoryCards />
+      <InfoCards />
+      <UserRate />
     </main>
-  )
+  );
 }

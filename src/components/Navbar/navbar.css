@@ -9,9 +9,9 @@
   text-decoration: none;
   list-style: none;
 }
- 
+
 nav {
-  @apply bg-[#DABEB6] w-full h-24 fixed top-0 left-0 px-8 py-2 flex justify-between z-50;
+  @apply bg-[rgba(218,190,182,.8)] w-full h-24 fixed top-0 left-0 px-8 py-2 flex justify-between backdrop-blur-md z-50;
 
   .btn-container {
     @apply hidden;
