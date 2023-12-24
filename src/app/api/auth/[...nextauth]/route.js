@@ -46,11 +46,6 @@ const authOptions = {
         ],
         callbacks: {
             async signIn({ user, account, profile, email, credentials }) {
-                console.log(user)
-                console.log(account)
-                console.log(profile)
-                console.log(email)
-                console.log(credentials)
                 if(!conn.isConnected) connectDB()
                 const findUser = await Users.findOne({email: user.email});
 
@@ -60,6 +55,7 @@ const authOptions = {
                     findUser.token = account.access_token
                     await findUser.save();
                 }
+
                 return true // Redirigir al home después del inicio de sesión
               }
 
@@ -69,7 +65,7 @@ const authOptions = {
                     findUser.img = user.image
                     findUser.token =  account.access_token
                     await findUser.save();
-                    return true
+                    return "/"
                 } else {
                     const splitName = user.name.split(" ");
                     const name = splitName[0];
@@ -92,7 +88,7 @@ const authOptions = {
                         token:account.access_token,
                     });
                 }
-                return true
+                return "/"
             }
 
             if(account?.provider === 'google'){
@@ -100,7 +96,7 @@ const authOptions = {
                     findUser.token =  account.access_token
                     findUser.img = user.image
                     await findUser.save();
-                    return true
+                    return "/"
                 } else {
                     const splitName = user.name.split(" ");
                     const name = splitName[0];
@@ -124,7 +120,7 @@ const authOptions = {
                     });
                 }
                 
-                return true
+                return "/"
             }
 
             },
