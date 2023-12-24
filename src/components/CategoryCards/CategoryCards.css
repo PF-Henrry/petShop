@@ -2,54 +2,47 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-@media (max-width: 500px) {
-  .categoryDiv {
-    display: grid;
-    flex-direction: column;
+.categoryDiv {
+  @apply flex flex-col items-start gap-3 w-[80%];
+
+  .cards-category-container {
+    @apply flex items-center justify-evenly flex-wrap gap-3 bg-white p-3 shadow-md w-full h-auto rounded-xl;
   }
 
-  .categoryDiv > div {
-    width: 20px;
-    height: 100px;
-    margin-bottom: 10px;
+  .card-category-container {
+    @apply flex flex-col items-center;
+
+    & img {
+      @apply rounded-[2rem] duration-150 shadow-md hover:scale-105;
+    }
+
+    & p {
+      @apply text-[#143146] text-sm p-2;
+    }
   }
 
-  .categoryDiv img {
-    width: 50%;
-    height: auto;
-  }
-}
+  @media (max-width: 1020px) {
+    @apply p-10;
 
-@media (max-width: 650px) {
-  .categoryDiv {
-    display: grid;
-    flex-direction: column;
+    .card-category-container img {
+      @apply w-32 rounded-3xl;
+    }
   }
 
-  .categoryDiv > div {
-    width: 100%;
-    margin-bottom: 10px;
-  }
+  @media (max-width: 952px) {
+    @apply p-8;
 
-  .categoryDiv img {
-    width: 100px;
-    height: 100px;
-    min-width: 100px;
+    .card-category-container img {
+      @apply w-24 rounded-3xl;
+    }
   }
-}
-
-@media (max-width: 200px) {
-  .categoryDiv {
-    flex-direction: column;
+  @media (max-width: 858px) {
+    @apply p-6;
   }
-
-  .categoryDiv > div {
-    width: 50%;
-    margin-bottom: 5px;
-  }
-
-  .categoryDiv img {
-    width: 40px;
-    height: 40px;
+  @media (max-width: 768px) {
+    @apply p-4;
+    .card-category-container img {
+      @apply w-20 rounded-3xl;
+    }
   }
 }

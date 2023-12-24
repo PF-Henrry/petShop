@@ -65,8 +65,8 @@ const Carousel = () => {
           <Image
             key={currentIndex}
             src={images[currentIndex].src}
-            width={1000}
-            height={500}
+            width={1440}
+            height={560}
             alt={`Imagen ${currentIndex + 1}`}
             className="carousel-image"
           />

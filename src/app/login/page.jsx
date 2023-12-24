@@ -7,11 +7,12 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-import {  useRouter } from 'next/navigation';
 import { EMAIL_CHECKED, PASSWORD_CHECKED } from '@/utils/regex'
-import {signIn} from 'next-auth/react';
 import toastNotify from '@/libs/toast';
- 
+
+import {  useRouter } from 'next/navigation';
+
+import {signIn} from "next-auth/react"
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -31,8 +32,8 @@ const validationSchema = Yup.object({
 });
 
 const Login = ({ initialValues, onSubmit }) => {
-  const router = useRouter();
   const {showNotify,ToastContainer} = toastNotify();
+  const router = useRouter();
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -41,19 +42,37 @@ const Login = ({ initialValues, onSubmit }) => {
     }
    
 
+  
+const handleClick = async(e,provider) => {
+  e.preventDefault();
+  await loginAuth(provider)
+}
 
+  const loginAuth = async (provider) => {
+        let res;
+         if(provider==="google"){
+          res = await signIn("google", { redirect: false });
+          localStorage.setItem('ToasNotify',JSON.stringify({type:"success",message:"login success"}))
+         } else if(provider==="facebook"){
+           res = await signIn("facebook", { redirect: false });
+           localStorage.setItem('ToasNotify',JSON.stringify({type:"success",message:"login success"}))
+         }
+    
+    
+  }
   const handleOnSubmit = async (values) => {
     try {
-      const res = await signIn("credentials",{...values,redirect: false});
-      
-     if(res.ok){
-      localStorage.setItem('ToasNotify',JSON.stringify({type:"success",message:"login success"}))
-      router.push("/");}
-     else showNotify("error",res.error)
-    } catch (error) {
-      showNotify("error",error.message)
-    }
+      const res = await signIn('credentials',{...values,redirect:false});  
+      if(res?.ok){
+        localStorage.setItem('ToasNotify',JSON.stringify({type:"success",message:"login success"}))
+        router.push('/');
+      } else  showNotify("error",res.error)
+
+    } catch (error) { showNotify("error",error.message) }
+
   };
+
+
   const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
           handleOnSubmit(); 
@@ -70,7 +89,7 @@ const Login = ({ initialValues, onSubmit }) => {
         
         
                 <div className="flex flex-col items-center justify-center space-y-6 mt-14 gap-1">
-                <button  onClick={()=> signIn('google')} type="button" className="max-w-md flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
+                <button  onClick={ (e) => handleClick(e,"google")}  type="button" className="max-w-md flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
          bg-white border border-slate-600 rounded-md hover:bg-gray-100  focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-600 focus:ring-opacity-50 ">
         
                  <svg viewBox="0 0 48 48" width="35" height="24" version="1.1" xmlns="http://www.w3.org/2000/svg" 
@@ -83,7 +102,7 @@ const Login = ({ initialValues, onSubmit }) => {
                 <span className="text-gray-700 font-medium">Continuar con Google</span>
                 </button>
         
-                <button onClick= { ()=> signIn('facebook')}type="button" className="max-w-md flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
+                <button onClick={(e)=> handleClick(e,"facebook")}  type="button" className="max-w-md flex items-center mb-2 justify-center transition ease-in-out delay-50 px-3 py-2.5 space-x-2
                  bg-white border border-slate-600 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2
                   focus:ring-gray-600 focus:ring-opacity-50">
                 <svg width="24" height="26" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="#3b5998" >

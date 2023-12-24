@@ -21,7 +21,7 @@ export default function Home() {
   }, [showNotify]);
 
   return (
-    <main className="main-container flex min-h-screen flex-col items-center justify-between px-24 py-8 mt-24 gap-10">
+    <main className="main-container flex min-h-screen flex-col items-center justify-between px-28 py-8 gap-10">
       <ToastContainer />
       <Carousel />
       <CategoryCards />
