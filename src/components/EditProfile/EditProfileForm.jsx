@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import {useState} from 'react'
 import * as Yup from 'yup'
@@ -7,9 +8,13 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
-import {  EMAIL_CHEKED, PASSWORD_CHECKED, INPUT_NAME_CHECKED,
+import {  EMAIL_CHECKED, PASSWORD_CHECKED, INPUT_NAME_CHECKED,
      ZIP_CHECKED,AREA_CODE_CHECKED,ONLYNUMBERS_CHECKED} from '@/utils/regex'
- 
+import { useSession } from 'next-auth/react'
+
+
+
+
 const validationSchema = Yup.object({
     name: Yup.string().required('Campo requerido').matches(
         INPUT_NAME_CHECKED,
@@ -33,7 +38,7 @@ const validationSchema = Yup.object({
     areaCode: Yup.string().matches(AREA_CODE_CHECKED, 'Ingrese un código de área válido').required('Campo requerido'),
     phoneNumber: Yup.string().matches(ONLYNUMBERS_CHECKED, 'Ingrese un número de teléfono válido').required('Campo requerido'),
     email: Yup.string().required('Campo requerido').matches(
-        EMAIL_CHEKED,
+        EMAIL_CHECKED,
         'El e-mail ingresado no es válido'),  
 
     street: Yup.string().required('Campo requerido'),
@@ -52,10 +57,20 @@ const validationSchema = Yup.object({
 
 const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
 
-    // const handleCreditCardSubmit = (creditCardData) => {
-    //     console.log('Información de la tarjeta de crédito:', creditCardData);
-      
-    //   };
+
+  const { data: session } = useSession();
+  const userSessionImage = session?.user?.image;
+  
+ 
+
+  const imageUrl = userSessionImage || initialValues.image;
+
+
+
+//   const handleImageChange = (e) => {
+    
+// };
+
     const [selectedProvince, setSelectedProvince] = useState('')
 
     const provinces= ['Buenos Aires',
@@ -98,8 +113,33 @@ const EditProfileForm = ({ initialValues, onSubmit, editable }) => {
        <Form className="max-w-5xl mx-auto my-8 p-8 rounded shadow border border-gray-300 bg-customPrimary">
 
             <div className="mb-4"  >
+            <div className="flex flex-col items-center justify-center">
+  
+    <label htmlFor="upload-image-input">
+        <img 
+           name="image"
+           src={imageUrl.src || imageUrl}
+            alt="Imagen de perfil"
+            width={250}
+            height={250}
+            className="rounded-full cursor-pointer"
+        />
+    </label>
+    <input
+        type="file"
+        accept="image/*"
+        //onChange={handleImageChange}
+        disabled={!editable}
+        id="upload-image-input"
+        className="mb-2" 
+    />
+</div>
+
+
+            
           <p className="text-xl font-bold mb-4">Datos Personales:</p>
           <div className="grid grid-cols-2 gap-4" >
+
           <Field
             name="name"
             label="Nombre"
