@@ -81,14 +81,16 @@ const Carousel = () => {
       </div>
       {/* Boton de navegación derecha end */}
 
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-3 items-center bg-[rgba(255,250,242,0.5)] rounded-xl p-[6px] backdrop-blur">
+      <div className="carousel-indicators">
         {images.map((_, index) => (
-          <div
+          <figure
             key={index}
-            className={`h-3 w-3 rounded-full duration-500 ${
-              index === currentIndex ? "scale-125 bg-[#143146]" : "bg-[#eee0dd]"
+            className={`carousel-indicator ${
+              index === currentIndex
+                ? "indicator-active scale-125 bg-[#143146]"
+                : "bg-[#eee0dd]"
             }`}
-          ></div>
+          ></figure>
         ))}
       </div>
     </div>
