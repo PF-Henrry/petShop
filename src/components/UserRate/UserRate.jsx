@@ -6,7 +6,7 @@ import "./UserRate.css";
 export default function UserRate() {
   return (
     <div className="userRate-container">
-      <p>Comentarios de nuestros usuarios</p>
+      <p className="userRate-title">Comentarios de nuestros usuarios</p>
       <div className="userRate-info-container">
         <figure>
           <Image
@@ -19,16 +19,16 @@ export default function UserRate() {
         </figure>
 
         <div className="ml-4">
-          <div className="text-black">Nombre del Usuario</div>
+          <p className="user-name">Nombre del Usuario</p>
 
-          <div className="text-black text-sm">
+          <p className="user-rate">
             Opinión del usuario sobre el servicio de la página
-          </div>
-          <div className="text-[#FFD700] space-x-2">
+          </p>
+          <span className="text-[#FFD700] space-x-2">
             {[...Array(5)].map((_, index) => (
               <StarIcon key={index} className="star-icon" />
             ))}
-          </div>
+          </span>
         </div>
       </div>
     </div>

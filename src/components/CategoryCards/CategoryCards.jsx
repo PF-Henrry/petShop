@@ -10,7 +10,9 @@ import "./CategoryCards.css";
 export default function CategoryCards() {
   return (
     <div className="categoryDiv">
-      <p className="text-[#7A8D9B] text-base">Comprar por categoría</p>
+      <p className="tag-category text-[#7A8D9B] text-base">
+        Comprar por categoría
+      </p>
       {/* bg-blue-200 p-4 */}
       <div className="cards-category-container">
         <div className="card-category-container">
