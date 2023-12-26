@@ -162,7 +162,7 @@ const handleClick = async(e,provider) => {
                     <div className="flex justify-center gap-4 font-semibold mt-2">
                       <p>¿No tienes cuenta?</p>
                       <Link className="hover:text-customSecondary transition-colors duration-300" href="/signup">
-                        Iniciá Sesión
+                        Registrate
                       </Link>
                     </div>
         
