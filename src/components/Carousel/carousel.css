@@ -34,8 +34,12 @@
     }
   }
 
-  .carousel-info-container {
-    @apply absolute top-3/4 left-1/4 transform -translate-x-1/2;
+  .carousel-indicators {
+    @apply absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-3 items-center bg-[rgba(255,250,242,0.5)] rounded-xl p-[6px] backdrop-blur;
+
+    .carousel-indicator {
+      @apply h-3 w-3 rounded-full duration-500;
+    }
   }
 
   @media (max-width: 1024px) {
@@ -51,6 +55,20 @@
 
     .carousel-button button {
       @apply p-1;
+    }
+  }
+
+  @media (max-width: 858px) {
+    .carousel-indicators {
+      @apply gap-2 bottom-2;
+
+      .carousel-indicator {
+        @apply w-2 h-2;
+      }
+
+      /* .indicator-active {
+        @apply scale-150;
+      } */
     }
   }
 

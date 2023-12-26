@@ -22,27 +22,30 @@
   }
 
   @media (max-width: 1020px) {
-    @apply p-10;
-
     .card-category-container img {
       @apply w-32 rounded-3xl;
     }
   }
 
   @media (max-width: 952px) {
-    @apply p-8;
-
-    .card-category-container img {
-      @apply w-24 rounded-3xl;
+    .tag-category {
+      @apply text-xs;
+    }
+    .card-category-container {
+      & p {
+        @apply text-[10px];
+      }
+      & img {
+        @apply w-20 rounded-3xl;
+      }
     }
   }
   @media (max-width: 858px) {
-    @apply p-6;
+    @apply w-full p-2;
   }
   @media (max-width: 768px) {
-    @apply p-4;
     .card-category-container img {
-      @apply w-20 rounded-3xl;
+      @apply w-16 rounded-3xl;
     }
   }
 }
