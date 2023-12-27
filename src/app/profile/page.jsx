@@ -5,11 +5,11 @@ import EditProfileForm from '../../components/EditProfile/EditProfileForm';
 
 const Profile = () => {
     const [editable, setEditable] = useState(false);
-    const defaultImageUrl = 'http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png'
+    
 
  
     const initialValues = {
-      image: defaultImageUrl,
+      image:'',
       name: '',
       lastname: '',
       password:'',
@@ -27,7 +27,7 @@ const Profile = () => {
       province: '',
     };
   
-    const handleSubmit = (values, { setSubmitting }) => {
+    const handleSubmit = (values, { setSubmitting}) => {
       // Lógica para manejar la subida de datos
       console.log('Valores enviados:', values);
       setSubmitting(false);
