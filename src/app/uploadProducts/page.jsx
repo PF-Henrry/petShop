@@ -62,15 +62,13 @@ function UploadImage(){
         const deletedItemName = e.target.getAttribute('name');
     
         if (deletedItemName) {
-            if (species.includes(deletedItemName)) {
-                const updatedSpecies = species.filter(specie => specie !== deletedItemName);
+                const updatedSpecies = species.filter(specie => specie.name !== deletedItemName);
                 setSpecies(updatedSpecies);
-            } else if (categorys.includes(deletedItemName)) {
                 const updatedCategories = categorys.filter(category => category !== deletedItemName);
                 setCategorys(updatedCategories);
             }
         }
-    };
+    
 
     const handleOnChange = (e) => {
         try {     
