@@ -7,7 +7,7 @@ import { connectDB } from "@/libs/mongodb";
 
 
 export  async function addUser(user) {
-  console.log('entro em addUser',user)
+  console.log(user)
   try {
     const { city, province } = user;
     connectDB();
