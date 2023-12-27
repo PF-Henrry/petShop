@@ -11,7 +11,7 @@ export const addProduct = async (dataProduct) => {
         if(!conn.isConnected) connectDB();
 
         const {brand,category,name,price,specie} = dataProduct;
-
+        console.log('este es el valor de species',specie);
         if(!name || !price) throw TypeError('Name and Price is required');
 
 
@@ -46,7 +46,7 @@ export const addProduct = async (dataProduct) => {
                  species: pushSpecies,
          })
         
-
+console.log(newProduct)
         return newProduct
 
     } catch (error) {
