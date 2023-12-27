@@ -96,7 +96,7 @@ const authOptions = {
                     findUser.token =  account.access_token
                     findUser.img = user.image
                     await findUser.save();
-                    return "/profile"
+                    return "/"
                 } else {
                     const splitName = user.name.split(" ");
                     const name = splitName[0];
