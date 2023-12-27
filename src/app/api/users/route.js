@@ -38,6 +38,7 @@ export async function POST(request){
   
     if(!conn.isConnected) connectDB()
     const dataUser = await request.json()
+  console.log(dataUser)
     const newUser = new addUser(dataUser)
     // await newUser.save()
     const findUser = await userDB.findOne({_id:newUser._id})

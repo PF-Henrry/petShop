@@ -1,13 +1,14 @@
-
 'use client'
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Link from 'next/link';
 import * as Yup from 'yup';
-import Router from 'next/router';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
- 
 import { EMAIL_CHECKED, PASSWORD_CHECKED } from '@/utils/regex';
+import {  useRouter } from 'next/navigation';
+import { signIn, useSession } from 'next-auth/react';
+import { useEffect } from 'react';
+
 
 const validationSchema = Yup.object({
   username: Yup.string().required('El nombre de usuario es requerido'),
@@ -17,33 +18,72 @@ const validationSchema = Yup.object({
       EMAIL_CHECKED,
       "Formato de e-mail no válido"
     ),
-  confirmEmail: Yup.string().required('Campo requerido')
-    .oneOf([Yup.ref('email'), null], 'El email debe coincidir'),
+  // confirmEmail: Yup.string().required('Campo requerido')
+  //   .oneOf([Yup.ref('email'), null], 'El email debe coincidir'),
   password: Yup.string()
     .required("La contraseña es requerida")
     .matches(
       PASSWORD_CHECKED,
       "La contraseña debe contener al menos una mayuscula, un numero, un caracter especial y tiene que tener un min de 8 y un maximo de 15. No admite espacios"
     ),
-  confirmPassword: Yup.string().required('Campo requerido')
-    .oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir')
+  // confirmPassword: Yup.string().required('Campo requerido')
+  //   .oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir')
 });
 
 const Signup = ({ initialValues, onSubmit }) => {
-  const handleOnSubmit = (values) => {
-    console.log("Formulario enviado con los siguientes valores:", values);
-    // Falta lógica para enviar los datos al back
-    Router.push('/profile');
+ const router = useRouter()
+ const { data: session, status } = useSession();
+
+  useEffect(()=>{
+    if (status === "authenticated"){
+      router.push('/profile')
+    } 
+  },[router, status])
+  
+  const handleOnSubmit = async (values) => {
+    console.log(values)
+    try {
+      // Realizar la solicitud HTTP al backend
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+      if (response.ok) {
+        console.log('Datos enviados correctamente al backend');
+        
+        await signIn("credentials",
+        {email:values.email,password:values.password}, {
+          redirect:false
+        })
+         router.push("/profile")
+      } else {
+        console.error('Error al enviar datos ');
+        console.log(response)
+      }
+    } catch (error) {
+      console.error('Error de red al enviar datos al backend', error);
+    }
   };
+
 
   return (
     <Formik
     initialValues={{
-      username: '',
-      email: '',  
-      confirmEmail: '',
-      password: '',  
-      confirmPassword: ''
+      name:"Unknown",
+      lastname:"Unknown",
+      username:'',
+      adress:'Unknown',
+      city:'Unknown',
+      province:'Unknown', 
+      role:1,
+      img:"http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png",
+      email:"",
+      password:"",
+      codeP:1234
+
     }}
       validationSchema={validationSchema}
       onSubmit={onSubmit || handleOnSubmit}
@@ -74,7 +114,7 @@ const Signup = ({ initialValues, onSubmit }) => {
             />
             <ErrorMessage name="email" component="div" style={{ color: 'red' }} />
 
-            <Field
+            {/* <Field
               name="confirmEmail"
               type="text"
               label="Confirmar E-mail"
@@ -82,11 +122,11 @@ const Signup = ({ initialValues, onSubmit }) => {
               fullWidth
               required
             />
-            <ErrorMessage name="confirmEmail" component="div" style={{ color: 'red' }} />
+            <ErrorMessage name="confirmEmail" component="div" style={{ color: 'red' }} /> */}
 
             <Field
               name="password"
-              type="password"
+              type="text"
               label="Contraseña"
               as={TextField}
               fullWidth
@@ -94,7 +134,7 @@ const Signup = ({ initialValues, onSubmit }) => {
             />
             <ErrorMessage name="password" component="div" style={{ color: 'red' }} />
 
-            <Field
+            {/* <Field
               name="confirmPassword"
               type="password"
               label="Confirmar Contraseña"
@@ -102,7 +142,7 @@ const Signup = ({ initialValues, onSubmit }) => {
               fullWidth
               required
             />
-            <ErrorMessage name="confirmPassword" component="div" style={{ color: 'red' }} />
+            <ErrorMessage name="confirmPassword" component="div" style={{ color: 'red' }} /> */}
           </div>
 
           <div className="flex justify-center gap-4 font-semibold mt-2">
@@ -115,7 +155,7 @@ const Signup = ({ initialValues, onSubmit }) => {
           <Button
             type="submit"
             variant="outlined"
-            disabled={isSubmitting || !isValid}
+            disabled={isSubmitting }
             style={{ borderColor: 'grey' }}
             className={`text-black
               py-2 px-4 rounded focus:outline-none focus:shadow-outline
