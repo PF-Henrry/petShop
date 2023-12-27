@@ -11,15 +11,15 @@ import {
   CaretDown,
 } from "@phosphor-icons/react/dist/ssr";
 import "./footer.css";
- 
+
 export default function Footer() {
   return (
-    <footer className="bottom-0 w-full text-black flex flex-col items-center justify-center mt-4">
+    <footer className="bottom-0 w-full flex flex-col items-center justify-center mt-12">
       <div className="backToTop">
         <ToTopBtnFooter />
       </div>
 
-      <section className="info flex flex-wrap flex-row gap-y-8 gap-x-32 p-8 justify-start">
+      <section className="info">
         <div>
           <p>Con&oacute;cenos</p>
           <ul>
