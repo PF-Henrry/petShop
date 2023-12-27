@@ -18,16 +18,14 @@ const validationSchema = Yup.object({
       EMAIL_CHECKED,
       "Formato de e-mail no válido"
     ),
-  // confirmEmail: Yup.string().required('Campo requerido')
-  //   .oneOf([Yup.ref('email'), null], 'El email debe coincidir'),
+
   password: Yup.string()
     .required("La contraseña es requerida")
     .matches(
       PASSWORD_CHECKED,
       "La contraseña debe contener al menos una mayuscula, un numero, un caracter especial y tiene que tener un min de 8 y un maximo de 15. No admite espacios"
     ),
-  // confirmPassword: Yup.string().required('Campo requerido')
-  //   .oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir')
+ 
 });
 
 const Signup = ({ initialValues, onSubmit }) => {
@@ -43,8 +41,8 @@ const Signup = ({ initialValues, onSubmit }) => {
   const handleOnSubmit = async (values) => {
     console.log(values)
     try {
-      // Realizar la solicitud HTTP al backend
-      const response = await fetch('/api/auth/signup', {
+      
+      const response = await fetch('/api/users', {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
@@ -72,19 +70,20 @@ const Signup = ({ initialValues, onSubmit }) => {
   return (
     <Formik
     initialValues={{
-      name:"Unknown",
-      lastname:"Unknown",
       username:'',
+      email:"",
+      password:"",
+      name:"Unknown",
+      lastname:"Unknown",      
       adress:'Unknown',
       city:'Unknown',
       province:'Unknown', 
       role:1,
-      img:"http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png",
-      email:"",
-      password:"",
+      img:"http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png",      
       codeP:1234
 
     }}
+    
       validationSchema={validationSchema}
       onSubmit={onSubmit || handleOnSubmit}
       enableReinitialize
@@ -114,15 +113,6 @@ const Signup = ({ initialValues, onSubmit }) => {
             />
             <ErrorMessage name="email" component="div" style={{ color: 'red' }} />
 
-            {/* <Field
-              name="confirmEmail"
-              type="text"
-              label="Confirmar E-mail"
-              as={TextField}
-              fullWidth
-              required
-            />
-            <ErrorMessage name="confirmEmail" component="div" style={{ color: 'red' }} /> */}
 
             <Field
               name="password"
@@ -134,15 +124,7 @@ const Signup = ({ initialValues, onSubmit }) => {
             />
             <ErrorMessage name="password" component="div" style={{ color: 'red' }} />
 
-            {/* <Field
-              name="confirmPassword"
-              type="password"
-              label="Confirmar Contraseña"
-              as={TextField}
-              fullWidth
-              required
-            />
-            <ErrorMessage name="confirmPassword" component="div" style={{ color: 'red' }} /> */}
+           
           </div>
 
           <div className="flex justify-center gap-4 font-semibold mt-2">
