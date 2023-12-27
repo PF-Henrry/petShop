@@ -83,7 +83,7 @@ const Signup = ({ initialValues, onSubmit }) => {
       codeP:1234
 
     }}
-    
+
       validationSchema={validationSchema}
       onSubmit={onSubmit || handleOnSubmit}
       enableReinitialize
@@ -116,7 +116,7 @@ const Signup = ({ initialValues, onSubmit }) => {
 
             <Field
               name="password"
-              type="text"
+              type="password"
               label="Contraseña"
               as={TextField}
               fullWidth
