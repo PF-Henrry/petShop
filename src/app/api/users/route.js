@@ -38,7 +38,7 @@ export async function POST(request){
     if(!conn.isConnected) connectDB()
     console.log('entro aca')
     const dataUser = await request.json()
-    const newUser = new addUser(dataUser)
+    const newUser = await addUser(dataUser)
     // await newUser.save()
     const findUser = await userDB.findOne({_id:newUser._id})
     if(findUser) return NextResponse.json(findUser,{

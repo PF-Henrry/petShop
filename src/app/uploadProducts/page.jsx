@@ -42,8 +42,7 @@ function UploadImage(){
 
             const sizeData = Array.from(sizeInput).map((size) => size.value);
 
-            console.log(ageData);
-            console.log(sizeData);
+            
 
             if (specieInput) {
                 const newSpecie = specieInput.value.trim();
@@ -52,6 +51,8 @@ function UploadImage(){
                         ...prevSpecies, 
                         { name: newSpecie, size: sizeData[0], age: ageData[0] }
                     ]);
+
+                    console.log(sizeData[0],ageData[0]);
                     specieInput.value = ''; // Limpiar el input después de agregar la especie
                 }
             }
@@ -115,7 +116,6 @@ function UploadImage(){
         
                         console.log(response);
                         if(response.ok){
-                            console.log('entro aca')
                             showNotify('success','Producto subido')
 
                         }
