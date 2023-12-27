@@ -35,21 +35,19 @@ return NextResponse.json(users, {
 
 export async function POST(request){
   try {
-  
     if(!conn.isConnected) connectDB()
+    console.log('entro aca')
     const dataUser = await request.json()
-  console.log(dataUser)
     const newUser = new addUser(dataUser)
     // await newUser.save()
     const findUser = await userDB.findOne({_id:newUser._id})
-
     if(findUser) return NextResponse.json(findUser,{
       status:200
    })
 
   } catch(error){
-    return NextResponse.json({mensaje: "Algo salió mal"}, {
-      status: 405
+    return NextResponse.json({mensaje: error.message}, {
+      status: 404
   })
   }
 }
