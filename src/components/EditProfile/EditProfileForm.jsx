@@ -59,7 +59,7 @@ const EditProfileForm = ({ initialValues,editable, setFieldValue, }) => {
 
   const { data: session } = useSession();
   const userSessionImage = session?.user?.image;
-  const [selectedImage, setSelectedImage] = useState(userSessionImage || initialValues.image);
+  const [selectedImage, setSelectedImage] = useState(null);
  
 
   //const imageUrl = userSessionImage || initialValues.image;
