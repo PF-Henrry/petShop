@@ -33,6 +33,14 @@ const productSchema = new Schema({
     },
     category:{
         type: [{type:Types.ObjectId,ref:'Category'}]
+    },
+    age:{
+        type: String,
+        enum: ['adult','puppy/kitten']
+    },
+    size:{
+        type: String,
+        enum: ['small','big','medium']
     }
 })
 

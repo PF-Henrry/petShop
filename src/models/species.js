@@ -8,14 +8,6 @@ const specieSchemma = new Schema({
         trim: true,
         minlength: 2,
         maxlength: 50,
-    },
-    age:{
-        type: String,
-        enum: ['adult','puppy/kitten']
-    },
-    size:{
-        type: String,
-        enum: ['small','big','medium']
     }
 })
 
