@@ -4,7 +4,9 @@ import { connectDB, conn } from "@/libs/mongodb";
 import userDB from '@/models/users';
 import { PASSWORD_CHECKED } from "@/utils/regex";
 import { postImage } from "@/libs/cloudinary";
-
+import Provinces from '@/models/provinces';
+import { findOrCreateModel } from "@/libs/dbmethods";
+import Citys from "@/models/city";
 export async function DELETE(request, {params}) {
     try {
         if(!conn.isConnected) connectDB();
@@ -41,27 +43,38 @@ export async function PUT(request, {params}){  //         /api/users [PUT]
         try {
             
             if(!conn.isConnected) connectDB();
-            const _id = params.id
+            const idUser = params.id
             const data = await request.json()
             const {password, dataSinPass} = data;
-            const findUser = await userDB.findOne({_id:_id});
-
+            const findUser = await userDB.findOne({_id:idUser});
+            
             if(findUser){
-                
-                const newImagen = await postImage(dataSinPass.img,_id);
+                const newImagen = await postImage(dataSinPass.img,idUser);
                 if(password){
                     findUser.password = password;
                     await findUser.save()
                 }
+
                 if(dataSinPass && newImagen){
+                    if(dataSinPass.hasOwnProperty('province')){
+                      const newProvince =  await findOrCreateModel(Provinces,{name:dataSinPass.province})
+                      dataSinPass.province = newProvince._id
+                    }
+                    if(dataSinPass.hasOwnProperty('city')){
+                        const newProvince =  await findOrCreateModel(Citys,{name:dataSinPass.city})
+                        dataSinPass.city = newProvince._id
+                      }
+
+                    dataSinPass.img = newImagen.url;
+
                     const result = await userDB.findOneAndUpdate(
-                        { _id: _id },
-                        { $set: { ...dataSinPass, img: newImagen.url } },
-                        { new: true }
+                        { _id: idUser },
+                        { $set: { ...dataSinPass } },
                       );
-                //    result.img = newImagen.url;
-                //     result.save();
+                      
+
                   if(result) return NextResponse.json(result,{status:200});
+
                 } 
             }
 
