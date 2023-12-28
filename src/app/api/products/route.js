@@ -15,8 +15,6 @@ export async function GET(request){
      .populate("species",{
          _id:0,
          name:1,
-         age:1,
-         size:1,
      })
      .populate("brand",{
          _id:0,
@@ -46,8 +44,6 @@ export async function POST(request){
         .populate("species",{
             _id:0,
             name:1,
-            age:1,
-            size:1,
         })
         .populate("brand",{
             _id:0,
