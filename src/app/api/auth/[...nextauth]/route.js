@@ -62,7 +62,6 @@ const authOptions = {
             if(account?.provider === 'facebook'){
                
                 if(findUser){
-                    findUser.img = user.image
                     findUser.token =  account.access_token
                     await findUser.save();
                     return true
@@ -95,7 +94,6 @@ const authOptions = {
             if(account?.provider === 'google'){
                 if(findUser){
                     findUser.token =  account.access_token
-                    findUser.img = user.image
                     await findUser.save();
                     return true
                 } else {
