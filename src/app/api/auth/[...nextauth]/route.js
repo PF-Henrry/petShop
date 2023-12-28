@@ -65,7 +65,7 @@ const authOptions = {
                     findUser.img = user.image
                     findUser.token =  account.access_token
                     await findUser.save();
-                    return "/"
+                    return true
                 } else {
                     const splitName = user.name.split(" ");
                     const name = splitName[0];
@@ -88,7 +88,8 @@ const authOptions = {
                         token:account.access_token,
                     });
                 }
-                return "/"
+
+                return true
             }
 
             if(account?.provider === 'google'){
@@ -96,7 +97,7 @@ const authOptions = {
                     findUser.token =  account.access_token
                     findUser.img = user.image
                     await findUser.save();
-                    return "/"
+                    return true
                 } else {
                     const splitName = user.name.split(" ");
                     const name = splitName[0];
@@ -120,7 +121,7 @@ const authOptions = {
                     });
                 }
                 
-                return "/"
+                return true
             }
 
             },
