@@ -51,10 +51,10 @@ const handleClick = async(e,provider) => {
   const loginAuth = async (provider) => {
         let res;
          if(provider==="google"){
-          res = await signIn("google", { redirect: false });
+          res = await signIn("google", { callbackUrl: 'http://localhost:3000/' });
           localStorage.setItem('ToasNotify',JSON.stringify({type:"success",message:"login success"}))
          } else if(provider==="facebook"){
-           res = await signIn("facebook", { redirect: false });
+           res = await signIn("facebook", { callbackUrl: 'http://localhost:3000/' });
            localStorage.setItem('ToasNotify',JSON.stringify({type:"success",message:"login success"}))
          }
     
