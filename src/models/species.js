@@ -4,7 +4,6 @@ import {GOOD_GRAMMAR_CHECKED} from '@/utils/regex';
 const specieSchemma = new Schema({
     name:{
         type: String,
-        unique:true,
         required:[true,'Please enter an name'],
         trim: true,
         minlength: 2,
