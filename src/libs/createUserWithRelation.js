@@ -17,14 +17,17 @@ export  async function addUser(user) {
       const newCity =  await findOrCreateModel(Citys,{name:city})
       const newProvince = await findOrCreateModel(Provinces,{name:province}) 
       const savedUser = await Users.create({
+        
         ...user,
         city: newCity._id,
         province: newProvince._id,
-      });
 
+      });
+      console.log(savedUser)
       const newFavorite = await Favorite.create({userID:savedUser._id,products:[]});
     
       return savedUser
+      
     
   
 
