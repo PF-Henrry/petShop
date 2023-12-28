@@ -46,7 +46,7 @@ export const addProduct = async (dataProduct) => {
                  species: pushSpecies,
          })
         
-console.log(newProduct)
+
         return newProduct
 
     } catch (error) {
