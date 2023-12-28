@@ -126,16 +126,15 @@ const authOptions = {
 
             },
             async jwt({ token, account }) {
-                if (account) { 
-                   
+                if (account) {                    
                   token.accessToken = account.access_token
                 }
                 return token
               },
               async session({ session, user, token }) {
-               
+                const findUser = await Users.findOne({email:token.email});
+                if(findUser) session.user.id = findUser._id
                 session.accessToken = token.accessToken
-                session.user_id = token.sub
                 return session
               }
         },
