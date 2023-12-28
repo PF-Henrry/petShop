@@ -21,6 +21,20 @@ export async function DELETE(request, {params}) {
     }
 }
 
+export async function GET(request,{params}){
+    try {
+        if(!conn.isConnected) connectDB()
+        const _id = params.id
+        const findUser = await userDB.findOne({_id:_id},{password:0});
+
+        if(findUser) return NextResponse.json(findUser,{status:200})
+        throw Error('User no encontrado');
+    } catch (error) {
+        return NextResponse.json(error.message,
+            {status:400})
+    }
+}
+
 export async function PUT(request, {params}){  //         /api/users [PUT]
     
         try {
