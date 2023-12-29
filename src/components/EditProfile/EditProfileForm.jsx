@@ -1,187 +1,182 @@
 /* eslint-disable @next/next/no-img-element */
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import * as Yup from 'yup'
 import TextField from '@mui/material/TextField'
+import { InputLabel } from '@mui/material'
 import Button from '@mui/material/Button'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
-import InputLabel from '@mui/material/InputLabel'
-//import MenuItem from '@mui/material/MenuItem'
-//import FormControl from '@mui/material/FormControl'
 import {  EMAIL_CHECKED, PASSWORD_CHECKED, INPUT_NAME_CHECKED,
-     ZIP_CHECKED,AREA_CODE_CHECKED,ONLYNUMBERS_CHECKED} from '@/utils/regex'
+     ZIP_CHECKED} from '@/utils/regex'
 import { useSession } from 'next-auth/react'
 
-const defaultImageUrl = 'http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png'
+const defaultImage = 'http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png'
 
 
  const validationSchema = Yup.object({
-//     name: Yup.string().required('Campo requerido').matches(
-//         INPUT_NAME_CHECKED,
-//         'Ingresar solo letras'
-//     ),
-//     lastname: Yup.string().required('Campo requerido').matches(
-//         INPUT_NAME_CHECKED,
-//         'Ingresar solo letras'
-//     ),
-//     password: Yup.string().required('Campo requerido')
-//     .matches(
-//     PASSWORD_CHECKED,
-//       'La contraseña debe contener al menos una letra, un número y tener una longitud mínima de 8 caracteres'
-//     ),
-//     confirmPassword: Yup.string().required('Campo requerido')
-//     .required('Campo requerido')
-//     .oneOf([Yup.ref('password'), null], 'Las contraseñas deben coincidir'),
+    name: Yup.string().matches(
+        INPUT_NAME_CHECKED,
+        'Ingresar solo letras'
+    ),
+    lastname: Yup.string().matches(
+        INPUT_NAME_CHECKED,
+        'Ingresar solo letras'
+    ),
+    username: Yup.string(),
+    password: Yup.string()
+    .matches(
+    PASSWORD_CHECKED,
+      'La contraseña debe contener al menos una letra, un número y tener una longitud mínima de 8 caracteres'
+    ),
+   
+    email: Yup.string().matches(
+        EMAIL_CHECKED,
+        'El e-mail ingresado no es válido'),  
 
-    
-  
-//     areaCode: Yup.string().matches(AREA_CODE_CHECKED, 'Ingrese un código de área válido').required('Campo requerido'),
-//     phoneNumber: Yup.string().matches(ONLYNUMBERS_CHECKED, 'Ingrese un número de teléfono válido').required('Campo requerido'),
-//     email: Yup.string().required('Campo requerido').matches(
-//         EMAIL_CHECKED,
-//         'El e-mail ingresado no es válido'),  
-
-//     street: Yup.string().required('Campo requerido'),
-//     numStreet: Yup.string().required('Campo requerido').matches(ONLYNUMBERS_CHECKED, 'Ingrese un número válido'),
-//     neighborhood: Yup.string().required('Campo requerido'),
-//     floor: Yup.string().length(2),
-//     apartment: Yup.string(),
-//     ZIP: Yup.string().required('Campo requerido').matches(
-//         ZIP_CHECKED,
-//         'Ingrese un código postal válido'
-//     ),
-     province: Yup.string()
-  
+    adress: Yup.string(),
+    codeP: Yup.string().matches(
+        ZIP_CHECKED,
+        'Ingrese un código postal válido'
+    ),
+     province: Yup.string(),
+     city: Yup.string()
    });
   
 
-const EditProfileForm = ({ initialValues,editable, setFieldValue, }) => {
+const EditProfileForm = ({ initialValues,editable}) => {
+
 
   const { data: session } = useSession();
-  const userSessionImage = session?.user?.image;
-  const [selectedImage, setSelectedImage] = useState(null);
+  
+  const userSessionId = session?.user?.id;
+  
+   
  
 
-  //const imageUrl = userSessionImage || initialValues.image;
+  const [selectedImage, setSelectedImage] = useState(null);
+  const userImageToShow = selectedImage ||  defaultImage;
+
+
+  
   const handleImageChange = (event) => {
-    const file = event.target.files[0];
+    try {     
+      if (event.target.files.length) {
+        const file = event.target.files[0];
+        const reader = new FileReader();
   
-    if (file && setFieldValue) { // Verifica que setFieldValue esté definido
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        try {
-          console.log('entro al try de handle');
-          console.log(typeof setFieldValue); // Debería imprimir "function"
-          const newImage = reader.result || userSessionImage || defaultImageUrl;
-          setSelectedImage(newImage);
-          setFieldValue('image', newImage);
-        } catch (error) {
-          console.error('Error al procesar la imagen:', error);
-        }
-      };
+        reader.onload = (event) => {
+          setSelectedImage(event.target.result);
+        };
   
-      reader.readAsDataURL(file);
+        reader.readAsDataURL(file);
+      } 
+    } catch (error) {
+      console.error('Error al procesar la imagen:', error);
     }
   };
   
-    
   
 
-  // const handleImageChange = (event) => {
-  //   console.log('entro a handleImage')
-  //   const file = event.target.files[0];
-  //   console.log(file)
-  //   if (file && typeof setFieldValue === 'function') {
-  //     console.log('entro al if de handle')
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => {
-  //       try {
-  //         console.log('entro al try de handle')
-  //         const selectedImage = reader.result || userSessionImage || initialValues.image;
-  //         setFieldValue('image', selectedImage);
-  //       } catch (error) {
-  //         console.error('Error al procesar la imagen:', error);
-  //       }
-  //     };
-      
-    //   reader.readAsDataURL(file);
-    // }
-  //};
-  
-  
+   const [userData, setUserData] = useState(  { img:'',
+   name: '',
+   lastname: '',
+   username: '',
+   password:'',
+   email: '',
+   adress: '',
+   codeP: '',
+   province: '',
+   city:''});
 
-    //const [selectedProvince, setSelectedProvince] = useState('')
+   const handleRemoveImage = () => {
+    selectedImage(null)
+  };
 
-    // const provinces= ['Buenos Aires',
-    //     'Ciudad Autónoma de Buenos Aires',
-    //     'Catamarca',
-    //     'Chaco',
-    //     'Chubut',
-    //    'Córdoba',
-    //     'Corrientes',
-    //     'Entre Ríos',
-    //     'Formosa',
-    //     'Jujuy',
-    //     'La Pampa',
-    //     'La Rioja',
-    //     'Mendoza',
-    //     'Misiones',
-    //     'Neuquén',
-    //     'Río Negro',
-    //     'Salta',
-    //     'San Juan',
-    //     'San Luis',
-    //     'Santa Cruz',
-    //     'Santa Fe',
-    //     'Santiago del Estero',
-    //     'Tierra del Fuego, Antártida e Islas del Atlántico Sur',
-    //     'Tucumán']
-
-
-        // const handleChange = (event) => {
-        //   console.log('setValues:', setValues); 
-        //   console.log('Selected Province:', event.target.value);
-        //   const selectedProvinceTrimmed = event.target.value.trim();
-          
-        //   setValues((prevValues) => ({
-        //     ...prevValues,
-        //     province: selectedProvinceTrimmed,
-        //   }));
-        // };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+       
+        if(userSessionId){
+          const response = await fetch('/api/users/'+ userSessionId); 
         
-        
-        
+          if (response.ok) {
+            const userData = await response.json();
+            console.log('Datos del usuario obtenidos:', userData);
+            userData.province = userData?.province?.name;
+            userData.city = userData?.city?.name;
 
-        const onSubmit = async (values, { setSubmitting}) => {
+            setUserData(userData);
+            setSelectedImage(userData.img)
+            
+          } else {
+            console.error('Error al obtener los datos del usuario');
+          }
+        }
         
+      } catch (error) {
+        console.error('Error de red al obtener los datos del usuario', error);
+      }
+    };
+    fetchUserData();
+  }, [userSessionId]);
+
+
+
+     
+        
+        const onSubmit = async (values, { setSubmitting }) => {
           try {
-            console.log('values', values)
-            const response = await fetch('/api/users', {
-              method: 'PUT', 
+            // Hacer una pequeña pausa para permitir que 'values' se actualice
+            await new Promise(resolve => requestAnimationFrame(resolve));
+        
+            // Comparar los valores cambiados con los valores iniciales
+            const changedValues = Object.keys(values).reduce((acc, key) => {
+              if (values[key] !== initialValues[key]) {
+                acc[key] = values[key];
+              }
+              return acc;
+            }, {});
+        
+            // Construir el objeto final que se enviará al backend
+            const dataUser = {
+              password: values.password,
+              dataSinPass: {
+                ...values,
+                img: selectedImage,
+                codeP: parseInt(values.codeP),
+                changedValues,
+              },
+            };
+        
+            console.log('Datos que se enviarán al backend:', dataUser);
+        
+            const response = await fetch('api/users/' + userSessionId, {
+              method: 'PUT',
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify(values), 
+              body: JSON.stringify(dataUser),
             });
-        
-            if (response.ok) {              
-              console.log('Datos enviados correctamente al backend');
+           console.log(response.status)
+            if (response.ok) {
+              const res = await response.json();
+              console.log('Datos enviados correctamente al backend', res);
             } else {
-              console.error('Error al enviar datos al backend');
+              const errorResponse = await response.json();
+            console.error('Error al enviar datos al backend', response.status, errorResponse);
             }
           } catch (error) {
-            
-            console.error('Error de red al enviar datos al backend', error);
+            console.error('Error de red al enviar datos al backend', error.message);
           }
         
-          
           setSubmitting(false);
         };
         
-       
+        
+        
+      
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={userData}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
       enableReinitialize // Permite reinicializar los valores cuando cambia la propiedad initialValues
@@ -194,213 +189,150 @@ const EditProfileForm = ({ initialValues,editable, setFieldValue, }) => {
             <div className="flex flex-col items-center justify-center">
   
     <label htmlFor="upload-image-input">
-        <img 
-           name="image"
-           src={userSessionImage || selectedImage || defaultImageUrl}
-            alt="Imagen de perfil"
-            width={250}
-            height={250}
-            className="rounded-full cursor-pointer"
-        />
-    </label>
-    <input
-        type="file"
-        accept="image/*"
-        onChange={handleImageChange}
-        disabled={!editable}
-        id="upload-image-input"
-        className="mb-2" 
-    />
-</div>
-
+    <img
+                  name="img"
+                  src={userImageToShow}
+                  alt="Imagen de perfil"
+                  width={250}
+                  height={250}
+                  className="rounded-full cursor-pointer"
+                />
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                disabled={!editable}
+                id="upload-image-input"
+                className="mb-2"
+              />
+              {selectedImage && (
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="text-red-500 underline cursor-pointer"
+                  disabled={!editable}
+                >
+                  Eliminar Imagen
+                </button>
+              )}
+            </div>
 
             
           <p className="text-xl font-bold mb-4">Datos Personales:</p>
           <div className="grid grid-cols-2 gap-4" >
 
-          <Field
-            name="name"
-            label="Nombre"
-            as={TextField}
-            fullWidth
-            disabled={!editable}
-            required
-         
-          />
-       <ErrorMessage name="name" component="div" style={{ color: 'red' }} />
+          <div className="flex flex-col">            
+    <InputLabel htmlFor="name" className="text-sm font-bold mb-1">
+      Nombre:
+    </InputLabel>
+    <Field
+      name="name"
+      as={TextField}
+      fullWidth
+      disabled={!editable}
+    
+    />
+    <ErrorMessage name="name" component="div" style={{ color: 'red' }} />
+  </div>
 
-          <Field
-            name="lastname"
-            label="Apellido"
-            as={TextField}
-            fullWidth
-            disabled={!editable}
-            required
-          />
-<ErrorMessage name="lastname" component="div" style={{ color: 'red' }} />
+  <div className="flex flex-col"> 
+  <InputLabel htmlFor="lastname" className="text-sm font-bold mb-1">
+      Apellido:
+    </InputLabel>
+    <Field
+      name="lastname"
+      as={TextField}
+      fullWidth
+      disabled={!editable}
+    />
+    <ErrorMessage name="lastname" component="div" style={{ color: 'red' }} />
+  </div>
 
-        <Field
-    name="password"
-    type="password"
-    label="Contraseña"
-    as={TextField}
-    fullWidth
-    disabled={!editable}
-    required
-  />
-  <ErrorMessage name="password" component="div" style={{ color: 'red' }} />
-
-  <Field
-    name="confirmPassword"
-    type="password"
-    label="Confirmar Contraseña"
-    as={TextField}
-    fullWidth
-    disabled={!editable}
-    required
-  />
-  <ErrorMessage name="confirmPassword" component="div" style={{ color: 'red' }} />
+  <div className="flex flex-col"> 
+  <InputLabel htmlFor="username" className="text-sm font-bold mb-1">
+      Nombre de Usuario:
+    </InputLabel>
+    <Field
+      name="username"
+      as={TextField}
+      fullWidth
+      disabled={!editable}
+    />
+    <ErrorMessage name="username" component="div" style={{ color: 'red' }} />
+  </div>
+  
  </div>
           
        </div>
 
-       <div className="mb-4" >
-          <p className="text-xl font-bold mb-4" >Datos de Contacto:</p>
-          <div className="grid grid-cols-2 gap-4">
-          <Field
-              name="areaCode"
-              label="Código de Área"
-              as={TextField}
-              fullWidth
-              disabled={!editable}
-              required
-            />
-            <ErrorMessage name="areaCode" component="div" style={{ color: 'red' }} />
-
-            <Field
-              name="phoneNumber"
-              label="Número de Teléfono"
-              as={TextField}
-              fullWidth
-              disabled={!editable}
-              required
-            />
-        <ErrorMessage name="phoneNumber" component="div" style={{ color: 'red' }} />
-
-          <Field
-            name="email"
-            label="Email"
-            as={TextField}
-            fullWidth
-            disabled={!editable}
-            required
-          />
-        <ErrorMessage name="email" component="div" style={{ color: 'red' }} />  
-          </div>
-          </div>
+      
 
           <div className="mb-4" >
           <p className="text-xl font-bold mb-1">Dirección de Envío:</p>
           <p className="text-sm text-gray-500 mt-1 mb-3">Para envíos fuera de CABA, contactar al vendedor</p>
           <div className="grid grid-cols-2 gap-4">
 
-          <Field
-            name="street"
-            label="Calle"
-            as={TextField}
-            fullWidth
-            disabled={!editable}
-            required
-          />
+          <div className="flex flex-col"> 
+  <InputLabel htmlFor="adress" className="text-sm font-bold mb-1">
+      Dirección (calle y n°):
+    </InputLabel>
+    <Field
+      name="adress"
+      as={TextField}
+      fullWidth
+      disabled={!editable}
+    />
+    <ErrorMessage name="adress" component="div" style={{ color: 'red' }} />
+  </div>
 
-          <Field
-            name="numStreet"
-            label="Número"
-            as={TextField}
-            fullWidth
-            disabled={!editable}
-            required
-          />
-        <ErrorMessage name="numStreet" component="div" style={{ color: 'red' }} />
-
-          <Field
-            name="neighborhood"
-            label="Barrio"
-            as={TextField}
-            fullWidth
-            disabled={!editable}
-            required
-          />
-
-          <Field
-            name="floor"
-            label="Piso"
-            as={TextField}
-            fullWidth
-            disabled={!editable}
-          />
-
-          <Field
-            name="apartment"
-            label="Dpto"
-            as={TextField}
-            fullWidth
-            disabled={!editable}
-          />
-          <Field
-            name="ZIP"
-            label="Código Postal"
-            as={TextField}
-            fullWidth
-            disabled={!editable}
-            required
-          />
-
-       <ErrorMessage name="ZIP" component="div" style={{ color: 'red' }} />
+        
+             <div className="flex flex-col"> 
+  <InputLabel htmlFor="codeP" className="text-sm font-bold mb-1">
+     Código Postal:
+    </InputLabel>
+    <Field
+      name="codeP"
+      as={TextField}
+      fullWidth
+      disabled={!editable}
+    />
+    <ErrorMessage name="codeP" component="div" style={{ color: 'red' }} />
+  </div>
 
           </div>
           </div>
 
           <div className="mb-4" >
-         
+          <div className="flex flex-col"> 
+  <InputLabel htmlFor="city" className="text-sm font-bold mb-1">
+     Localidad:
+    </InputLabel>
+    <Field
+      name="city"
+      as={TextField}
+      fullWidth
+      disabled={!editable}
+    />
+    <ErrorMessage name="city" component="div" style={{ color: 'red' }} />
+  </div>
          </div>
          <div>
-      {/* <FormControl sx={{ m: 1, minWidth: 200 }}>
-        <InputLabel id="demo-simple-select-autowidth-label">Provincia*</InputLabel>
-        <Select
-          name="province"
-          labelId="demo-simple-select-autowidth-label"
-          id="demo-simple-select-autowidth"
-          value={selectedProvince}
-          onChange={handleChange}
-          autoWidth
-          label="Provincia"
-          disabled={!editable}
-          
-          
-          
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          {provinces.map((province, index) => (
-            <MenuItem key={index} value={province}>
-              {province}
-            </MenuItem>
-          ))}
-          
-        </Select>
-        
-      </FormControl> */}
-       <Field
-            name="province"
-            label="Provincia"
-            as={TextField}
-            fullWidth
-            disabled={!editable}
-            required
-          />
-      <ErrorMessage name="province" component="div" style={{ color: 'red' }} />
+  
+
+   <div className="flex flex-col"> 
+  <InputLabel htmlFor="province" className="text-sm font-bold mb-1">
+     Provincia:
+    </InputLabel>
+    <Field
+      name="province"
+      as={TextField}
+      fullWidth
+      disabled={!editable}
+      
+    />
+    <ErrorMessage name="province" component="div" style={{ color: 'red' }} />
+  </div>
     </div>
 
          <Button
