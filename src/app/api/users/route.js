@@ -11,14 +11,12 @@ try {
 
 if(!conn.isConnected) connectDB();    
 const users = await userDB.find({}, {password: 0})
-// .populate("City", {
-// _id: 0,
-// name: 1
-// })
-// .populate("provinces", {
-// _id: 0,
-// name: 1
-// })
+.populate("province",{
+  name:1
+})
+.populate("city",{
+  name:1
+})
 
 
 return NextResponse.json(users, {
@@ -41,6 +39,12 @@ export async function POST(request){
     const newUser = await addUser(dataUser)
     // await newUser.save()
     const findUser = await userDB.findOne({_id:newUser._id})
+    .populate("province",{
+      name:1
+    })
+  .populate("city",{
+      name:1
+  })
     if(findUser) return NextResponse.json(findUser,{
       status:200
    })

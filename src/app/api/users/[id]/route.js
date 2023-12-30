@@ -13,9 +13,15 @@ export async function DELETE(request, {params}) {
 
        const _id = params.id
 
-        const deleteUser = await userDB.findByIdAndDelete(_id);
+        const deleteUser = await userDB.findByIdAndDelete(_id)
+        .populate("province",{
+            name:1
+        })
+        .populate("city",{
+            name:1
+        });
 
-        return NextResponse.json({mensaje: "Usuario eliminado"},{status:200})
+        return NextResponse.json({mensaje: "Usuario eliminado",...deleteUser},{status:200})
 
     } catch (error) {
         return NextResponse.json({mensaje: "Usuario no encontrado"}, {
@@ -28,9 +34,15 @@ export async function GET(request,{params}){
     try {
         if(!conn.isConnected) connectDB()
         const _id = params.id
-        const findUser = await userDB.findOne({_id:_id},{password:0});
+        const findUser = await userDB.findOne({_id:_id},{password:0})
+        .populate("province",{
+            name:1
+        })
+        .populate("city",{
+            name:1
+        });
 
-        if(findUser) return NextResponse.json(findUser,{status:200})
+        if(findUser) return NextResponse.json(findUser,{status:200});
         throw Error('User no encontrado');
     } catch (error) {
         return NextResponse.json(error.message,
@@ -70,7 +82,13 @@ export async function PUT(request, {params}){  //         /api/users [PUT]
                     const result = await userDB.findOneAndUpdate(
                         { _id: idUser },
                         { $set: { ...dataSinPass } },
-                      );
+                      )
+                      .populate("province",{
+                        name:1
+                    })
+                    .populate("city",{
+                        name:1
+                    });
                       
 
                   if(result) return NextResponse.json(result,{status:200});
