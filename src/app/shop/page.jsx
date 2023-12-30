@@ -2,10 +2,15 @@
 
 import CardProduct from "@/components/CardsProducts/CardProduct";
 import { useEffect, useState } from "react";
+import { useProductStore } from "@/hooks/usePages";
+import NavPages from "@/components/NavPages/NavPages";
+
 
 export default function Shop() {
   const [products, setProducts] = useState([]);
   const [ratings, setRatings] = useState([]);
+  const productsStore = useProductStore();
+
 
   useEffect(() => {
     const storedRatings = localStorage.getItem("ratings");
@@ -21,7 +26,11 @@ export default function Shop() {
     })
       .then((res) => res.json())
       .then((data) => {
-        setProducts(data);
+
+        productsStore.setProducts(data);
+        const Page = productsStore.getArrayPage();
+
+        setProducts(Page);
 
         if (!storedRatings) {
           const randomRatings = data.map(() => generateRandomRating());
@@ -29,7 +38,7 @@ export default function Shop() {
           localStorage.setItem("ratings", JSON.stringify(randomRatings));
         }
       });
-  }, []);
+  }, [productsStore]);
 
   const generateRandomRating = () => {
     return Math.floor(Math.random() * 5) + 1;
@@ -53,6 +62,7 @@ export default function Shop() {
             />
           ))}
       </div>
+      <NavPages />
     </div>
   );
 }
