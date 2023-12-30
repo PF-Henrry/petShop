@@ -1,5 +1,5 @@
 import { Inter, Jomhuria } from "next/font/google";
-import Navbar from "../components/Navbar/Navbar";
+import NavbarIn from "@/components/Navbar/NavBarIn";
 import Footer from "../components/Footer/Footer";
 import favicon from "../public/favicon.ico";
 
@@ -22,7 +22,7 @@ export default function RootLayout({ children }) {
         <link rel="icon" href={favicon.src} />
       </head>
       <body className={inter.className}>
-        <Navbar />
+        <NavbarIn />
         <SessionAuthProvider>{children}</SessionAuthProvider>
         <Footer />
       </body>

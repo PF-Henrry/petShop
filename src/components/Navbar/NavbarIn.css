@@ -11,7 +11,7 @@
 }
 
 nav {
-  @apply bg-[#DABEB6] w-full h-24 fixed top-0 left-0 px-20 py-2 flex justify-between z-50;
+  @apply bg-[#DABEB6] w-full h-24 sticky top-0 left-0 px-20 py-2 flex justify-between z-50;
 
   .btn-container {
     @apply hidden;
