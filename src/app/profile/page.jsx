@@ -2,31 +2,31 @@
 import React, { useState, useEffect } from 'react';
 import EditProfileForm from '../../components/EditProfile/EditProfileForm';
 
+
 const Profile = () => {
     const [editable, setEditable] = useState(false);
     
+
  
     const initialValues = {
+      img:'',
       name: '',
       lastname: '',
+      username: '',
       password:'',
-      confirmPassword:'',
-      ID: '',
-      areaCode:'',
-      phoneNumber: '',
       email: '',
-      street: '',
-      numStreet: '',
-      neighborhood: '',
-      floor: '',
-      apartment: '',
-      ZIP: '',
+      adress: '',
+      codeP: '',
       province: '',
+      city:''
     };
-  
-    const handleSubmit = (values, { setSubmitting }) => {
+
+   
+    
+    const handleSubmit = (values, { setSubmitting}) => {
       // Lógica para manejar la subida de datos
       console.log('Valores enviados:', values);
+      
       setSubmitting(false);
       setEditable(false); // Desactiva la edición después de guardar
     };
