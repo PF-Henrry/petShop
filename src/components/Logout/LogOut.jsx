@@ -1,8 +1,8 @@
-
-import React, {useState} from 'react';
-import Button from '@mui/material/Button'
-//import toastNotify from '@/libs/toast';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import Button from "@mui/material/Button";
+import styled from "styled-components";
+import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 const ModalBackdrop = styled.div`
   position: fixed;
@@ -10,66 +10,63 @@ const ModalBackdrop = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); 
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
-  align-items: center; 
+  align-items: center;
   justify-content: center;
-  z-index: 1000; 
-  box-shadow:  rgba(100,100,111,0.2) 0px 7px 29px 0px;
+  z-index: 1000;
+  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 `;
 
-
 const Logout = () => {
- 
-  //const {showNotify,ToastContainer} = toastNotify();
+
+  const router = useRouter();
   const [isModalOpen, setModalOpen] = useState(false);
 
+  const handleLogout = async () => {
+    try {
+      const data = await signOut({ redirect: false });
 
+      if (data.error) {
+        console.error("Error during logout:", data.error);
+      } else {
+        localStorage.removeItem("userData");
 
-   const handleLogout = async () => {
-//     try {
-    
-//       const res = await logOut({ redirect: false });
-  
-//       if (res.ok) {
-       
-//         localStorage.removeItem('ToasNotify',JSON.stringify({type:"success",message:"Gracias por visitarnos!"}));
-        
-//         router.push('/login');
-//       } else {
-       
-//         showNotify('error', 'Error al cerrar la sesión');
-//       }
-setModalOpen(false)
-//     } catch (error) {
-      
-//       showNotify('error', error.message);
-//     }
-  }
+        router.push("/login");
+      }
+
+      setModalOpen(false);
+    } catch (error) {
+      console.error("Unexpected error during logout:", error);
+    }
+  };
 
   const handleConfirm = () => {
     handleLogout();
   };
 
   const handleCancel = () => {
-    setModalOpen(false)
-    
+    setModalOpen(false);
   };
 
   return (
-    <div className="flex items-center justify-center h-screen ">     
-
+    <div className="flex items-center justify-center h-screen ">
       {isModalOpen && (
         <ModalBackdrop>
           <div className="text-center flex flex-col items-center p-8 rounded shadow border border-gray-300 bg-customPrimary relative">
-            <button onClick={handleCancel} className="absolute top-2 right-2  cursor-pointer">❌</button>
+            <button
+              onClick={handleCancel}
+              className="absolute top-2 right-2  cursor-pointer"
+            >
+              ❌
+            </button>
             <p className="mb-4 text-3xl  font-bold p-2">¿Ya te vas?</p>
             <div className="flex gap-4">
               <Button
                 type="submit"
                 variant="outlined"
                 onClick={handleConfirm}
-                style={{ borderColor: 'grey' }}
+                style={{ borderColor: "grey" }}
                 className={`text-black
                   py-2 px-4 rounded focus:outline-none focus:shadow-outline
                   active:shadow-md active:translate-y-1 block mx-auto  mt-8 hover:bg-customSecondary w-40 text-lg`}
@@ -77,10 +74,10 @@ setModalOpen(false)
                 Sí, Salir
               </Button>
               <Button
-                type="button"  
+                type="button"
                 variant="outlined"
                 onClick={handleCancel}
-                style={{ borderColor: 'grey' }}
+                style={{ borderColor: "grey" }}
                 className={`text-black
                   py-2 px-4 rounded focus:outline-none focus:shadow-outline
                   active:shadow-md active:translate-y-1 block mx-auto  mt-8 hover:bg-customSecondary w-40 text-lg`}
@@ -91,9 +88,8 @@ setModalOpen(false)
           </div>
         </ModalBackdrop>
       )}
-     {/* <ToastContainer /> */}
     </div>
   );
-}
+};
 
 export default Logout;
