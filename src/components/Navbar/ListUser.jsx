@@ -6,9 +6,10 @@ import {
   Heart,
   SignOut,
 } from "@phosphor-icons/react/dist/ssr";
+import Image from "next/image";
 
 import Link from "next/link";
-export default function ListUser() {
+export default function ListUser({ userImg }) {
   return (
     <ol>
       <div className="user-navBar-menu">
@@ -20,7 +21,13 @@ export default function ListUser() {
         />
         <li>
           <Link href="/profile">
-            <UserCircle size={20} weight="fill" />
+            <Image
+              src={userImg}
+              alt="user"
+              width={20}
+              height={20}
+              className="rounded-full"
+            />
             <p>Mi cuenta</p>
           </Link>
         </li>

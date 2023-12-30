@@ -10,7 +10,7 @@
   list-style: none;
 }
 
-nav {
+.NavBarIn {
   @apply bg-[rgba(218,190,182,.8)] w-full h-24 sticky top-0 left-0 px-8 py-2 flex justify-between backdrop-blur-md z-50;
 
   .btn-container {
@@ -145,7 +145,7 @@ nav {
                 @apply py-1 border-b border-b-[#DABEB6] overflow-hidden;
 
                 & a {
-                  @apply text-base font-normal text-[#143146] delay-0 py-2;
+                  @apply text-base font-normal text-[#143146] delay-0 py-2 flex gap-[5px];
 
                   & p {
                     @apply opacity-0 translate-x-[150%] duration-300;
@@ -238,7 +238,7 @@ nav {
 
   @media (max-width: 858px) {
     & ul {
-      @apply fixed justify-center w-full h-[100vh] top-24 left-[-100%] bg-[#143146] z-10;
+      @apply fixed justify-center w-full h-[100vh] top-24 left-[-100%] bg-[rgba(20,49,70,.95)] z-10;
       transition: all 0.5s;
 
       .menu {

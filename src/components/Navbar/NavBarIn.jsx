@@ -20,10 +20,55 @@ import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import ListUser from "./ListUser";
 import "./NavbarIn.css";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 
 export default function NavbarIn() {
+  const { data: session } = useSession();
+
+  const userSessionId = session?.user?.id;
+
+  const [userData, setUserData] = useState({
+    img: "",
+    name: "",
+    lastname: "",
+    username: "",
+    password: "",
+    email: "",
+    adress: "",
+    codeP: "",
+    province: "",
+    city: "",
+  });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (userSessionId) {
+          const response = await fetch("/api/users/" + userSessionId);
+
+          if (response.ok) {
+            const userData = await response.json();
+            console.log("Datos del usuario obtenidos:", userData.img);
+          } else {
+            console.error("Error al obtener los datos del usuario");
+          }
+        }
+      } catch (error) {
+        console.error("Error de red al obtener los datos del usuario", error);
+      }
+    };
+    fetchUserData();
+
+    const storedUserData = localStorage.getItem("userData");
+    if (storedUserData) {
+      const parsedUserData = JSON.parse(storedUserData);
+      setUserData(parsedUserData);
+    }
+  }, [userSessionId]);
+
   return (
-    <nav>
+    <nav className="NavBarIn">
       <section className="logo-container flex gap-4 overflow-hidden justify-center items-end ml-5">
         <Image
           src={logo}
@@ -77,10 +122,15 @@ export default function NavbarIn() {
             <section className="details-user-navBar hidden">
               <details>
                 <summary>
-                  <User size={20} weight="bold" className="scale-125" />
+                  <Image
+                    src={userData.img}
+                    alt="user"
+                    width={20}
+                    height={20}
+                    className="rounded-full scale-125"
+                  />
                   <p>
-                    Usuario
-                    {/* {sessionStorage.getItem("user")} */}
+                    {userData.name}
                     <CaretUp
                       size={20}
                       className="caret-user-details"
@@ -88,16 +138,21 @@ export default function NavbarIn() {
                     />
                   </p>
                 </summary>
-                <ListUser />
+                <ListUser userImg={userData.img} />
               </details>
             </section>
             <section className="list-user-navBar block">
               <input type="checkbox" id="check-user" />
               <Tippy content="Cuenta">
                 <label htmlFor="check-user" className="user-navBar">
-                  <User size={20} weight="bold" />
-                  Usuario
-                  {/* {sessionStorage.getItem("user")} */}
+                  <Image
+                    src={userData.img}
+                    alt="user"
+                    width={30}
+                    height={30}
+                    className="rounded-full"
+                  />
+                  {userData.name}
                   <CaretDown
                     size={15}
                     color="#eee0dd"
@@ -106,7 +161,7 @@ export default function NavbarIn() {
                   />
                 </label>
               </Tippy>
-              <ListUser />
+              <ListUser userImg={userData.img} />
             </section>
           </li>
           {/** USER NAVBAR **/}
