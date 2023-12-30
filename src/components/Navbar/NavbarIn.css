@@ -11,7 +11,7 @@
 }
 
 nav {
-  @apply bg-[#DABEB6] w-full h-24 fixed top-0 left-0 px-20 py-2 flex justify-between z-50;
+  @apply bg-[rgba(218,190,182,.8)] w-full h-24 sticky top-0 left-0 px-8 py-2 flex justify-between backdrop-blur-md z-50;
 
   .btn-container {
     @apply hidden;
@@ -48,15 +48,15 @@ nav {
       @apply flex items-center gap-8;
       & li {
         & a {
-          @apply relative text-lg font-semibold text-[#143146] duration-300 flex items-center gap-1 overflow-hidden;
+          @apply relative text-base font-semibold text-[#143146] duration-300 flex items-center gap-1 overflow-hidden;
 
           &::after {
             content: "";
-            @apply absolute w-full h-[2px] bg-[#143146] bottom-0 left-0 translate-y-[-2rem] duration-200;
+            @apply absolute w-full h-[2px] bg-[#143146] bottom-[-2px] left-0 translate-y-[-2rem] duration-200;
           }
 
           &:hover {
-            @apply text-[#2d638b];
+            @apply text-[#2d638b] overflow-visible;
 
             &::after {
               @apply bg-[#2d638b] translate-y-0;
@@ -139,7 +139,7 @@ nav {
             }
 
             & ol {
-              @apply absolute bg-[#fff0ec] mt-4 rounded-lg right-20 h-0 overflow-hidden;
+              @apply absolute bg-[#fff0ec] mt-4 rounded-lg right-10 h-0 overflow-hidden shadow-[0_4px_4px_0_rgba(0,0,0,0.25)];
 
               & li {
                 @apply py-1 border-b border-b-[#DABEB6] overflow-hidden;
