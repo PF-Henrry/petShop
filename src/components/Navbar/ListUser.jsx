@@ -7,9 +7,14 @@ import {
   SignOut,
 } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
-
 import Link from "next/link";
+
 export default function ListUser({ userImg }) {
+
+  
+  
+  
+
   return (
     <ol>
       <div className="user-navBar-menu">
@@ -50,7 +55,7 @@ export default function ListUser({ userImg }) {
           </Link>
         </li>
         <li>
-          <Link href="/logout">
+          <Link href="/logout" >
             <SignOut size={20} weight="bold" />
             <p>Cerrar sesion</p>
           </Link>
