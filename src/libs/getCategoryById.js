@@ -1,5 +1,4 @@
 import category from "@/models/category";
-import category from "@/models/category";
 
 const getCategoriesById = async(req, res) => {
     const id = req.query;
