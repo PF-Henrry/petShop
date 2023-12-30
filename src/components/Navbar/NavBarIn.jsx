@@ -1,5 +1,4 @@
 "use client";
-
 import logo from "@/public/assets/logoNav.png";
 import { jomhuria } from "@/app/layout";
 import Image from "next/image";
@@ -27,6 +26,7 @@ export default function NavbarIn() {
   const { data: session } = useSession();
 
   const userSessionId = session?.user?.id;
+  
 
   const [userData, setUserData] = useState({
     img: "",
@@ -67,6 +67,10 @@ export default function NavbarIn() {
     }
   }, [userSessionId]);
 
+  ;
+
+ 
+  
   return (
     <nav className="NavBarIn">
       <section className="logo-container flex gap-4 overflow-hidden justify-center items-end ml-5">
@@ -89,6 +93,7 @@ export default function NavbarIn() {
           <X size={25} weight="bold" className="cross hidden" />
         </label>
       </span>
+
 
       <ul>
         <div className="menu">
@@ -138,7 +143,7 @@ export default function NavbarIn() {
                     />
                   </p>
                 </summary>
-                <ListUser userImg={userData.img} />
+                <ListUser userImg={userData.img} setModalOpen={() => setModalOpen(true)}/>
               </details>
             </section>
             <section className="list-user-navBar block">
@@ -161,13 +166,13 @@ export default function NavbarIn() {
                   />
                 </label>
               </Tippy>
-              <ListUser userImg={userData.img} />
+              <ListUser />
             </section>
           </li>
           {/** USER NAVBAR **/}
 
           <li>
-            <Link href="/logout" className="user-navBar-link">
+          <Link href= "/logout" className="user-navBar-link">
               <SignOut size={20} className="icon-list" />
               Cerrar Sesion
             </Link>
