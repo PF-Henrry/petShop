@@ -75,7 +75,11 @@ const EditProfileForm = ({ initialValues, editable }) => {
   });
 
   const handleRemoveImage = () => {
-    selectedImage(null);
+    setSelectedImage(defaultImage);
+    setUserData((prevUserData) => ({
+      ...prevUserData,
+      img: defaultImage,
+    }));
   };
 
   useEffect(() => {
@@ -90,6 +94,8 @@ const EditProfileForm = ({ initialValues, editable }) => {
             userData.province = userData?.province?.name;
             userData.city = userData?.city?.name;
 
+            localStorage.setItem("userData", JSON.stringify(userData));
+
             setUserData(userData);
             setSelectedImage(userData.img);
           } else {
@@ -101,6 +107,13 @@ const EditProfileForm = ({ initialValues, editable }) => {
       }
     };
     fetchUserData();
+
+    const storedUserData = localStorage.getItem("userData");
+    if (storedUserData) {
+      const parsedUserData = JSON.parse(storedUserData);
+      setUserData(parsedUserData);
+      setSelectedImage(parsedUserData.img);
+    }
   }, [userSessionId]);
 
   const onSubmit = async (values, { setSubmitting }) => {
