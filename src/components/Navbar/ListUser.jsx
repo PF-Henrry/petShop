@@ -19,7 +19,7 @@ export default function ListUser() {
           weight="fill"
         />
         <li>
-          <Link href="/account">
+          <Link href="/profile">
             <UserCircle size={20} weight="fill" />
             <p>Mi cuenta</p>
           </Link>
