@@ -60,13 +60,13 @@ export default function NavbarIn() {
             </Link>
           </li>
           <li>
-            <Link href="/shop" className="user-navBar-link">
+            <Link href="/adoption" className="user-navBar-link">
               <PawPrint size={20} className="icon-list" />
               Adopciones
             </Link>
           </li>
           <li>
-            <Link href="/shop" className="user-navBar-link">
+            <Link href="/petcare" className="user-navBar-link">
               <Scissors size={20} className="icon-list" />
               Peluqueria
             </Link>
