@@ -16,33 +16,33 @@ export default function CategoryCards() {
       {/* bg-blue-200 p-4 */}
       <div className="cards-category-container">
         <div className="card-category-container">
-          <Link href="/category/1">
+          {/* <Link href="/category/1"> */}
             <Image
               src={accCategory}
               alt="Accessorios"
               width={150}
               height={150}
             />
-          </Link>
-          <p>Accessorios</p>
+          {/* </Link> */}
+          <p>Accesorios</p>
         </div>
         <div className="card-category-container">
-          <Link href="/category/2">
+          {/* <Link href="/category/2"> */}
             <Image src={foodCategory} alt="Comida" width={150} height={150} />
-          </Link>
-          <p>Comida</p>
+          {/* </Link> */}
+          <p>Alimento</p>
         </div>
         <div className="card-category-container">
-          <Link href="/category/3">
+          {/* <Link href="/category/3"> */}
             <Image src={hygCategory} alt="Higiene" width={150} height={150} />
-          </Link>
+          {/* </Link> */}
           <p>Higiene</p>
         </div>
         <div className="card-category-container">
-          <Link href="/category/4">
+          {/* <Link href="/category/4"> */}
             <Image src={healthCategory} alt="Salud" width={150} height={150} />
-          </Link>
-          <p>Salúd</p>
+          {/* </Link> */}
+          <p>Salud</p>
         </div>
       </div>
     </div>
