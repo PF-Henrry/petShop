@@ -21,12 +21,13 @@ import ListUser from "./ListUser";
 import "./NavbarIn.css";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+const defaultImage =
+  "http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png";
 
 export default function NavbarIn() {
   const { data: session } = useSession();
 
   const userSessionId = session?.user?.id;
-  
 
   const [userData, setUserData] = useState({
     img: "",
@@ -50,6 +51,7 @@ export default function NavbarIn() {
           if (response.ok) {
             const userData = await response.json();
             console.log("Datos del usuario obtenidos:", userData.img);
+            setUserData(userData);
           } else {
             console.error("Error al obtener los datos del usuario");
           }
@@ -67,10 +69,6 @@ export default function NavbarIn() {
     }
   }, [userSessionId]);
 
-  ;
-
- 
-  
   return (
     <nav className="NavBarIn">
       <section className="logo-container flex gap-4 overflow-hidden justify-center items-end ml-5">
@@ -93,7 +91,6 @@ export default function NavbarIn() {
           <X size={25} weight="bold" className="cross hidden" />
         </label>
       </span>
-
 
       <ul>
         <div className="menu">
@@ -143,7 +140,7 @@ export default function NavbarIn() {
                     />
                   </p>
                 </summary>
-                <ListUser userImg={userData.img} setModalOpen={() => setModalOpen(true)}/>
+                <ListUser userImg={userData.img || defaultImage} />
               </details>
             </section>
             <section className="list-user-navBar block">
@@ -151,7 +148,7 @@ export default function NavbarIn() {
               <Tippy content="Cuenta">
                 <label htmlFor="check-user" className="user-navBar">
                   <Image
-                    src={userData.img}
+                    src={userData.img || defaultImage}
                     alt="user"
                     width={30}
                     height={30}
@@ -172,7 +169,7 @@ export default function NavbarIn() {
           {/** USER NAVBAR **/}
 
           <li>
-          <Link href= "/logout" className="user-navBar-link">
+            <Link href="/logout" className="user-navBar-link">
               <SignOut size={20} className="icon-list" />
               Cerrar Sesion
             </Link>

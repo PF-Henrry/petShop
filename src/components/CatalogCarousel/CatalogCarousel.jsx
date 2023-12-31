@@ -1,66 +1,98 @@
-'use client'
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
+"use client";
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { CaretLeft, CaretRight } from "@phosphor-icons/react/dist/ssr";
+import tippy, { followCursor } from "tippy.js";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/dist/svg-arrow.css";
+import "./CarouselCatalog.css";
 
 const catalogImages = [
-  { src: '/assets/banner_catalogo1.jpg' },
-  { src: '/assets/banner_catalogo2.jpg' },
-  { src: '/assets/banner_catalogo3.jpg' },
- ];
+  {
+    src: "https://res.cloudinary.com/kimeipetshop/image/upload/v1704005814/banner_catalogo1_oy4inh.jpg",
+  },
+  {
+    src: "https://res.cloudinary.com/kimeipetshop/image/upload/v1704005814/banner_catalogo2_axyayr.jpg",
+  },
+  {
+    src: "https://res.cloudinary.com/kimeipetshop/image/upload/v1704005810/banner_catalogo3_tzpuew.png",
+  },
+];
 
 const CatalogCarousel = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
+    // Verificar si estamos en un entorno de navegador antes de usar tippy
+    // if (typeof document !== "undefined") {
+    //   tippy("#tooltip-carousel", {
+    //     content: "Ver más",
+    //     followCursor: true,
+    //     plugins: [followCursor],
+    //     arrow: false,
+    //   });
+    // }
+
     const intervalId = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex === catalogImages.length - 1 ? 0 : prevIndex + 1));
-    }, 3000);
+      setCurrentIndex((prevIndex) =>
+        prevIndex === catalogImages.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 4000);
 
     return () => clearInterval(intervalId);
   }, [currentIndex]);
 
   const goToPrevious = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? catalogImages.length - 1 : prevIndex - 1));
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? catalogImages.length - 1 : prevIndex - 1
+    );
   };
 
   const goToNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === catalogImages.length - 1 ? 0 : prevIndex + 1));
+    setCurrentIndex((prevIndex) =>
+      prevIndex === catalogImages.length - 1 ? 0 : prevIndex + 1
+    );
   };
 
   return (
-    <div className="relative w-full overflow-hidden">
-      <Image
-        key={currentIndex}
-        src={catalogImages[currentIndex].src}
-        alt={`Imagen ${currentIndex + 1}`}
-        width={1200}
-        height={400}
-        className="object-cover transition-transform duration-500 ease-in-out transform translate-x-0"
-      />
-      <div className="absolute top-1/2 left-4 transform -translate-y-1/2">
-        <button
-          onClick={goToPrevious}
-          className="text-white text-4xl p-4 focus:outline-none z-10"
-        >
-          &#8249;
+    <div className="carousel-container-catalog">
+      {/* Boton de navegación izquierda */}
+      <div className="carousel-button" id="prev-button">
+        <button onClick={goToPrevious}>
+          <CaretLeft size={32} weight="bold" />
         </button>
       </div>
-      <div className="absolute top-1/2 right-4 transform -translate-y-1/2">
-        <button
-          onClick={goToNext}
-          className="text-white text-4xl p-4 focus:outline-none z-10"
-        >
-          &#8250;
+      {/* Boton de navegación izquierda end */}
+
+      <section className="carousel-img-container" id="tooltip-carousel">
+        <Image
+          key={currentIndex}
+          src={catalogImages[currentIndex].src}
+          width={1440}
+          height={560}
+          alt={`Imagen ${currentIndex + 1}`}
+          className="carousel-image"
+        />
+      </section>
+
+      {/* Boton de navegación derecha */}
+      <div className="carousel-button" id="next-button">
+        <button onClick={goToNext}>
+          <CaretRight size={32} weight="bold" />
         </button>
       </div>
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      {/* Boton de navegación derecha end */}
+
+      <div className="carousel-indicators">
         {catalogImages.map((_, index) => (
-          <div
+          <figure
             key={index}
-            className={`h-4 w-4 rounded-full bg-gray-300 ${
-              index === currentIndex ? 'bg-gray-700' : 'bg-gray-400'
+            className={`carousel-indicator ${
+              index === currentIndex
+                ? "indicator-active scale-125 bg-[#143146]"
+                : "bg-[#eee0dd]"
             }`}
-          ></div>
+          ></figure>
         ))}
       </div>
     </div>

@@ -19,7 +19,19 @@ export async function POST(request){
       }
 
       console.log(query)
-      const res = await products.find({...query});
+      const res = await products.find({...query})
+      .populate("category",{
+         _id:1,
+         name:1
+     })
+     .populate("species",{
+         _id:1,
+         name:1,
+     })
+     .populate("brand",{
+         _id:1,
+         name:1
+     });
       if(!res) throw TypeError('Product is not found')
       return NextResponse.json(res,{...query});
    } catch (error) {
