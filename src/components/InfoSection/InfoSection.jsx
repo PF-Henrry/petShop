@@ -8,7 +8,7 @@ import "./InfoSection.css";
 
 const InfoSection = () => {
   return (
-    <div className="info-container">
+    <div className="info-section-container">
       <div className="payment-container">
         <p className="payment-title">Todos los medios de pago:</p>
         <div className="flex items-center justify-center gap-4">
