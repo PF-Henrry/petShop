@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+.filter-container {
+  background-color: #eed0c6;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 16px;
+  max-width: 300px;
+}
+
+.filter-container label {
+  margin-bottom: 8px;
+}
+
+.filter-container li {
+  list-style-type: none;
+}
