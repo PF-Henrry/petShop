@@ -1,88 +1,72 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { MagnifyingGlass } from "@phosphor-icons/react/dist/ssr";
 
-const SearchBar = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [error, setError] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+import { useState, useEffect } from "react";
+
+export default function SearchBar({ onSearch, onClear }) {
+  const [query, setQuery] = useState("");
+
+  const handleSearch = () => {
+    onSearch(query);
+    localStorage.setItem("searchQuery", query);
+  };
 
   useEffect(() => {
-    const performSearch = async () => {
-      try {
-        const response = await fetch(`http://localhost:3000/api/products`);
-        const data = await response.json();
-
-        const lowerCaseSearchTerm = searchTerm.toLowerCase();
-        const filteredResults = data.filter((item) => {
-          const productWords = (item.name || "").toLowerCase().split(" ");
-          const allWordsPresent = lowerCaseSearchTerm
-            .split(" ")
-            .every((searchWord) =>
-              productWords.some((productWord) =>
-                productWord.includes(searchWord)
-              )
-            );
-
-          return allWordsPresent;
-        });
-
-        if (filteredResults.length === 0) {
-          setError("No se encontraron resultados");
-        } else {
-          setError("");
-        }
-
-        setSearchResults(filteredResults);
-      } catch (error) {
-        setError("Hubo un problema al obtener los productos");
-      }
-    };
-
-    if (searchTerm.trim() === "") {
-      setSearchResults([]);
-      setError("");
-    } else {
-      performSearch();
+    const storedQuery = localStorage.getItem("searchQuery");
+    if (storedQuery && storedQuery !== query) {
+      setQuery(storedQuery);
+      onSearch(storedQuery);
     }
-  }, [searchTerm]);
+  }, [onSearch, query]);
 
-  const handleInputChange = (e) => {
-    const inputValue = e.target.value;
-    setSearchTerm(inputValue);
+  const handleClear = () => {
+    setQuery("");
+    onClear();
+    clearLocalStorage();
+  };
+
+  const clearLocalStorage = () => {
+    localStorage.removeItem("searchQuery");
+    localStorage.removeItem("filteredProducts");
+    localStorage.removeItem("filterQuery");
+  };
+
+  const handleChange = (e) => {
+    setQuery(e.target.value);
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Backspace" && query.length > 0) {
+      const updatedQuery = query.slice(0, -1);
+      setQuery(updatedQuery);
+      onSearch(updatedQuery);
+      localStorage.setItem("searchQuery", updatedQuery);
+    }
   };
 
   return (
-    <div className="my-4 relative">
-      <div className="md:flex md:items-center p-4 rounded">
-        <div className="flex flex-col items-center md:flex-row md:items-start md:w-full">
-          <input
-            className="border p-3 w-full text-gray-800 rounded-lg bg-white focus:border-purple-500"
-            type="text"
-            placeholder="Buscar productos..."
-            value={searchTerm}
-            onChange={handleInputChange}
-          />
-          <button
-            className="bg-purple-500 text-white px-3 py-2 rounded-lg ml-2 flex items-center transition duration-300 ease-in-out hover:bg-purple-700"
-            onClick={() => setSearchResults([])}
-          >
-            <MagnifyingGlass className="mr-2 w-auto h-auto" />
-          </button>
-        </div>
-      </div>
-
-      {error && <div className="mt-2 text-red-500">{error}</div>}
-
-      {searchResults.length > 0 && (
-        <ul>
-          {searchResults.map((result) => (
-            <li key={result.id}>{result.name}</li>
-          ))}
-        </ul>
+    <div className="flex items-center gap-4 w-full relative px-6 mt-6">
+      <input
+        type="text"
+        placeholder="Search products..."
+        value={query}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        className="border p-2 pl-10 w-full" // Añadido el padding izquierdo para acomodar la 'X'
+      />
+      {query && ( // Mostrar la 'X' solo si hay texto en el input
+        <button
+          onClick={handleClear}
+          className="absolute inset-y-0 left-0 m-2 bg-gray-300 text-gray-700 px-2 py-1 rounded cursor-pointer"
+        >
+          X
+        </button>
       )}
+      <button
+        onClick={handleSearch}
+        className="bg-blue-500 text-white px-4 py-2 rounded"
+      >
+        Search
+      </button>
     </div>
   );
-};
-
-export default SearchBar;
+}

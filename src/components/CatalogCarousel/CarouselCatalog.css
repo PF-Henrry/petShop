@@ -1,0 +1,107 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.carousel-container-catalog {
+  @apply relative w-full h-96 overflow-hidden flex justify-center items-center;
+
+  .carousel-img-container {
+    @apply w-[90%] h-full rounded-2xl overflow-hidden;
+    .carousel-image {
+      @apply object-cover w-full h-full;
+    }
+  }
+
+  .carousel-button {
+    @apply h-full flex items-center z-10;
+
+    & button {
+      @apply h-full px-4 text-3xl text-[#143146] duration-200;
+
+      & svg {
+        @apply scale-150 duration-200 drop-shadow-[0_2px_1px_rgba(0,0,0,0.4)];
+      }
+
+      &:hover {
+        @apply text-[#2d638b];
+      }
+
+      &:active {
+        & svg {
+          @apply scale-[1.35];
+        }
+      }
+    }
+  }
+
+  .carousel-indicators {
+    @apply absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-3 items-center bg-[rgba(255,250,242,0.5)] rounded-xl p-[6px] backdrop-blur;
+
+    .carousel-indicator {
+      @apply h-3 w-3 rounded-full duration-500;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    @apply h-80 rounded-xl;
+
+    .carousel-img-container {
+      @apply w-full h-full;
+
+      .carousel-image {
+        @apply object-cover w-full h-full;
+      }
+    }
+
+    .carousel-button button {
+      @apply p-1;
+    }
+  }
+
+  @media (max-width: 858px) {
+    .carousel-indicators {
+      @apply gap-2 bottom-2;
+
+      .carousel-indicator {
+        @apply w-2 h-2;
+      }
+
+      /* .indicator-active {
+        @apply scale-150;
+      } */
+    }
+  }
+
+  @media (max-width: 768px) {
+    @apply h-52;
+    .carousel-button {
+      @apply h-full flex items-center z-10;
+
+      & button {
+        @apply h-full duration-200 text-[#143146] p-0;
+
+        & svg {
+          @apply scale-90;
+        }
+
+        &:active {
+          & svg {
+            @apply scale-75;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 640px) {
+    @apply h-44 w-[100%];
+  }
+
+  @media (max-width: 480px) {
+    @apply h-32;
+  }
+
+  @media (max-width: 320px) {
+    @apply h-24;
+  }
+}
