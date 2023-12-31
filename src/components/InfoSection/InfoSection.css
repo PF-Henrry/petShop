@@ -10,7 +10,7 @@
 }
 
 .info-container {
-  @apply px-20 w-full h-24 flex flex-row justify-center items-center mb-8 mt-8;
+  @apply w-full h-24 flex flex-row justify-center items-center mb-8 mt-8;
 
   & p {
     @apply text-base text-[#143146] font-semibold;
