@@ -32,7 +32,7 @@ export default function Filter({ handleOnChange, handleOnClick }) {
         <h2 className="filters-title">Filtrar por:</h2>
 
         <span>
-          <p className="filter-title-select">Animal</p>
+          <p className="filter-title-select">Especie</p>
           <select onChange={(e) => handleOnChange(e)} name="species">
             {data?.species.length &&
               data.species.map((specie) => {
