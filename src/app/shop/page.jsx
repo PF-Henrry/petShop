@@ -137,6 +137,7 @@ export default function UnificadoShop() {
     <div className="container mx-auto p-4">
       <CatalogCarousel />
       <SearchBar onSearch={handleSearch} onClear={handleClear} />
+      <NavPages />
       <div className="flex flex-row p-6">
         <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
         <div className="flex flex-wrap gap-10 justify-between items-center pl-10">

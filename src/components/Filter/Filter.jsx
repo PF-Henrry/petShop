@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import "./Filter.css";
 import { useProductStore } from "@/hooks/usePages";
+import { Funnel } from "@phosphor-icons/react/dist/ssr";
 
 export default function Filter({ handleOnChange, handleOnClick }) {
   const { setProducts, setDataId, getDataId } = useProductStore();
   const [inputs, setInputs] = useState();
   const [data, setData] = useState();
+  const [hovered, setHovered] = useState(false);
 
   // la primera vez que se renderiza el componente.
   useEffect(() => {
@@ -16,55 +18,74 @@ export default function Filter({ handleOnChange, handleOnClick }) {
       });
   }, []);
 
-  return (
-    <div className="filter-container flex flex-col bg-white">
-      <h2 style={{ fontSize: "20px" }} className="p-2">
-        Filtrar por:
-      </h2>
-      <div className="font-bold text-xl">Animal</div>
-      <select
-        onChange={(e) => handleOnChange(e)}
-        name="species"
-        className="mb-2 p-3"
-      >
-        {data?.species.length &&
-          data.species.map((specie) => {
-            return (
-              <option key={specie?._id} value={specie?._id}>
-                {specie?.name}
-              </option>
-            );
-          })}
-      </select>
-      <div className="font-bold text-xl">Categoría</div>
-      <select
-        onChange={(e) => handleOnChange(e)}
-        name="category"
-        className="mb-2 p-3"
-      >
-        {data?.category.length &&
-          data.category.map((c) => {
-            return (
-              <option key={c?._id} value={c?._id}>
-                {c?.name}
-              </option>
-            );
-          })}
-      </select>
+  const handleHover = () => {
+    setHovered(true);
+  };
 
-      <h2 style={{ fontSize: "20px" }} className="p-2">
-        Ordenar por:{" "}
-      </h2>
-      <div className="font-bold text-xl">Precio</div>
-      <li className="mb-2 p-3">
-        <label className="flex items-center">
-          <input type="checkbox" className="mr-2" /> Mayor precio
-        </label>
-        <label className="flex items-center">
-          <input type="checkbox" className="mr-2" /> Menor precio
-        </label>
-      </li>
-      <button onClick={handleOnClick}>Filtrar</button>
+  const handleUnHover = () => {
+    setHovered(false);
+  };
+
+  return (
+    <div className="filters-container">
+      <section className="filters-by-container">
+        <h2 className="filters-title">Filtrar por:</h2>
+
+        <span>
+          <p className="filter-title-select">Animal</p>
+          <select onChange={(e) => handleOnChange(e)} name="species">
+            {data?.species.length &&
+              data.species.map((specie) => {
+                return (
+                  <option key={specie?._id} value={specie?._id}>
+                    {specie?.name}
+                  </option>
+                );
+              })}
+          </select>
+        </span>
+
+        <span>
+          <p className="filter-title-select">Categoría</p>
+          <select onChange={(e) => handleOnChange(e)} name="category">
+            {data?.category.length &&
+              data.category.map((c) => {
+                return (
+                  <option key={c?._id} value={c?._id}>
+                    {c?.name}
+                  </option>
+                );
+              })}
+          </select>
+        </span>
+      </section>
+
+      <figure className="w-full border border-[#DABEB6]"></figure>
+
+      <section className="filters-sort-container">
+        <h2 className="sort-title">Ordenar por:</h2>
+
+        <span>
+          <p className="sort-title-select">Precio</p>
+          <select name="price-sort" id="price-sort">
+            <option value="desc">Mayor precio</option>
+            <option value="asc">Menor precio</option>
+          </select>
+        </span>
+      </section>
+      <button
+        onClick={handleOnClick}
+        onMouseEnter={handleHover}
+        onMouseLeave={handleUnHover}
+        className="btn-filter"
+      >
+        Filtrar
+        <Funnel
+          size={20}
+          className="icon-filter"
+          weight={hovered ? "fill" : "regular"}
+        />
+      </button>
     </div>
   );
 }
