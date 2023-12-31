@@ -5,10 +5,45 @@
 .userRate-container {
   @apply flex flex-col items-start gap-3 w-[80%];
 
-  & p {
+  .userRate-title {
     @apply text-[#7A8D9B] text-base;
   }
   .userRate-info-container {
     @apply bg-white p-7 shadow-md flex flex-row items-center w-full rounded-xl;
+
+    .user-name {
+      @apply text-base font-semibold pb-1;
+    }
+
+    .user-rate {
+      @apply text-black text-sm pb-1;
+    }
+  }
+
+  @media (max-width: 1020px) {
+  }
+
+  @media (max-width: 952px) {
+  }
+  @media (max-width: 858px) {
+    @apply w-full p-2;
+
+    .userRate-title {
+      @apply text-xs;
+    }
+
+    .userRate-info-container {
+      @apply p-4;
+
+      .user-name {
+        @apply text-sm;
+      }
+
+      .user-rate {
+        @apply text-[#143146] text-xs;
+      }
+    }
+  }
+  @media (max-width: 768px) {
   }
 }

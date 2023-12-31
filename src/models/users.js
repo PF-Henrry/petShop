@@ -1,6 +1,6 @@
 import { encrypt,isEqual } from "@/libs/crypt";
 import { Types, Schema, model, models} from "mongoose";
-import {INPUT_NAME_CHECKED, ADDRESS_CHECKED, URLIMG_CHECKED, EMAIL_CHECKED, PASSWORD_CHECKED, POSTAL_CHECKED} from '@/utils/regex';
+import {INPUT_NAME_CHECKED, ADDRESS_CHECKED, URLIMG_CHECKED, EMAIL_CHECKED, PASSWORD_CHECKED, ZIP_CHECKED} from '@/utils/regex';
 
 const userSchemma = new Schema({
 
@@ -57,7 +57,7 @@ const userSchemma = new Schema({
     },
     codeP:{
         type:Number,
-        match: POSTAL_CHECKED
+        match: ZIP_CHECKED
     },
     favorite:{
         type: Types.ObjectId

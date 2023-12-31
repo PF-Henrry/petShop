@@ -6,8 +6,7 @@ const productSchema = new Schema({
         type: String,
         required: [true, 'Please Name is required'],
         trim: true,
-        minlength: 2,
-        maxlength: 20,
+        minlength: 2
     },
     price:{
         type: Number,
@@ -34,6 +33,14 @@ const productSchema = new Schema({
     },
     category:{
         type: [{type:Types.ObjectId,ref:'Category'}]
+    },
+    age:{
+        type: String,
+        enum: ['adult','puppy/kitten']
+    },
+    size:{
+        type: String,
+        enum: ['small','big','medium']
     }
 })
 

@@ -15,8 +15,6 @@ export async function GET(request){
      .populate("species",{
          _id:0,
          name:1,
-         age:1,
-         size:1,
      })
      .populate("brand",{
          _id:0,
@@ -33,9 +31,9 @@ export async function GET(request){
 }
 
 export async function POST(request){
+  
     try {
       if(!conn.isConnected) connectDB()
-
         const dataProduct = await request.json();
         const newProduct = await addProduct(dataProduct)
         const findProduct = await products.findOne({_id:newProduct._id})
@@ -46,8 +44,6 @@ export async function POST(request){
         .populate("species",{
             _id:0,
             name:1,
-            age:1,
-            size:1,
         })
         .populate("brand",{
             _id:0,
@@ -61,7 +57,7 @@ export async function POST(request){
            findProduct.image= newImg.url
          findProduct.save()
         }
-         if(findProduct) return NextResponse.json(findProduct,{
+         if(findProduct) return NextResponse.json({...findProduct,ok:true},{
             status:200
          })
     } catch (error) {

@@ -36,20 +36,12 @@ export const ADDRESS_CHECKED = /^[a-zA-Z0-9\s,'.-]+$/
 
 //Regex que permite letras, números, espacios y guiones, que son comunes en códigos postales.
 
-export const POSTAL_CHECKED = /^[a-zA-Z0-9\s-]+$/
-
-
-
-
-
-
+export const ZIP_CHECKED = /^[a-zA-Z0-9\s-]+$/
 //Valida que haya solo números
-export const ONLYNUMBERS_CHECKED = /^\d{3}-\d{3}-\d{4}$/
+export const ONLYNUMBERS_CHECKED = /.*\d+.*/
 
-//Valida que el codigo de area tenga de 1 a 4 digitos para validar todos los codigo de area de sudamerica, en caso inmigrantes
-export const AREA_CODE_CHECKED = /^\d{1,4}$/
 
-//valida que el código de área tenga 5 digitos
-export const ZIP_CHECKED = /^\d{5}$/
+
+
 
 

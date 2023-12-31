@@ -17,8 +17,6 @@ export async function GET(request,{params}) {
         .populate("specie",{
             _id:0,
             name:1,
-            age:1,
-            size:1,
         })
         .populate("brand",{
             _id:0,

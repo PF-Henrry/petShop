@@ -9,10 +9,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { EMAIL_CHECKED, PASSWORD_CHECKED } from '@/utils/regex'
 import toastNotify from '@/libs/toast';
-
 import {  useRouter } from 'next/navigation';
-
 import {signIn} from "next-auth/react"
+
 
 const validationSchema = Yup.object({
   email: Yup.string()
@@ -51,10 +50,10 @@ const handleClick = async(e,provider) => {
   const loginAuth = async (provider) => {
         let res;
          if(provider==="google"){
-          res = await signIn("google", { redirect: false });
+          res = await signIn("google", { callbackUrl: 'http://localhost:3000/' });
           localStorage.setItem('ToasNotify',JSON.stringify({type:"success",message:"login success"}))
          } else if(provider==="facebook"){
-           res = await signIn("facebook", { redirect: false });
+           res = await signIn("facebook", { callbackUrl: 'http://localhost:3000/' });
            localStorage.setItem('ToasNotify',JSON.stringify({type:"success",message:"login success"}))
          }
     
@@ -162,7 +161,7 @@ const handleClick = async(e,provider) => {
                     <div className="flex justify-center gap-4 font-semibold mt-2">
                       <p>¿No tienes cuenta?</p>
                       <Link className="hover:text-customSecondary transition-colors duration-300" href="/signup">
-                        Iniciá Sesión
+                        Registrate
                       </Link>
                     </div>
         

@@ -36,7 +36,7 @@
     @apply p-8;
   }
   @media (max-width: 858px) {
-    @apply p-6;
+    @apply p-6 w-full;
   }
   @media (max-width: 768px) {
     @apply p-4;

@@ -62,10 +62,9 @@ const authOptions = {
             if(account?.provider === 'facebook'){
                
                 if(findUser){
-                    findUser.img = user.image
                     findUser.token =  account.access_token
                     await findUser.save();
-                    return "/"
+                    return true
                 } else {
                     const splitName = user.name.split(" ");
                     const name = splitName[0];
@@ -88,15 +87,15 @@ const authOptions = {
                         token:account.access_token,
                     });
                 }
-                return "/"
+
+                return true
             }
 
             if(account?.provider === 'google'){
                 if(findUser){
                     findUser.token =  account.access_token
-                    findUser.img = user.image
                     await findUser.save();
-                    return "/"
+                    return true
                 } else {
                     const splitName = user.name.split(" ");
                     const name = splitName[0];
@@ -120,19 +119,19 @@ const authOptions = {
                     });
                 }
                 
-                return "/"
+                return true
             }
 
             },
             async jwt({ token, account }) {
-                if (account) { 
-                   
+                if (account) {                    
                   token.accessToken = account.access_token
                 }
                 return token
               },
-              async session({ session, token, user }) {
-               
+              async session({ session, user, token }) {
+                const findUser = await Users.findOne({email:token.email});
+                if(findUser) session.user.id = findUser._id
                 session.accessToken = token.accessToken
                 return session
               }

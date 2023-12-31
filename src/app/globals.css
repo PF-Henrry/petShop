@@ -31,4 +31,15 @@ body {
       @apply px-6;
     }
   }
+
+  @media (max-width: 858px) {
+    .main-container {
+      @apply px-3;
+    }
+  }
+  @media (max-width: 768px) {
+    .main-container {
+      @apply px-1;
+    }
+  }
 }
