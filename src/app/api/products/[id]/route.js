@@ -6,7 +6,8 @@ import Products from "@/models/products"
 export async function GET(request,{params}) {
     try {
         const id =  params.id
-        
+         //asd
+         
         if(!conn.isConnected) connectDB();
 
         const queryProduct = await Products.findById(id)
@@ -14,7 +15,7 @@ export async function GET(request,{params}) {
             _id:0,
             name:1
         })
-        .populate("specie",{
+        .populate("species",{
             _id:0,
             name:1,
         })
