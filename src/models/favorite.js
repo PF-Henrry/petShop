@@ -9,6 +9,13 @@ const favoriteSchemma = new Schema({
      },
      products:{
         type: [{type:Types.ObjectId,ref:"Products"}]
+     },
+     active:{
+      type: Boolean,
+      default: true
+     },
+      updatedAt:{
+      type: Date,
      }
 })
 

@@ -45,6 +45,7 @@ export async function POST(request,{params}){
     if(!conn.isConnected) connectDB();
 
      const id =  params.id
+     
      const requestQuery = await request.json();
      const {productId} = requestQuery;
 

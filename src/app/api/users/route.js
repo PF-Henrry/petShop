@@ -7,30 +7,29 @@ import { PASSWORD_CHECKED } from "@/utils/regex";
 
 export async function GET(request){  //         /api/users [GET]
 
-try {
-
-if(!conn.isConnected) connectDB();    
-const users = await userDB.find({}, {password: 0})
-// .populate("City", {
-// _id: 0,
-// name: 1
-// })
-// .populate("provinces", {
-// _id: 0,
-// name: 1
-// })
-
-
-return NextResponse.json(users, {
-  status:200
-})
-
-} catch (error){
-    return NextResponse.json({mensaje: "Algo salió mal"}, {
-        status: 405
-    })
-}
-}
+  try {
+  
+  if(!conn.isConnected) connectDB();    
+  const users = await userDB.find({ active: true }, {password: 0})
+  
+  if(users.length === 0) {
+    return NextResponse.json({mensaje: "No se encontró ningún usuario"}, {
+      status: 405
+  })
+  }
+  
+  return NextResponse.json(users, {
+    status:200
+  })
+  
+  
+  
+  } catch (error){
+      return NextResponse.json({mensaje: "Algo salió mal"}, {
+          status: 405
+      })
+  }
+  }
 
 
 export async function POST(request){

@@ -64,6 +64,13 @@ const userSchemma = new Schema({
     },
     token:{
         type: String
+    },
+    active:{
+        type: Boolean,
+        default: true
+    },
+    updatedAt:{
+        type: Date,
     }
 });
 

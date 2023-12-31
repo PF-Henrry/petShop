@@ -3,12 +3,12 @@ import { addProduct } from "@/libs/createProductWithRelation";
 import { postImage } from "@/libs/cloudinary";
 import products from "@/models/products";
 import { connectDB,conn } from "@/libs/mongodb";
-
+import { iniciarIntervalo } from "@/app/api/softDelete/softDeleteProducts"
 
 export async function GET(request){
    try {
       if(!conn.isConnected) connectDB()
-      const res = await products.find({}).populate("category",{
+      const res = await products.find({ active: true }).populate("category",{
          _id:0,
          name:1
      })
@@ -21,7 +21,7 @@ export async function GET(request){
          name:1
      });
 
-      if(!res) throw TypeError('Products not found');
+      if(res.length === 0) throw TypeError('Products not found');
 
       return NextResponse.json(res,{status:200});
 
@@ -73,12 +73,31 @@ export async function DELETE(request){
       const dataProduct = await request.json();
       const {query} = dataProduct;
 
+      console.log(query)
+
 
       if(!query) throw TypeError('Query is undefined');
 
-      const res = await  products.findOneAndDelete({...query});
+      // const res = await  products.findOneAndDelete({...query});
 
-      return NextResponse.json(res,{status:200});
+      await products.findOneAndUpdate(
+         { ...query },
+         {
+             $set: {
+             active: false,
+             updatedAt: new Date()
+         }
+     },
+         {new: true}
+       );
+ 
+       const datosInactivos = await products.find({ active: false })
+ 
+       if(datosInactivos.length === 1){
+         iniciarIntervalo();
+       }
+
+      return NextResponse.json({mensaje: "Usuario eliminado"},{status:200});
       
    } catch (error) {
       return NextResponse.json(error.message,{status:404});
@@ -95,7 +114,7 @@ export async function PUT(request){
       if(!query) throw TypeError('Error query args');
 
       
-      const findUpdate = await products.findOneAndUpdate({...query},dataProduct);
+      const findUpdate = await products.findOneAndUpdate({...query, active: true },dataProduct);
 
       if(!findUpdate) throw TypeError('Product not found');
 

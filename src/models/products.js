@@ -41,6 +41,13 @@ const productSchema = new Schema({
     size:{
         type: String,
         enum: ['small','big','medium']
+    },
+    active:{
+        type: Boolean,
+        default: true
+    },
+    updatedAt:{
+        type: Date,
     }
 })
 

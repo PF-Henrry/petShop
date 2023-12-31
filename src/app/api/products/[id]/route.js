@@ -10,7 +10,7 @@ export async function GET(request,{params}) {
          
         if(!conn.isConnected) connectDB();
 
-        const queryProduct = await Products.findById(id)
+        const queryProduct = await Products.findById(id).find({ active: true })
         .populate("category",{
             _id:0,
             name:1
@@ -26,7 +26,7 @@ export async function GET(request,{params}) {
 
 
 
-        if(!queryProduct) throw TypeError('Product not found');
+        if(queryProduct.length === 0) throw TypeError('Product not found');
 
 
         return NextResponse.json({queryProduct},{status:200})
