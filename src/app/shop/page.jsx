@@ -112,7 +112,9 @@ export default function UnificadoShop() {
       requestFilter.query.category = [{ _id: filters.category }];
     if (filters.species)
       requestFilter.query.species = [{ _id: filters.species }];
-
+    if(filters.brand)
+      requestFilter.query.brand = [{_id: filters.brand}];
+    
     fetch("api/products/filter", {
       method: "POST",
       headers: {

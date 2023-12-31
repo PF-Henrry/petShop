@@ -8,11 +8,13 @@ export const useProductStore = create(((set,get) => ({
   currentPage: 1, // Página actual por defecto
   filter:{
     category:null,
-    species:null
+    species:null,
+    brand:null,
   },
   dataId:{
     category:'',
-    species:''
+    species:'',
+    brand:''
   },
 
   getTotalPages: () => {
