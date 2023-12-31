@@ -10,7 +10,7 @@ export async function GET(){
         if(!conn.isConnected) await connectDB();
 
         const Allcategory = await category.find({});
-        const Allspecie = await category.find({});
+        const Allspecie = await species.find({});
 
         const result = {category: [...Allcategory], specie: [...Allspecie]}
         
