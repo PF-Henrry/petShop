@@ -1,0 +1,38 @@
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+.info-container {
+  @apply px-20 w-full h-24 flex flex-row justify-center items-center mb-8 mt-8;
+
+  & p {
+    @apply text-base text-[#143146] font-semibold;
+  }
+
+  .payment-container {
+    @apply border-r border-b p-8 border-slate-400 flex flex-col justify-center items-center gap-2 h-full;
+
+    .payment-logo {
+      @apply w-10 h-9 p-1 drop-shadow-[0_2px_1px_rgba(0,0,0,0.4)] object-cover;
+    }
+  }
+
+  .pickup-container {
+    @apply border-r border-b p-8 border-slate-400 h-full flex flex-row justify-center items-center gap-2;
+  }
+
+  .icon-info {
+    @apply text-[#143146];
+  }
+
+  .delivery-container {
+    @apply border-b p-8 border-slate-400 h-full flex flex-row justify-center items-center gap-2;
+  }
+}

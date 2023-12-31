@@ -14,7 +14,11 @@ export default function Filter({ handleOnChange, handleOnClick }) {
     fetch("api/infoids")
       .then((data) => data.json())
       .then((data) => {
-        setData({ category: data.category, species: data.specie, brand: data.brand });
+        setData({
+          category: data.category,
+          species: data.specie,
+          brand: data.brand,
+        });
       });
   }, []);
 
@@ -62,7 +66,7 @@ export default function Filter({ handleOnChange, handleOnClick }) {
         <span>
           <p className="filter-title-select">Marcas</p>
           <select onChange={(e) => handleOnChange(e)} name="brand">
-            {data?.brand.length &&
+            {data?.brand?.length &&
               data.brand.map((brand) => {
                 return (
                   <option key={brand?._id} value={brand?._id}>

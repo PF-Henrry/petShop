@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import "./SearchBar.css";
+import { MagnifyingGlass, X } from "@phosphor-icons/react/dist/ssr";
 
 export default function SearchBar({ onSearch, onClear }) {
   const [query, setQuery] = useState("");
@@ -44,28 +46,22 @@ export default function SearchBar({ onSearch, onClear }) {
   };
 
   return (
-    <div className="flex items-center gap-4 w-full relative px-6 mt-6">
+    <div className="search-bar-container">
       <input
         type="text"
-        placeholder="Search products..."
+        placeholder="Busca productos..."
         value={query}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        className="border p-2 pl-10 w-full" // Añadido el padding izquierdo para acomodar la 'X'
+        className="search-bar"
       />
       {query && ( // Mostrar la 'X' solo si hay texto en el input
-        <button
-          onClick={handleClear}
-          className="absolute inset-y-0 left-0 m-2 bg-gray-300 text-gray-700 px-2 py-1 rounded cursor-pointer"
-        >
-          X
+        <button onClick={handleClear} className="clear-button">
+          <X size={20} />
         </button>
       )}
-      <button
-        onClick={handleSearch}
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Search
+      <button onClick={handleSearch} className="search-button">
+        <MagnifyingGlass size={25} />
       </button>
     </div>
   );
