@@ -27,6 +27,7 @@ export default function Home() {
       <CategoryCards />
       <InfoCards />
       <UserRate />
+     
     </main>
   );
 }

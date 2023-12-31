@@ -16,10 +16,10 @@ import {
 import Tippy from "@tippyjs/react";
 import "tippy.js/dist/tippy.css";
 import "./navbar.css";
-  
+
 export default function Navbar() {
   return (
-    <nav>
+    <nav className="NavBar">
       <section className="logo-container flex gap-4 overflow-hidden justify-center items-end ml-5">
         <Image
           src={logo}
