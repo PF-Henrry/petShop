@@ -31,7 +31,14 @@ const Logout = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen ">
+    <div
+    className="flex items-center justify-center h-screen "
+    style={{
+      position: "relative",
+      backgroundColor: "rgba(0, 0, 0, 0.5)", 
+      zIndex: 1,
+    }}
+  >
       <div className="text-center flex flex-col items-center p-8 rounded shadow border border-gray-300 bg-customPrimary relative">
         <button
           onClick={handleCancel}

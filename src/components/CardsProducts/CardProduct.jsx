@@ -8,6 +8,7 @@ import {
 import { Rating } from "@mui/material";
 import Link from "next/link";
 import "./CardProduct.css";
+import { useState } from "react";
 
 export default function CardProduct({
   rating,
@@ -34,11 +35,15 @@ export default function CardProduct({
 
   const categoryName = category ? category : "Sin categoria";
 
+
+
   return (
     <div className="card-product">
       <button className="card-product-favorite">
         <HeartStraight size={20} />
       </button>
+      
+
       <Image src={imageUrl} alt={name} width={150} height={150} />
       <p className="card-product-category">{categoryName}</p>
       <span className="card-product-info">
