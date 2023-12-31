@@ -9,7 +9,7 @@
   list-style: none;
 }
 
-.info-container {
+.info-section-container {
   @apply w-full h-24 flex flex-row justify-center items-center mb-8 mt-8;
 
   & p {
