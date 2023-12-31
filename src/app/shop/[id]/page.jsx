@@ -16,14 +16,16 @@ const DetailProduct = () => {
 
   useEffect(() => {
     // Función para obtener los detalles del producto desde la API
-    const obtenerDetallesDelProducto = async () => {
+    const obtenerDetallesDelProducto =  () => {
       try {
         // Realiza la llamada a la API para obtener los detalles del producto
-        const response = await fetch(`/api/products/${id}`);
-        const data = await response.json();
+        fetch(`/api/products/${id}`).then(
+          data => data.json()
+        ).then(data => {
+          setProduct({...data});
+        });
 
-        // Establece los detalles del producto en el estado
-        setProduct(data);
+        
       } catch (error) {
         console.error('Error al obtener detalles del producto:', error);
       }
@@ -41,6 +43,9 @@ const DetailProduct = () => {
   // Renderiza los detalles del producto
   return (
     <div>
+      {
+        console.log('esto es product',product)
+      }
       <h1>{product?.name}</h1>
       <p>Precio: ${product?.price}</p>
       <p>{product?.detail}</p>

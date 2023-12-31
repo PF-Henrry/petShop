@@ -37,6 +37,7 @@ export default function UnificadoShop() {
             JSON.parse(storeProducts),
             storedFilterQuery
           );
+
           setFilteredProducts(filtered);
         } else {
           const response = await fetch("api/products");
@@ -89,7 +90,15 @@ export default function UnificadoShop() {
 
   const handleSearch = (query) => {
     const filtered = applyFilter(getProducts(), query);
-    setFilteredProducts(filtered);
+
+    console.log('entro a filter',filtered);
+
+    setProductsStore(filtered);
+    const newProducts = getArrayPage()
+
+    console.log('nueva pag',newProducts)
+    setFilteredProducts(newProducts);
+
     localStorage.setItem("filteredProducts", JSON.stringify(filtered));
     localStorage.setItem("filterQuery", query);
   };
@@ -148,6 +157,7 @@ export default function UnificadoShop() {
             filteredProducts.map((product, index) => (
               <CardProduct
                 key={product?._id}
+                id={product?._id}
                 name={product?.name}
                 price={product?.price}
                 detail={product?.detail}
