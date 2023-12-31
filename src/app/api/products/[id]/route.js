@@ -14,7 +14,7 @@ export async function GET(request,{params}) {
             _id:0,
             name:1
         })
-        .populate("specie",{
+        .populate("species",{
             _id:0,
             name:1,
         })
