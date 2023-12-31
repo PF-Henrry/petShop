@@ -7,6 +7,7 @@ import SearchBar from "@/components/SearchBar/SearchBarCatalogo";
 import CatalogCarousel from "@/components/CatalogCarousel/CatalogCarousel";
 import Filter from "@/components/Filter/Filter";
 import NavPages from "@/components/NavPages/NavPages";
+import InfoSection from "@/components/InfoSection/InfoSection";
 import { useProductStore, useCurrentPage } from "@/hooks/usePages";
 
 export default function UnificadoShop() {
@@ -112,9 +113,8 @@ export default function UnificadoShop() {
       requestFilter.query.category = [{ _id: filters.category }];
     if (filters.species)
       requestFilter.query.species = [{ _id: filters.species }];
-    if(filters.brand)
-      requestFilter.query.brand = [{_id: filters.brand}];
-    
+    if (filters.brand) requestFilter.query.brand = [{ _id: filters.brand }];
+
     fetch("api/products/filter", {
       method: "POST",
       headers: {
@@ -138,6 +138,7 @@ export default function UnificadoShop() {
   return (
     <div className="container mx-auto p-4">
       <CatalogCarousel />
+      <InfoSection />
       <SearchBar onSearch={handleSearch} onClear={handleClear} />
       <NavPages />
       <div className="flex flex-row p-6">
