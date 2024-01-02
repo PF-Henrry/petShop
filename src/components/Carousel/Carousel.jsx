@@ -10,7 +10,7 @@ import "tippy.js/dist/svg-arrow.css";
 import "./carousel.css";
 
 const images = [
-  { src: "https://i.imgur.com/m696SBy.png", link: "/ruta-1" },
+  { src: "https://i.imgur.com/m696SBy.png", link: "/shop" },
   { src: "https://i.imgur.com/mFesy5s.png", link: "/ruta-2" },
   { src: "https://i.imgur.com/nDpy21j.png", link: "/ruta-3" },
 ];
