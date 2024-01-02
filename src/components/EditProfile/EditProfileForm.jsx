@@ -13,6 +13,7 @@ import {
 } from "@/utils/regex";
 import { useSession } from "next-auth/react";
 
+
 const defaultImage =
   "http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png";
 
@@ -160,7 +161,8 @@ const EditProfileForm = ({ initialValues, editable }) => {
           response.status,
           errorResponse
         );
-      }
+        }
+      
     } catch (error) {
       console.error("Error de red al enviar datos al backend", error.message);
     }
@@ -362,6 +364,7 @@ const EditProfileForm = ({ initialValues, editable }) => {
           </Button>
         </Form>
       )}
+      
     </Formik>
   );
 };
