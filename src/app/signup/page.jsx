@@ -7,8 +7,11 @@ import Button from '@mui/material/Button';
 import { EMAIL_CHECKED, PASSWORD_CHECKED } from '@/utils/regex';
 import {  useRouter } from 'next/navigation';
 import { signIn, useSession } from 'next-auth/react';
-import { useEffect } from 'react';
-
+import { useEffect, useState } from 'react';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const validationSchema = Yup.object({
   username: Yup.string().required('El nombre de usuario es requerido'),
@@ -38,51 +41,58 @@ const Signup = ({ initialValues, onSubmit }) => {
     } 
   },[router, status])
   
+
   const handleOnSubmit = async (values) => {
-    console.log(values)
+    console.log(values);
     try {
-      
       const response = await fetch('/api/users', {
-        method: 'POST', 
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(values),
       });
+  
       if (response.ok) {
         console.log('Datos enviados correctamente al backend');
-        
-        await signIn("credentials",
-        {email:values.email,password:values.password}, {
-          redirect:false
-        })
-         router.push("/profile")
+  
+        await signIn("credentials", { email: values.email, password: values.password }, { redirect: false })
+        router.push("/profile");
       } else {
-        console.error('Error al enviar datos ');
-        console.log(response)
+        console.error('Error al enviar datos ', response);
+  
+        if (response.status === 404) {          
+          const responseBody = await response.json();
+      console.log(responseBody)
+            toast.error('El nombre de usuario o el correo electrónico ya existen.');
+        }
       }
     } catch (error) {
       console.error('Error de red al enviar datos al backend', error);
     }
   };
+  
+  const [showPassword, setShowPassword] = useState(false);
 
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  }
 
   return (
-    <Formik
-    initialValues={{
-      username:'',
-      email:"",
-      password:"",
-      name:"Unknown",
-      lastname:"Unknown",      
-      adress:'Unknown',
-      city:'Unknown',
-      province:'Unknown', 
-      role:1,
-      img:"http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png",      
-      codeP:1234
-
-    }}
+    <><Formik
+      initialValues={{
+        username: '',
+        email: "",
+        password: "",
+        name: "Agregar",
+        lastname: "Agregar",
+        adress: 'Agregar',
+        city: 'Agregar',
+        province: 'Agregar',
+        role: 1,
+        img: "http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png",
+        codeP: 1234
+      }}
 
       validationSchema={validationSchema}
       onSubmit={onSubmit || handleOnSubmit}
@@ -100,8 +110,7 @@ const Signup = ({ initialValues, onSubmit }) => {
               label="Nombre de Usuario"
               as={TextField}
               fullWidth
-              required
-            />
+              required />
             <ErrorMessage name="username" component="div" style={{ color: 'red' }} />
 
             <Field
@@ -109,22 +118,29 @@ const Signup = ({ initialValues, onSubmit }) => {
               label="Email"
               as={TextField}
               fullWidth
-              required
-            />
+              required />
             <ErrorMessage name="email" component="div" style={{ color: 'red' }} />
-
 
             <Field
               name="password"
-              type="password"
+              type={showPassword ? 'text' : 'password'}
               label="Contraseña"
               as={TextField}
               fullWidth
               required
-            />
+              InputProps={{
+                endAdornment: (
+                  <div
+                    onClick={handleTogglePassword}
+                    style={{ cursor: 'pointer', marginLeft: '8px' }}
+                  >
+                    {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                  </div>
+                ),
+              }} />
             <ErrorMessage name="password" component="div" style={{ color: 'red' }} />
 
-           
+
           </div>
 
           <div className="flex justify-center gap-4 font-semibold mt-2">
@@ -137,7 +153,7 @@ const Signup = ({ initialValues, onSubmit }) => {
           <Button
             type="submit"
             variant="outlined"
-            disabled={isSubmitting }
+            disabled={isSubmitting}
             style={{ borderColor: 'grey' }}
             className={`text-black
               py-2 px-4 rounded focus:outline-none focus:shadow-outline
@@ -147,7 +163,7 @@ const Signup = ({ initialValues, onSubmit }) => {
           </Button>
         </Form>
       )}
-    </Formik>
+    </Formik><ToastContainer position="bottom-right" /></>
   );
 };
 
