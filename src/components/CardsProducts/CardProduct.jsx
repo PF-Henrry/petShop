@@ -11,6 +11,7 @@ import "./CardProduct.css";
 import { useState } from "react";
 
 export default function CardProduct({
+  id,
   rating,
   name,
   price,
@@ -18,7 +19,7 @@ export default function CardProduct({
   image,
   brand,
   category,
-  specie,
+  species,
 }) {
   const imageUrl = image ? image : "https://via.placeholder.com/150";
 
@@ -36,7 +37,6 @@ export default function CardProduct({
   const categoryName = category ? category : "Sin categoria";
 
 
-
   return (
     <div className="card-product">
       <button className="card-product-favorite">
@@ -51,6 +51,7 @@ export default function CardProduct({
           <h1 className="card-product-title">{name}</h1>
           <p className="card-product-brand">{brandName}</p>
         </Link>
+       
       </span>
       {/* <p className="card-product-description">{description}</p> */}
       <Rating
@@ -61,6 +62,9 @@ export default function CardProduct({
         className="px-2"
       />
       <p className="card-product-price">{formattedPrice} ARS</p>
+      <Link href={`/shop/${id}`}>
+      <button className="card-product-details">Ver detalles</button>
+    </Link>
       <button className="card-product-cart">
         <ShoppingCartSimple size={32} className="card-product-cart-icon" />
         Añadir al carrito
