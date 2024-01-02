@@ -4,7 +4,7 @@ import { useProductStore } from "@/hooks/usePages";
 import { Funnel } from "@phosphor-icons/react/dist/ssr";
 
 export default function Filter({ handleOnChange, handleOnClick }) {
-  const { setProducts, setDataId, getDataId } = useProductStore();
+  const { setProducts, setDataId, getDataId, resetFilters } = useProductStore();
   const [inputs, setInputs] = useState();
   const [data, setData] = useState();
   const [hovered, setHovered] = useState(false);
@@ -28,6 +28,11 @@ export default function Filter({ handleOnChange, handleOnClick }) {
 
   const handleUnHover = () => {
     setHovered(false);
+  };
+
+  const handleResetFilters = () => {
+    resetFilters();
+    handleOnClick(); 
   };
 
   return (
@@ -103,6 +108,9 @@ export default function Filter({ handleOnChange, handleOnClick }) {
           className="icon-filter"
           weight={hovered ? "fill" : "regular"}
         />
+      </button>
+      <button onClick={handleResetFilters}  className=" bg-red-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+        Resetear Filtros
       </button>
     </div>
   );
