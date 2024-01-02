@@ -65,6 +65,15 @@ export const useProductStore = create((set, get) => ({
   },
 
   setOriginalProducts: (products) => set({ originalProducts: [...products] }),
+
+  resetFilters: () => set((state) => ({
+    filter: {
+      category: null,
+      species: null,
+      brand: null,
+    },
+  })),
+  
 }));
 
 export const useOriginalProducts = () => {
