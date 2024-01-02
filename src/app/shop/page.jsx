@@ -1,6 +1,5 @@
 // UnificadoShop.jsx
-"use client";
-
+'use client'
 import React, { useEffect, useState } from "react";
 import CardProduct from "@/components/CardsProducts/CardProduct";
 import SearchBar from "@/components/SearchBar/SearchBarCatalogo";
@@ -8,7 +7,11 @@ import CatalogCarousel from "@/components/CatalogCarousel/CatalogCarousel";
 import Filter from "@/components/Filter/Filter";
 import NavPages from "@/components/NavPages/NavPages";
 import InfoSection from "@/components/InfoSection/InfoSection";
-import { useProductStore, useCurrentPage } from "@/hooks/usePages";
+import {
+  useProductStore,
+  useCurrentPage,
+  useOriginalProducts,
+} from "@/hooks/usePages";
 
 export default function UnificadoShop() {
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -19,8 +22,20 @@ export default function UnificadoShop() {
     getArrayPage,
     getFilter,
     setFilter,
+    setOriginalProducts, // Agregamos esta función
   } = useProductStore();
   const currentPage = useCurrentPage();
+  const originalProducts = useOriginalProducts();
+
+  // Usamos useEffect para establecer la lista original de productos
+  useEffect(() => {
+    const storeProducts = localStorage.getItem("products");
+
+    if (storeProducts) {
+      const data = JSON.parse(storeProducts);
+      setOriginalProducts(data);
+    }
+  }, [setOriginalProducts]);
 
   useEffect(() => {
     const storeProducts = localStorage.getItem("products");
@@ -62,7 +77,7 @@ export default function UnificadoShop() {
     };
 
     fetchData();
-  }, [setProductsStore]);
+  }, [setProductsStore, setOriginalProducts]);
 
   useEffect(() => {
     const newProducts = getArrayPage();
@@ -89,13 +104,22 @@ export default function UnificadoShop() {
 
   const handleSearch = (query) => {
     const filtered = applyFilter(getProducts(), query);
+    
     setFilteredProducts(filtered);
     localStorage.setItem("filteredProducts", JSON.stringify(filtered));
     localStorage.setItem("filterQuery", query);
+
+    setProductsStore(filtered);
+
+    const newProducts = getArrayPage();
+    setFilteredProducts(newProducts);
   };
 
   const handleClear = () => {
-    setFilteredProducts(getProducts());
+    setFilter({ name: "name", value: "" });
+    setProductsStore(originalProducts);
+    setFilteredProducts(originalProducts);
+    localStorage.removeItem("filterQuery");
   };
 
   const handleOnChange = (e) => {
