@@ -13,12 +13,20 @@
 .card-product {
   @apply relative flex flex-col items-start w-60 h-[31rem] bg-white shadow-[0_1px_15px_0_rgba(0,0,0,0.20)] rounded-md overflow-hidden;
 
-  & img {
-    @apply object-contain aspect-square w-full border-b border-[#DABEB6];
+  .card-product-image-container {
+    @apply flex justify-center items-center w-full border-b border-[#DABEB6] overflow-hidden z-10;
+
+    & img {
+      @apply object-contain aspect-square w-full duration-200;
+
+      &:hover {
+        @apply scale-105;
+      }
+    }
   }
 
   .card-product-favorite {
-    @apply absolute top-0 right-0 p-2 text-[#143146] duration-200;
+    @apply absolute top-0 right-0 p-2 text-[#143146] duration-200 z-20;
 
     &:hover {
       @apply text-[#ee2130];
@@ -29,16 +37,16 @@
     @apply flex flex-col items-start justify-center p-2 w-full;
 
     .card-product-title {
-      @apply text-base text-[#143146] font-semibold text-ellipsis w-full;
+      @apply text-base text-[#143146] font-semibold text-ellipsis w-full duration-100;
     }
 
     .card-product-brand {
-      @apply mt-1 text-xs text-[#7A8D9B] text-ellipsis w-full;
+      @apply mt-1 text-xs text-[#7A8D9B] text-ellipsis w-full duration-100;
     }
 
     &:hover {
       .card-product-title {
-        @apply brightness-150;
+        @apply text-[#5f8dad];
       }
 
       .card-product-brand {
