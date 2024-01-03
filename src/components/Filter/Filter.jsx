@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import "./Filter.css";
 import { useProductStore } from "@/hooks/usePages";
-import { Funnel } from "@phosphor-icons/react/dist/ssr";
+import { Funnel, TrashSimple } from "@phosphor-icons/react/dist/ssr";
 
 export default function Filter({ handleOnChange, handleOnClick }) {
   const { setProducts, setDataId, getDataId, resetFilters } = useProductStore();
   const [inputs, setInputs] = useState();
   const [data, setData] = useState();
-  const [hovered, setHovered] = useState(false);
+  const [isFilterIconHovered, setFilterIconHovered] = useState(false);
+  const [isClearIconHovered, setClearIconHovered] = useState(false);
 
   // la primera vez que se renderiza el componente.
   useEffect(() => {
@@ -22,17 +23,25 @@ export default function Filter({ handleOnChange, handleOnClick }) {
       });
   }, []);
 
-  const handleHover = () => {
-    setHovered(true);
+  const handleFilterIconHover = () => {
+    setFilterIconHovered(true);
   };
 
-  const handleUnHover = () => {
-    setHovered(false);
+  const handleFilterIconUnHover = () => {
+    setFilterIconHovered(false);
+  };
+
+  const handleClearIconHover = () => {
+    setClearIconHovered(true);
+  };
+
+  const handleClearIconUnHover = () => {
+    setClearIconHovered(false);
   };
 
   const handleResetFilters = () => {
     resetFilters();
-    handleOnClick(); 
+    handleOnClick();
   };
 
   return (
@@ -96,22 +105,35 @@ export default function Filter({ handleOnChange, handleOnClick }) {
           </select>
         </span>
       </section>
-      <button
-        onClick={handleOnClick}
-        onMouseEnter={handleHover}
-        onMouseLeave={handleUnHover}
-        className="btn-filter"
-      >
-        Filtrar
-        <Funnel
-          size={20}
-          className="icon-filter"
-          weight={hovered ? "fill" : "regular"}
-        />
-      </button>
-      <button onClick={handleResetFilters}  className=" bg-red-500 text-white py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-        Resetear Filtros
-      </button>
+
+      <span className="buttons">
+        <button
+          onClick={handleOnClick}
+          onMouseEnter={handleFilterIconHover}
+          onMouseLeave={handleFilterIconUnHover}
+          className="btn-filter"
+        >
+          Filtrar
+          <Funnel
+            size={20}
+            className="icon-filter"
+            weight={isFilterIconHovered ? "fill" : "regular"}
+          />
+        </button>
+        <button
+          onClick={handleResetFilters}
+          onMouseEnter={handleClearIconHover}
+          onMouseLeave={handleClearIconUnHover}
+          className="btn-reset-filters"
+        >
+          Limpiar Filtros
+          <TrashSimple
+            size={20}
+            className="icon-clear-filters"
+            weight={isClearIconHovered ? "fill" : "regular"}
+          />
+        </button>
+      </span>
     </div>
   );
 }
