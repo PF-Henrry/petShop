@@ -6,6 +6,7 @@ const nextConfig = {
       "res.cloudinary.com",
       "via.placeholder.com",
       "lh3.googleusercontent.com",
+      "plataform-lookaside.fbsbx.com"
     ],
   },
 };
