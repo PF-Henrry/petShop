@@ -11,9 +11,12 @@
 }
 
 .filters-container {
-  @apply sticky top-28 bg-[#eed0c6] rounded-lg shadow-lg flex flex-col gap-5 h-full;
+  @apply sticky top-28 bg-[#eed0c6] rounded-lg shadow-lg h-full;
 
-  .filters-by-container {
+  .filters-container-visibility {
+    @apply flex flex-col gap-5 w-full;
+  }
+  .select-filters-container {
     @apply flex flex-col gap-6 w-full p-4;
 
     .filters-title {
@@ -26,7 +29,6 @@
       .filter-title-select {
         @apply text-[#2d638b] text-sm;
       }
-
       & select {
         @apply p-2 bg-white rounded duration-100 cursor-pointer;
 
@@ -40,75 +42,141 @@
     }
   }
 
-  .filters-sort-container {
-    @apply flex flex-col gap-6 w-full p-4;
-
-    .sort-title {
-      @apply text-[#143146] text-xl font-semibold;
-    }
-
-    & span {
-      @apply flex flex-col w-full;
-
-      .sort-title-select {
-        @apply text-[#2d638b] text-sm;
-      }
-
-      & select {
-        @apply p-2 bg-white duration-100 cursor-pointer;
-
-        &:focus {
-          @apply outline-0;
-        }
-
-        & option {
-          @apply cursor-pointer;
-        }
-      }
-    }
-  }
-
-  .buttons {
+  .buttons-container {
     @apply w-full flex flex-col justify-center items-center gap-[1px];
-  }
 
-  .btn-filter {
-    @apply flex justify-center items-center gap-2 p-4 bg-[#143146] text-[#f1e5e3]  duration-200 w-full;
+    .btn-filter {
+      @apply flex justify-center items-center gap-2 p-4 bg-[#143146] text-[#f1e5e3]  duration-200 w-full;
 
-    &:hover {
-      @apply bg-[#2d638b];
+      &:hover {
+        @apply bg-[#2d638b];
 
-      .icon-filter {
-        -webkit-animation: wobble-ver-right 0.8s both;
-        animation: wobble-ver-right 0.8s both;
+        .icon-filter {
+          -webkit-animation: wobble-ver-right 0.8s both;
+          animation: wobble-ver-right 0.8s both;
+        }
+      }
+
+      &:active {
+        @apply bg-[#2d628bdc];
       }
     }
 
-    &:active {
-      @apply bg-[#2d628bdc];
-    }
-  }
+    .btn-reset-filters {
+      @apply flex justify-center items-center gap-2 p-4 bg-[#143146] text-[#ffc3c3] rounded-b-lg duration-200 w-full;
 
-  .btn-reset-filters {
-    @apply flex justify-center items-center gap-2 p-4 bg-[#143146] text-[#ffc3c3] rounded-b-lg duration-200 w-full;
+      &:hover {
+        @apply bg-[#2d638b];
 
-    &:hover {
-      @apply bg-[#2d638b];
-
-      .icon-clear-filters {
-        -webkit-animation: wobble-ver-right 0.8s both;
-        animation: wobble-ver-right 0.8s both;
+        .icon-clear-filters {
+          -webkit-animation: wobble-ver-right 0.8s both;
+          animation: wobble-ver-right 0.8s both;
+        }
       }
     }
   }
-}
 
-.filter-container label {
-  @apply mb-2;
-}
+  .filters-container-accordion {
+    @apply bg-[#eed0c6] border-none outline-none m-0 p-0;
 
-.filter-container li {
-  @apply list-none;
+    &::before {
+      @apply hidden;
+    }
+    & p {
+      @apply text-[#143146] text-base font-semibold;
+    }
+
+    .filters-container-accordion-details {
+      @apply p-0 duration-0;
+    }
+  }
+
+  @media (max-width: 1024px) {
+  }
+
+  @media (max-width: 858px) {
+    @apply relative top-0 gap-1 overflow-hidden;
+
+    .filters-container-visibility {
+      @apply hidden;
+    }
+
+    .filters-container-accordion {
+      @apply block;
+    }
+    .select-filters-container {
+      @apply flex-row flex-wrap gap-2 gap-y-1 p-3 pt-0;
+
+      .filters-title {
+        @apply hidden;
+      }
+      & span {
+        @apply flex flex-col w-auto;
+
+        .filter-title-select {
+          @apply text-[#2d638b] text-[10px];
+        }
+
+        .sort-title-select {
+          @apply text-[#2d638b] text-[10px];
+        }
+
+        & select {
+          @apply p-1 text-xs;
+        }
+      }
+
+      & figure {
+        @apply hidden;
+      }
+    }
+
+    .buttons-container {
+      @apply w-full flex flex-col justify-center items-center gap-[1px];
+
+      .btn-filter {
+        @apply flex justify-center items-center gap-2 p-2 text-sm;
+
+        &:hover {
+          @apply bg-[#2d638b];
+
+          .icon-filter {
+            -webkit-animation: wobble-ver-right 0.8s both;
+            animation: wobble-ver-right 0.8s both;
+          }
+        }
+
+        &:active {
+          @apply bg-[#2d628bdc];
+        }
+      }
+
+      .btn-reset-filters {
+        @apply flex justify-center items-center gap-2 p-2 text-sm;
+
+        &:hover {
+          @apply bg-[#2d638b];
+
+          .icon-clear-filters {
+            -webkit-animation: wobble-ver-right 0.8s both;
+            animation: wobble-ver-right 0.8s both;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+  }
+
+  @media (max-width: 640px) {
+  }
+
+  @media (max-width: 480px) {
+  }
+
+  @media (max-width: 320px) {
+  }
 }
 
 @-webkit-keyframes wobble-ver-right {

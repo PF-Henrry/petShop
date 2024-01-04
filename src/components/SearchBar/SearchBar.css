@@ -11,7 +11,7 @@
 }
 
 .search-bar-container {
-  @apply flex items-center gap-3 w-full relative px-20 mt-6;
+  @apply flex items-center gap-3 w-full relative px-16 mt-6;
 
   .search-bar {
     @apply border p-2 pl-10 w-full rounded-md shadow-md;
@@ -26,7 +26,7 @@
   }
 
   .clear-button {
-    @apply absolute left-[85px] p-2 text-[#143146] duration-300;
+    @apply absolute left-[4.5rem] p-1 text-[#143146] duration-300;
 
     &:hover {
       @apply text-[#ee2130];
@@ -39,5 +39,38 @@
     &:hover {
       @apply bg-[#2d628bde];
     }
+  }
+
+  @media (max-width: 1024px) {
+  }
+
+  @media (max-width: 858px) {
+    @apply px-6;
+
+    .search-bar {
+      &::placeholder {
+        @apply text-sm;
+      }
+    }
+
+    .clear-button {
+      @apply absolute left-7 p-1 text-[#143146] duration-300;
+
+      &:hover {
+        @apply text-[#ee2130];
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+  }
+
+  @media (max-width: 640px) {
+  }
+
+  @media (max-width: 480px) {
+  }
+
+  @media (max-width: 320px) {
   }
 }
