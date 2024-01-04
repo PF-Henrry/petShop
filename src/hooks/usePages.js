@@ -1,7 +1,9 @@
 // usePages.js
 import { create } from 'zustand';
 
-const storedCart = JSON.parse(localStorage.getItem('cart')) || [];
+const storedCart = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('cart')) || [] : [];
+
+
 
 export const useProductStore = create((set, get) => ({
   products: [],

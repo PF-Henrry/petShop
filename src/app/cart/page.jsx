@@ -17,7 +17,7 @@ const Cart = () => {
   useEffect(() => {
     setTotal(calculateTotal(cartProducts));
   }, [cartProducts]);
-    console.log(total)
+   
 
   const removeFromCart = (product) => {
     const updatedCart = useProductStore.getState().cartProducts.filter((p) => p.id !== product.id);
