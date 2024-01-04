@@ -1,5 +1,5 @@
 // UnificadoShop.jsx
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import CardProduct from "@/components/CardsProducts/CardProduct";
 import SearchBar from "@/components/SearchBar/SearchBarCatalogo";
@@ -12,6 +12,8 @@ import {
   useCurrentPage,
   useOriginalProducts,
 } from "@/hooks/usePages";
+
+import "./ShopStyles.css";
 
 export default function UnificadoShop() {
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -106,20 +108,18 @@ export default function UnificadoShop() {
   const handleSearch = (query) => {
     const filtered = applyFilter(getProducts(), query);
 
-    console.log('entro a filter',filtered);
+    console.log("entro a filter", filtered);
 
     setProductsStore(filtered);
-    const newProducts = getArrayPage()
+    const newProducts = getArrayPage();
 
-    console.log('nueva pag',newProducts)
+    console.log("nueva pag", newProducts);
     setFilteredProducts(newProducts);
 
     localStorage.setItem("filteredProducts", JSON.stringify(filtered));
     localStorage.setItem("filterQuery", query);
 
     setProductsStore(filtered);
-
-   
   };
 
   const handleClear = () => {
@@ -167,14 +167,14 @@ export default function UnificadoShop() {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container-shop relative">
       <CatalogCarousel />
       <InfoSection />
       <SearchBar onSearch={handleSearch} onClear={handleClear} />
       <NavPages />
-      <div className="flex flex-row p-6">
+      <div className="products-container w-full">
         <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
-        <div className="flex flex-wrap gap-10 justify-between items-center pl-10">
+        <div className="flex flex-wrap gap-10 justify-around items-center">
           {filteredProducts.length ? (
             filteredProducts.map((product, index) => (
               <CardProduct

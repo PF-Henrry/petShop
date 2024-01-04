@@ -1,3 +1,4 @@
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -10,14 +11,14 @@
 }
 
 .info-section-container {
-  @apply w-full h-24 flex flex-row justify-center items-center mb-8 mt-8;
+  @apply w-full h-24 flex flex-row justify-center px-16 items-center mb-8 mt-8;
 
   & p {
     @apply text-base text-[#143146] font-semibold;
   }
 
   .payment-container {
-    @apply border-r border-b p-8 border-slate-400 flex flex-col justify-center items-center gap-2 h-full;
+    @apply border-r border-b p-5 border-slate-400 flex flex-col justify-center items-center gap-2 h-full w-full;
 
     .payment-logo {
       @apply w-10 h-9 p-1 drop-shadow-[0_2px_1px_rgba(0,0,0,0.4)] object-cover;
@@ -25,7 +26,7 @@
   }
 
   .pickup-container {
-    @apply border-r border-b p-8 border-slate-400 h-full flex flex-row justify-center items-center gap-2;
+    @apply border-r border-b p-5 border-slate-400 h-full flex flex-row justify-center items-center gap-2 w-full;
   }
 
   .icon-info {
@@ -33,6 +34,56 @@
   }
 
   .delivery-container {
-    @apply border-b p-8 border-slate-400 h-full flex flex-row justify-center items-center gap-2;
+    @apply border-b p-5 border-slate-400 h-full flex flex-row justify-center items-center gap-2 w-full;
+  }
+
+  @media (max-width: 1240px) {
+    .payment-container {
+      @apply py-4 px-0;
+    }
+    .pickup-container {
+      @apply py-4 px-0;
+    }
+    .delivery-container {
+      @apply py-4 px-0;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    & p {
+      @apply text-sm text-[#143146] font-normal;
+    }
+    .icon-info {
+      @apply text-xs;
+    }
+  }
+
+  @media (max-width: 858px) {
+    & p {
+      @apply text-xs text-[#143146];
+    }
+
+    .payment-container {
+      @apply py-4 px-2 text-xs;
+    }
+    .pickup-container {
+      @apply py-4 px-2 text-xs;
+    }
+    .delivery-container {
+      @apply py-4 px-2 text-xs;
+    }
+  }
+
+  @media (max-width: 768px) {
+    @apply hidden;
+  }
+
+  @media (max-width: 640px) {
+  }
+
+  @media (max-width: 480px) {
+  }
+
+  @media (max-width: 320px) {
   }
 }

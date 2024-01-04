@@ -2,6 +2,13 @@ import { useEffect, useState } from "react";
 import "./Filter.css";
 import { useProductStore } from "@/hooks/usePages";
 import { Funnel, TrashSimple } from "@phosphor-icons/react/dist/ssr";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+} from "@mui/material";
+import { CaretDown } from "@phosphor-icons/react";
 
 export default function Filter({ handleOnChange, handleOnClick }) {
   const { setProducts, setDataId, getDataId, resetFilters } = useProductStore();
@@ -46,94 +53,193 @@ export default function Filter({ handleOnChange, handleOnClick }) {
 
   return (
     <div className="filters-container">
-      <section className="filters-by-container">
-        <h2 className="filters-title">Filtrar por:</h2>
+      <div className="filters-container-visibility">
+        <section className="select-filters-container">
+          <h2 className="filters-title">Filtrar por:</h2>
 
-        <span>
-          <p className="filter-title-select">Especie</p>
-          <select onChange={(e) => handleOnChange(e)} name="species">
-            {data?.species.length &&
-              data.species.map((specie) => {
-                return (
-                  <option key={specie?._id} value={specie?._id}>
-                    {specie?.name}
-                  </option>
-                );
-              })}
-          </select>
+          <span>
+            <p className="filter-title-select">Especie</p>
+            <select onChange={(e) => handleOnChange(e)} name="species">
+              {data?.species.length &&
+                data.species.map((specie) => {
+                  return (
+                    <option key={specie?._id} value={specie?._id}>
+                      {specie?.name}
+                    </option>
+                  );
+                })}
+            </select>
+          </span>
+
+          <span>
+            <p className="filter-title-select">Categoría</p>
+            <select onChange={(e) => handleOnChange(e)} name="category">
+              {data?.category.length &&
+                data.category.map((c) => {
+                  return (
+                    <option key={c?._id} value={c?._id}>
+                      {c?.name}
+                    </option>
+                  );
+                })}
+            </select>
+          </span>
+
+          <span>
+            <p className="filter-title-select">Marcas</p>
+            <select onChange={(e) => handleOnChange(e)} name="brand">
+              {data?.brand?.length &&
+                data.brand.map((brand) => {
+                  return (
+                    <option key={brand?._id} value={brand?._id}>
+                      {brand?.name}
+                    </option>
+                  );
+                })}
+            </select>
+          </span>
+
+          <figure className="w-full border border-[#DABEB6]"></figure>
+
+          <h2 className="filters-title">Ordenar por:</h2>
+
+          <span>
+            <p className="filter-title-select">Precio</p>
+            <select id="price-sort">
+              <option value="desc">Mayor precio</option>
+              <option value="asc">Menor precio</option>
+            </select>
+          </span>
+        </section>
+
+        <span className="buttons-container">
+          <button
+            onClick={handleOnClick}
+            onMouseEnter={handleFilterIconHover}
+            onMouseLeave={handleFilterIconUnHover}
+            className="btn-filter"
+          >
+            Filtrar
+            <Funnel
+              size={20}
+              className="icon-filter"
+              weight={isFilterIconHovered ? "fill" : "regular"}
+            />
+          </button>
+          <button
+            onClick={handleResetFilters}
+            onMouseEnter={handleClearIconHover}
+            onMouseLeave={handleClearIconUnHover}
+            className="btn-reset-filters"
+          >
+            Limpiar Filtros
+            <TrashSimple
+              size={20}
+              className="icon-clear-filters"
+              weight={isClearIconHovered ? "fill" : "regular"}
+            />
+          </button>
         </span>
+      </div>
 
-        <span>
-          <p className="filter-title-select">Categoría</p>
-          <select onChange={(e) => handleOnChange(e)} name="category">
-            {data?.category.length &&
-              data.category.map((c) => {
-                return (
-                  <option key={c?._id} value={c?._id}>
-                    {c?.name}
-                  </option>
-                );
-              })}
-          </select>
-        </span>
-
-        <span>
-          <p className="filter-title-select">Marcas</p>
-          <select onChange={(e) => handleOnChange(e)} name="brand">
-            {data?.brand?.length &&
-              data.brand.map((brand) => {
-                return (
-                  <option key={brand?._id} value={brand?._id}>
-                    {brand?.name}
-                  </option>
-                );
-              })}
-          </select>
-        </span>
-      </section>
-
-      <figure className="w-full border border-[#DABEB6]"></figure>
-
-      <section className="filters-sort-container">
-        <h2 className="sort-title">Ordenar por:</h2>
-
-        <span>
-          <p className="sort-title-select">Precio</p>
-          <select name="price-sort" id="price-sort">
-            <option value="desc">Mayor precio</option>
-            <option value="asc">Menor precio</option>
-          </select>
-        </span>
-      </section>
-
-      <span className="buttons">
-        <button
-          onClick={handleOnClick}
-          onMouseEnter={handleFilterIconHover}
-          onMouseLeave={handleFilterIconUnHover}
-          className="btn-filter"
+      <Accordion className="filters-container-accordion duration-0 hidden">
+        <AccordionSummary
+          expandIcon={<CaretDown size={20} />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+          className="duration-0"
         >
-          Filtrar
-          <Funnel
-            size={20}
-            className="icon-filter"
-            weight={isFilterIconHovered ? "fill" : "regular"}
-          />
-        </button>
-        <button
-          onClick={handleResetFilters}
-          onMouseEnter={handleClearIconHover}
-          onMouseLeave={handleClearIconUnHover}
-          className="btn-reset-filters"
-        >
-          Limpiar Filtros
-          <TrashSimple
-            size={20}
-            className="icon-clear-filters"
-            weight={isClearIconHovered ? "fill" : "regular"}
-          />
-        </button>
-      </span>
+          <Typography>Filtros:</Typography>
+        </AccordionSummary>
+        <AccordionDetails className="filters-container-accordion-details">
+          <section className="select-filters-container">
+            <h2 className="filters-title">Filtrar por:</h2>
+
+            <span>
+              <p className="filter-title-select">Especie</p>
+              <select onChange={(e) => handleOnChange(e)} name="species">
+                {data?.species.length &&
+                  data.species.map((specie) => {
+                    return (
+                      <option key={specie?._id} value={specie?._id}>
+                        {specie?.name}
+                      </option>
+                    );
+                  })}
+              </select>
+            </span>
+
+            <span>
+              <p className="filter-title-select">Categoría</p>
+              <select onChange={(e) => handleOnChange(e)} name="category">
+                {data?.category.length &&
+                  data.category.map((c) => {
+                    return (
+                      <option key={c?._id} value={c?._id}>
+                        {c?.name}
+                      </option>
+                    );
+                  })}
+              </select>
+            </span>
+
+            <span>
+              <p className="filter-title-select">Marcas</p>
+              <select onChange={(e) => handleOnChange(e)} name="brand">
+                {data?.brand?.length &&
+                  data.brand.map((brand) => {
+                    return (
+                      <option key={brand?._id} value={brand?._id}>
+                        {brand?.name}
+                      </option>
+                    );
+                  })}
+              </select>
+            </span>
+
+            <figure className="w-full border border-[#DABEB6]"></figure>
+
+            <h2 className="filters-title">Ordenar por:</h2>
+
+            <span>
+              <p className="filter-title-select">Precio</p>
+              <select id="price-sort">
+                <option value="desc">Mayor precio</option>
+                <option value="asc">Menor precio</option>
+              </select>
+            </span>
+          </section>
+
+          <span className="buttons-container">
+            <button
+              onClick={handleOnClick}
+              onMouseEnter={handleFilterIconHover}
+              onMouseLeave={handleFilterIconUnHover}
+              className="btn-filter"
+            >
+              Filtrar
+              <Funnel
+                size={20}
+                className="icon-filter"
+                weight={isFilterIconHovered ? "fill" : "regular"}
+              />
+            </button>
+            <button
+              onClick={handleResetFilters}
+              onMouseEnter={handleClearIconHover}
+              onMouseLeave={handleClearIconUnHover}
+              className="btn-reset-filters"
+            >
+              Limpiar Filtros
+              <TrashSimple
+                size={20}
+                className="icon-clear-filters"
+                weight={isClearIconHovered ? "fill" : "regular"}
+              />
+            </button>
+          </span>
+        </AccordionDetails>
+      </Accordion>
     </div>
   );
 }
