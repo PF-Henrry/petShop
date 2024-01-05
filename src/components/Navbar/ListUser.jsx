@@ -51,7 +51,7 @@ export default function ListUser() {
           </Link>
         </li>
         <li>
-          <Link href="/wishlist">
+          <Link href="/favorites">
             <Heart size={20} weight="fill" />
             <p>Lista de favoritos</p>
           </Link>

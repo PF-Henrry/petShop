@@ -27,7 +27,7 @@ export default function UnificadoShop() {
     getTotalPages,
     getCurrentPage,
     setCurrentPage,
-    setOriginalProducts, // Agregamos esta función
+    setOriginalProducts, 
   } = useProductStore();
   const currentPage = useCurrentPage();
   const originalProducts = useOriginalProducts();
