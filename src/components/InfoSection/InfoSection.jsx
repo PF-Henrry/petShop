@@ -1,9 +1,6 @@
 import React from "react";
 import { Storefront, Truck } from "@phosphor-icons/react";
 import Image from "next/image";
-import MP from "@/public/assets/mp.png";
-import Card from "@/public/assets/tarjeta.png";
-import Cash from "@/public/assets/efectivo.png";
 import "./InfoSection.css";
 
 const InfoSection = () => {
@@ -12,9 +9,27 @@ const InfoSection = () => {
       <div className="payment-container">
         <p className="payment-title">Todos los medios de pago:</p>
         <div className="flex items-center justify-center gap-4">
-          <Image src={MP} alt="MP logo" className="payment-logo" />
-          <Image src={Card} alt="Card logo" className="payment-logo" />
-          <Image src={Cash} alt="Cash logo" className="payment-logo" />
+          <Image
+            src="https://res.cloudinary.com/kimeipetshop/image/upload/v1704005811/mp_ch7xhz.png"
+            width={48}
+            height={48}
+            alt="MP logo"
+            className="payment-logo"
+          />
+          <Image
+            src="https://res.cloudinary.com/kimeipetshop/image/upload/v1704005813/tarjeta_c7ggiu.png"
+            width={48}
+            height={48}
+            alt="Card logo"
+            className="payment-logo"
+          />
+          <Image
+            src="https://res.cloudinary.com/kimeipetshop/image/upload/v1704005809/efectivo_ocm3j7.png"
+            width={48}
+            height={48}
+            alt="Cash logo"
+            className="payment-logo"
+          />
         </div>
       </div>
 

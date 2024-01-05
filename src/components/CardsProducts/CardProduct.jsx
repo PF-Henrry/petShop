@@ -8,7 +8,13 @@ import {
 import { Rating } from "@mui/material";
 import Link from "next/link";
 import "./CardProduct.css";
-import { useState } from "react";
+import { useProductStore } from '@/hooks/usePages';
+import { ToastContainer, toast } from 'react-toastify';
+import {  useRouter } from 'next/navigation';
+import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 export default function CardProduct({
   id,
@@ -28,6 +34,8 @@ export default function CardProduct({
     currency: "ARS",
   });
 
+  const productName = name ? name : "Sin nombre";
+
   const formattedPrice = priceFormatter.format(price);
 
   const description = detail ? detail : "Sin descripción";
@@ -36,24 +44,51 @@ export default function CardProduct({
 
   const categoryName = category ? category : "Sin categoria";
 
+  const addToCart = useProductStore((state) => state.addToCart);
+
+  const { data: session, status: sessionStatus } = useSession();
+
+  const router = useRouter()
+
+  const handleAddToCart = () => {
+    if (session && sessionStatus === "authenticated") {
+      const product = {
+        id,
+        rating,
+        name,
+        price,
+        detail,
+        image,
+        brand,
+        category,
+        species,
+      };
+  
+      addToCart(product);
+      toast.success("Producto agregado al carrito con éxito");
+    } else {
+      router.push('/login');
+    }
+  };
 
   return (
     <div className="card-product">
       <button className="card-product-favorite">
         <HeartStraight size={20} />
       </button>
-      
 
-      <Image src={imageUrl} alt={name} width={150} height={150} />
+      <Link href={`/shop/${id}`}>
+        <span className="card-product-image-container">
+          <Image src={imageUrl} alt={productName} width={150} height={150} />
+        </span>
+      </Link>
       <p className="card-product-category">{categoryName}</p>
-      <span className="card-product-info">
-        <Link href={`#`}>
-          <h1 className="card-product-title">{name}</h1>
+      <Link href={`/shop/${id}`}>
+        <span className="card-product-info">
+          <h1 className="card-product-title">{productName}</h1>
           <p className="card-product-brand">{brandName}</p>
-        </Link>
-       
-      </span>
-      {/* <p className="card-product-description">{description}</p> */}
+        </span>
+      </Link>
       <Rating
         name="read-only"
         value={rating}
@@ -62,13 +97,11 @@ export default function CardProduct({
         className="px-2"
       />
       <p className="card-product-price">{formattedPrice} ARS</p>
-      <Link href={`/shop/${id}`}>
-      <button className="card-product-details">Ver detalles</button>
-    </Link>
-      <button className="card-product-cart">
+      <button className="card-product-cart" onClick={handleAddToCart} >
         <ShoppingCartSimple size={32} className="card-product-cart-icon" />
         Añadir al carrito
       </button>
+      <ToastContainer position="top-center" />
     </div>
   );
 }

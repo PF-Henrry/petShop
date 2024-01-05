@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+.container-shop {
+  @apply flex min-h-screen flex-col items-center justify-between px-28 py-10;
+
+  .products-container {
+    @apply flex flex-row p-6 gap-10;
+  }
+
+  @media (max-width: 1240px) {
+    @apply px-6;
+  }
+  @media (max-width: 1024px) {
+    @apply px-4;
+  }
+
+  @media (max-width: 858px) {
+    @apply px-3;
+    .products-container {
+      @apply flex flex-col p-6 gap-10;
+    }
+  }
+
+  @media (max-width: 768px) {
+    @apply px-1;
+  }
+
+  @media (max-width: 640px) {
+  }
+
+  @media (max-width: 480px) {
+  }
+
+  @media (max-width: 320px) {
+  }
+}
