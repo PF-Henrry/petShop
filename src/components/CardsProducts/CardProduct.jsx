@@ -8,13 +8,12 @@ import {
 import { Rating } from "@mui/material";
 import Link from "next/link";
 import "./CardProduct.css";
-import { useProductStore } from '@/hooks/usePages';
-import { ToastContainer, toast } from 'react-toastify';
-import {  useRouter } from 'next/navigation';
+import { useProductStore } from "@/hooks/usePages";
+import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import 'react-toastify/dist/ReactToastify.css';
-
+import "react-toastify/dist/ReactToastify.css";
 
 export default function CardProduct({
   id,
@@ -48,7 +47,7 @@ export default function CardProduct({
 
   const { data: session, status: sessionStatus } = useSession();
 
-  const router = useRouter()
+  const router = useRouter();
 
   const handleAddToCart = () => {
     if (session && sessionStatus === "authenticated") {
@@ -63,11 +62,11 @@ export default function CardProduct({
         category,
         species,
       };
-  
+
       addToCart(product);
       toast.success("Producto agregado al carrito con éxito");
     } else {
-      router.push('/login');
+      router.push("/login");
     }
   };
 
@@ -77,13 +76,13 @@ export default function CardProduct({
         <HeartStraight size={20} />
       </button>
 
-      <Link href={`/shop/${id}`}>
+      <Link href={`/shop/${id}?rating=${rating}`}>
         <span className="card-product-image-container">
           <Image src={imageUrl} alt={productName} width={150} height={150} />
         </span>
       </Link>
       <p className="card-product-category">{categoryName}</p>
-      <Link href={`/shop/${id}`}>
+      <Link href={`/shop/${id}?rating=${rating}`}>
         <span className="card-product-info">
           <h1 className="card-product-title">{productName}</h1>
           <p className="card-product-brand">{brandName}</p>
@@ -97,7 +96,7 @@ export default function CardProduct({
         className="px-2"
       />
       <p className="card-product-price">{formattedPrice} ARS</p>
-      <button className="card-product-cart" onClick={handleAddToCart} >
+      <button className="card-product-cart" onClick={handleAddToCart}>
         <ShoppingCartSimple size={32} className="card-product-cart-icon" />
         Añadir al carrito
       </button>

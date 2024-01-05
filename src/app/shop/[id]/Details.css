@@ -1,0 +1,249 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+.nextArrow {
+  @apply flex items-center right-0 h-full w-auto text-[#143146] z-20 duration-150;
+
+  &::before {
+    @apply text-[#143146] text-4xl duration-150 flex items-center;
+  }
+
+  &:hover {
+    &::before {
+      @apply text-[#2d638b];
+    }
+    @apply drop-shadow-[0_2px_1px_rgba(0,0,0,0.4)];
+  }
+}
+
+.prevArrow {
+  @apply flex items-center left-0 h-full w-auto text-[#143146] z-20 duration-150;
+
+  &::before {
+    @apply text-[#143146] text-4xl duration-150 flex items-center;
+  }
+
+  &:hover {
+    &::before {
+      @apply text-[#2d638b];
+    }
+    @apply drop-shadow-[0_2px_1px_rgba(0,0,0,0.4)];
+  }
+}
+
+.detail-product-container {
+  @apply flex flex-col gap-10 mx-28 my-10 p-10 bg-white rounded-2xl shadow-lg;
+
+  .nav-breadcrumbs ol li,
+  > a {
+    @apply text-[#7A8D9B] duration-200;
+
+    & a:hover {
+      @apply text-[#7a8d9bb4] underline;
+    }
+    & p {
+      @apply text-[#143146];
+    }
+  }
+
+  .MuiBreadcrumbs-separator {
+    @apply m-1;
+  }
+
+  .detail-product {
+    @apply flex flex-row items-start gap-6 w-full h-[43rem] relative object-contain overflow-hidden;
+
+    .detail-product-img-container {
+      @apply h-full w-full object-contain;
+
+      & div {
+        @apply h-full w-full object-contain;
+      }
+      .detail-product-img {
+        @apply h-full w-full object-contain;
+      }
+    }
+
+    .detail-product-info {
+      @apply flex flex-col gap-8 w-full;
+
+      .category-detail {
+        @apply text-[#7A8D9B] text-sm;
+      }
+      .title-detail {
+        @apply text-[#143146] text-4xl font-semibold mt-3;
+      }
+
+      .brand-detail {
+        @apply text-[#2d638b] text-base;
+      }
+
+      .rating-detail {
+        @apply flex flex-row gap-1 items-center justify-start text-[#143146] text-base;
+
+        .stars-detail {
+          @apply flex items-center text-xl;
+        }
+      }
+
+      .price-detail {
+        @apply text-[#143146] text-4xl font-bold;
+      }
+
+      .payment-pickup {
+        @apply flex flex-row gap-4;
+      }
+
+      .description-detail {
+        @apply text-[#0d1d29] text-base mt-10 py-4 border-y border-[#DABEB6];
+
+        & p {
+          @apply mb-3 font-medium;
+        }
+
+        & ul {
+          @apply flex flex-col gap-1;
+
+          & li {
+            @apply text-[#0d1d29] text-sm;
+          }
+        }
+      }
+    }
+
+    .card-product-cart {
+      @apply bottom-0 flex items-center justify-center gap-1 w-full p-2 bg-[#143146] text-[#f1e5e3] duration-150 rounded-lg;
+
+      &:hover .card-product-cart-icon {
+        -webkit-animation: wobble-hor-bottom 0.8s both;
+        animation: wobble-hor-bottom 0.8s both;
+      }
+
+      &:hover {
+        @apply bg-[#2d638b];
+      }
+
+      @-webkit-keyframes wobble-hor-bottom {
+        0%,
+        100% {
+          -webkit-transform: translateX(0%);
+          transform: translateX(0%);
+          -webkit-transform-origin: 50% 50%;
+          transform-origin: 50% 50%;
+        }
+        15% {
+          -webkit-transform: translateX(-5px) rotate(-6deg);
+          transform: translateX(-5px) rotate(-6deg);
+        }
+        30% {
+          -webkit-transform: translateX(5px) rotate(6deg);
+          transform: translateX(5px) rotate(6deg);
+        }
+        45% {
+          -webkit-transform: translateX(-5px) rotate(-2.6deg);
+          transform: translateX(-5px) rotate(-2.6deg);
+        }
+        60% {
+          -webkit-transform: translateX(3px) rotate(2.4deg);
+          transform: translateX(3px) rotate(2.4deg);
+        }
+        75% {
+          -webkit-transform: translateX(-2px) rotate(-1.2deg);
+          transform: translateX(-2px) rotate(-1.2deg);
+        }
+      }
+      @keyframes wobble-hor-bottom {
+        0%,
+        100% {
+          -webkit-transform: translateX(0%);
+          transform: translateX(0%);
+          -webkit-transform-origin: 50% 50%;
+          transform-origin: 50% 50%;
+        }
+        15% {
+          -webkit-transform: translateX(-5px) rotate(-6deg);
+          transform: translateX(-5px) rotate(-6deg);
+        }
+        30% {
+          -webkit-transform: translateX(5px) rotate(6deg);
+          transform: translateX(5px) rotate(6deg);
+        }
+        45% {
+          -webkit-transform: translateX(-5px) rotate(-2.6deg);
+          transform: translateX(-5px) rotate(-2.6deg);
+        }
+        60% {
+          -webkit-transform: translateX(3px) rotate(2.4deg);
+          transform: translateX(3px) rotate(2.4deg);
+        }
+        75% {
+          -webkit-transform: translateX(-2px) rotate(-1.2deg);
+          transform: translateX(-2px) rotate(-1.2deg);
+        }
+      }
+    }
+  }
+
+  .related-products {
+    @apply w-full flex flex-col gap-4;
+
+    .title-related {
+      @apply text-[#143146] text-lg font-semibold underline;
+    }
+
+    .slider-related {
+      @apply cursor-grab;
+
+      .slick-list {
+        @apply relative p-0 m-0 flex flex-row justify-center items-center gap-6;
+      }
+
+      .slick-track {
+        @apply flex flex-row items-center p-0 m-0 w-[90%];
+
+        .slick-slide {
+          .related-product-card {
+            @apply m-0 h-[25rem] bg-white shadow-md rounded-md overflow-hidden;
+
+            & a {
+              @apply w-full h-full flex justify-start flex-col;
+
+              .related-product-info {
+                @apply flex flex-col gap-2 p-4;
+
+                .category-related {
+                  @apply text-[#7A8D9B] text-xs;
+                }
+
+                .related-product-info-name {
+                  .name-related {
+                    @apply text-[#143146] text-base font-semibold;
+                  }
+
+                  .brand-related {
+                    @apply text-[#2d638b] text-sm;
+                  }
+                }
+                .price-detail {
+                  @apply text-[#0d1d29] text-lg font-semibold mt-4;
+                }
+              }
+            }
+            & img {
+              @apply object-contain w-full h-52 rounded-md;
+            }
+          }
+        }
+      }
+    }
+  }
+}
