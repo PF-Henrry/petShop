@@ -69,11 +69,38 @@ export default function CardProduct({
       router.push("/login");
     }
   };
+  const addToFavorites = useProductStore((state) => state.addToFavorites);
+  const removeFromFavorites = useProductStore((state) => state.removeFromFavorites);
+  const getFavorites = useProductStore((state) => state.getFavorites);
 
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    const favorites = getFavorites();
+    setIsFavorite(favorites.includes(id));
+  }, [getFavorites, id]);
+
+  
+  const handleToggleFavorite = async () => {
+    if (session && sessionStatus === "authenticated") {
+      if (isFavorite) {
+        await removeFromFavorites(id);
+      } else {
+        await addToFavorites(id);
+      }
+  
+      const updatedFavorites = getFavorites();
+      setIsFavorite(updatedFavorites.includes(id));
+    } else {
+      router.push("/login");
+    }
+  };
+  
   return (
     <div className="card-product">
-      <button className="card-product-favorite">
-        <HeartStraight size={20} />
+      <button className="card-product-favorite" onClick={handleToggleFavorite}>
+      {isFavorite ? "❤️" :
+        <HeartStraight size={20} />}
       </button>
 
       <Link href={`/shop/${id}?rating=${rating}`}>

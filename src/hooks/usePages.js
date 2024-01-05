@@ -1,8 +1,8 @@
-// usePages.js
+
 import { create } from 'zustand';
 
 const storedCart = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('cart')) || [] : [];
-
+const storedFavorites = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('favorites')) || [] : [];
 
 
 export const useProductStore = create((set, get) => ({
@@ -21,6 +21,7 @@ export const useProductStore = create((set, get) => ({
     brand: '',
   },
   originalProducts: [],
+  favorites: storedFavorites,
 
   getTotalPages: () => {
     const { products, sizeGroup } = get();
@@ -116,7 +117,35 @@ export const useProductStore = create((set, get) => ({
     });
   },
 
+  addToFavorites: (productId) => {
+    set((state) => {
+      const updatedFavorites = [...state.favorites, productId];
+      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      return { favorites: updatedFavorites };
+    });
+  },
+
+  removeFromFavorites: (productId) => {
+    set((state) => {
+      const updatedFavorites = state.favorites.filter((id) => id !== productId);
+      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      return { favorites: updatedFavorites };
+    });
+  },
+
+  getFavorites: () => {
+    const { favorites } = get();
+    return favorites;
+  },
+
+
 }));
+
+export const useFavorites = () => {
+  const favorites = useProductStore((state) => state.favorites);  
+  return favorites;
+};
+
 
 export const useOriginalProducts = () => {
   const originalProducts = useProductStore((state) => state.originalProducts);
