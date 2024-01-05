@@ -24,6 +24,9 @@ export default function UnificadoShop() {
     getArrayPage,
     getFilter,
     setFilter,
+    getTotalPages,
+    getCurrentPage,
+    setCurrentPage,
     setOriginalProducts, // Agregamos esta función
   } = useProductStore();
   const currentPage = useCurrentPage();
@@ -125,7 +128,9 @@ export default function UnificadoShop() {
   const handleClear = () => {
     setFilter({ name: "name", value: "" });
     setProductsStore(originalProducts);
-    setFilteredProducts(originalProducts);
+
+    const product = getArrayPage();
+    setFilteredProducts(product);
     localStorage.removeItem("filterQuery");
   };
 
@@ -156,6 +161,13 @@ export default function UnificadoShop() {
       .then((data) => data.json())
       .then((data) => {
         setProductsStore(data);
+
+        const totalPage = getTotalPages();
+        const currentPage = getCurrentPage();
+
+        if (totalPage < currentPage) {
+          setCurrentPage(1);
+        }
 
         const page = getArrayPage();
         setFilteredProducts(page);
