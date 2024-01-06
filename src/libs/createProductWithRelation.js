@@ -44,6 +44,7 @@ export const addProduct = async (dataProduct) => {
                  brand: pushMake._id,
                  category: pushCategory,
                  species: pushSpecies,
+                 active: true,
          })
         
 

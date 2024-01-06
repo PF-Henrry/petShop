@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-
+import { iniciarIntervalo } from "@/app/api/softDelete/softDeleteUsers"
 import { connectDB, conn } from "@/libs/mongodb";
 import userDB from '@/models/users';
 import { PASSWORD_CHECKED } from "@/utils/regex";
@@ -7,13 +7,33 @@ import { postImage } from "@/libs/cloudinary";
 import Provinces from '@/models/provinces';
 import { findOrCreateModel } from "@/libs/dbmethods";
 import Citys from "@/models/city";
+
 export async function DELETE(request, {params}) {
     try {
         if(!conn.isConnected) connectDB();
 
+        
+
        const _id = params.id
 
-        const deleteUser = await userDB.findByIdAndDelete(_id);
+       await userDB.findOneAndUpdate(
+        { _id: _id },
+        {
+            $set: {
+            active: false,
+            updatedAt: new Date()
+        }
+    },
+        {new: true}
+      );
+
+      const datosInactivos = await userDB.find({ active: false })
+
+      if(datosInactivos.length === 1){
+        iniciarIntervalo();
+      }
+
+        // const deleteUser = await userDB.findByIdAndDelete(_id);
 
         return NextResponse.json({mensaje: "Usuario eliminado"},{status:200})
 
@@ -30,7 +50,7 @@ export async function GET(request,{params}){
         const _id = params.id
         // const findUser = await userDB.findOne({_id:_id},{password:0});
         const findUser = await userDB
-            .findOne({ _id: _id }, { password: 0 })
+            .findOne({ _id: _id, active: true }, { password: 0 })
             .populate('city', '_id name') 
             .populate('province', '_id name'); 
 
@@ -49,7 +69,7 @@ export async function PUT(request, {params}) {
         const idUser = params.id
         const data = await request.json()
         const {password, dataSinPass} = data;
-        const findUser = await userDB.findOne({_id: idUser});
+        const findUser = await userDB.findOne({_id: idUser, active: true});
 
         console.log('Datos recibidos del cliente:', data);
 

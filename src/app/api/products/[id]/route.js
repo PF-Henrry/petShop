@@ -7,30 +7,28 @@ export async function GET(request,{params}) {
     try {
         const id =  params.id
          //asd
-
+         
         if(!conn.isConnected) connectDB();
 
-        const queryProduct = await Products.findOne({_id:id})
+        const queryProduct = await Products.findById(id).find({ active: true })
         .populate("category",{
-            _id:1,
+            _id:0,
             name:1
         })
         .populate("species",{
-            _id:1,
+            _id:0,
             name:1,
         })
         .populate("brand",{
-            _id:1,
+            _id:0,
             name:1
         });
 
 
 
+        if(queryProduct.length === 0) throw TypeError('Product not found');
 
-        if(!queryProduct) throw TypeError('Product not found');
-
-        console.log(queryProduct)
-        return NextResponse.json(queryProduct,{status:200})
+        return NextResponse.json({queryProduct},{status:200})
         
     } catch (error) {
         return NextResponse.json(error.message,{status:404})

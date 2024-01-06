@@ -21,7 +21,7 @@ export  async function addUser(user) {
         ...user,
         city: newCity._id,
         province: newProvince._id,
-
+        active: true,
       });
       console.log(savedUser)
       const newFavorite = await Favorite.create({userID:savedUser._id,products:[]});
