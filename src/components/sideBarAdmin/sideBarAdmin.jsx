@@ -58,7 +58,7 @@ const Sidebar = () => {
           <SidebarLink href="/admin/users" text="Usuarios" isActive={false} icon={<User size={32} />} />
           <SidebarLink href="/admin/products" text="Productos" isActive={false} icon={<Storefront size={32} />} />
           <ul className="ml-4">
-            <SidebarSubLink href="/admin/products/addProduct" text="Agregar Producto" />
+            <SidebarSubLink href="/admin/products/uploadProducts" text="Agregar Producto" />
           </ul>
           {/* ... (resto de tus enlaces) */}
         </ul>
