@@ -11,7 +11,15 @@ import {
 import { CaretDown } from "@phosphor-icons/react";
 
 export default function Filter({ handleOnChange, handleOnClick }) {
-  const { setProducts, setDataId, getDataId, resetFilters } = useProductStore();
+  const {
+    setProducts,
+    setDataId,
+    getDataId,
+    resetFilters,
+    setSortOrder,
+    sortProducts,
+    sortOrder,
+  } = useProductStore();
   const [inputs, setInputs] = useState();
   const [data, setData] = useState();
   const [isFilterIconHovered, setFilterIconHovered] = useState(false);
@@ -49,6 +57,12 @@ export default function Filter({ handleOnChange, handleOnClick }) {
   const handleResetFilters = () => {
     resetFilters();
     handleOnClick();
+  };
+
+  const handleSortChange = (e) => {
+    const newSortOrder = e.target.value;
+    setSortOrder(newSortOrder);
+    sortProducts();
   };
 
   return (
@@ -105,7 +119,11 @@ export default function Filter({ handleOnChange, handleOnClick }) {
 
           <span>
             <p className="filter-title-select">Precio</p>
-            <select id="price-sort">
+            <select
+              id="price-sort"
+              onChange={handleSortChange}
+              value={sortOrder}
+            >
               <option value="desc">Mayor precio</option>
               <option value="asc">Menor precio</option>
             </select>
