@@ -1,37 +1,34 @@
 import { NextResponse } from "next/server";
-import {conn,connectDB} from "@/libs/mongodb"
-import Products from "@/models/products"
+import { conn, connectDB } from "@/libs/mongodb";
+import Products from "@/models/products";
 // obtener producto por id.
 
-export async function GET(request,{params}) {
-    try {
-        const id =  params.id
-         //asd
-         
-        if(!conn.isConnected) connectDB();
+export async function GET(request, { params }) {
+  try {
+    const id = params.id;
 
-        const queryProduct = await Products.findById(id).find({ active: true })
-        .populate("category",{
-            _id:0,
-            name:1
-        })
-        .populate("species",{
-            _id:0,
-            name:1,
-        })
-        .populate("brand",{
-            _id:0,
-            name:1
-        });
+    //asd
 
+    if (!conn.isConnected) connectDB();
 
+    const result = await Products.findOne({ _id: id, active: true })
+      .populate("category", {
+        _id: 0,
+        name: 1,
+      })
+      .populate("species", {
+        _id: 0,
+        name: 1,
+      })
+      .populate("brand", {
+        _id: 0,
+        name: 1,
+      });
 
-        if(queryProduct.length === 0) throw TypeError('Product not found');
+    if (!result) throw new TypeError("Product not found");
 
-        return NextResponse.json({queryProduct},{status:200})
-        
-    } catch (error) {
-        return NextResponse.json(error.message,{status:404})
-    }
-   
+    return NextResponse.json(result, { status: 200 });
+  } catch (error) {
+    return NextResponse.json(error.message, { status: 404 });
+  }
 }
