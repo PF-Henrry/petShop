@@ -27,7 +27,8 @@ export default function UnificadoShop() {
     getTotalPages,
     getCurrentPage,
     setCurrentPage,
-    setOriginalProducts, 
+    setOriginalProducts,
+    sortOrder,
   } = useProductStore();
   const currentPage = useCurrentPage();
   const originalProducts = useOriginalProducts();
@@ -88,7 +89,7 @@ export default function UnificadoShop() {
   useEffect(() => {
     const newProducts = getArrayPage();
     setFilteredProducts(newProducts);
-  }, [currentPage, getArrayPage]);
+  }, [currentPage, getArrayPage, sortOrder]);
 
   const applyFilter = (data, filterQuery) => {
     if (!filterQuery) {
