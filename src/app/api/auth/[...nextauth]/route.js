@@ -130,6 +130,8 @@ const authOptions = {
                 return token
               },
               async session({ session, user, token }) {
+                if(!conn.isConnected) connectDB()
+
                 const findUser = await Users.findOne({email:token.email});
                 if(findUser) session.user.id = findUser._id
                 session.accessToken = token.accessToken
