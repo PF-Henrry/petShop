@@ -1,4 +1,3 @@
-
 import { create } from 'zustand';
 
 const storedCart = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('cart')) || [] : [];
@@ -22,6 +21,10 @@ export const useProductStore = create((set, get) => ({
   },
   originalProducts: [],
   favorites: storedFavorites,
+  order: {
+    orderID: null,
+    status: null,
+  },
 
   getTotalPages: () => {
     const { products, sizeGroup } = get();
@@ -138,7 +141,10 @@ export const useProductStore = create((set, get) => ({
     return favorites;
   },
 
-
+  updateOrderState: (newOrder) => {
+    set({ order: newOrder });
+  },
+  
 }));
 
 export const useFavorites = () => {
@@ -156,3 +162,4 @@ export const useCurrentPage = () => {
   const currentPage = useProductStore((state) => state.currentPage);
   return currentPage;
 };
+

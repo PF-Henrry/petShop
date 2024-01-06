@@ -1,10 +1,16 @@
+
+
 'use client'
 import React, { useState, useEffect } from 'react';
 import { useProductStore } from '@/hooks/usePages';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Cart = () => {
   const cartProducts = useProductStore((state) => state.cartProducts);
+  const updateOrderState = useProductStore((state) => state.updateOrderState);
   const [total, setTotal] = useState(0);
  
 
@@ -36,6 +42,60 @@ const Cart = () => {
     localStorage.setItem('cart', JSON.stringify(updatedCart));
   };
 
+  const clearCart = () => {
+    useProductStore.setState({ cartProducts: [] });
+    localStorage.removeItem('cart');
+  };
+
+  const { data: session } = useSession(); 
+ 
+  const userID = session?.user?.id;
+
+  const handleCheckout = async () => {
+    try {
+      if (!userID) {
+        console.error('No se pudo obtener el userID de la sesión');
+        return;
+      }
+  
+      const totalAmount = calculateTotal(cartProducts); 
+  
+      const products = cartProducts.map((product) => ({
+        "_id": product.id,
+        "name": product.name,
+        "price": product.price,
+        "count": product.quantity,
+      }));
+  
+      const response = await fetch('/api/mercadopago/create-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userID, products, totalAmount }), 
+      });
+  
+      if (!response.ok) {
+        throw new Error('Error al crear la orden');
+      }
+  
+      const result = await response.json();
+  
+      updateOrderState({
+        orderID: result.id,
+        status: 'pending',
+      });
+  
+      window.location.href = result.url;
+      clearCart();
+    } catch (error) {
+      console.error(error);
+      toast.error('Ocurrió un error al procesar la orden, inténtelo nuevamente');
+    }
+  };
+  
+ 
+
   return (
     <div>
       <h2>Carrito de Compras</h2>
@@ -53,7 +113,7 @@ const Cart = () => {
           ))}
           <p>Total: {total} ARS</p>
          
-          <button>Finalizar Compra</button>
+          <button onClick={handleCheckout}>Finalizar Compra</button>
         </div>
       )}
     </div>
@@ -88,6 +148,7 @@ const CartItem = ({ product, removeFromCart, updateQuantity }) => {
         </select>
       </label>
       <button onClick={handleRemove}>❌</button>
+      <ToastContainer position="top-center" />
     </div>
   );
 };
