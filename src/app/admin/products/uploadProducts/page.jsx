@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import {  useRouter } from 'next/navigation';
 import toastNotify from "@/libs/toast";
+import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
 
 function UploadImage(){
     
@@ -132,7 +133,7 @@ function UploadImage(){
     
 
     return(
-
+<LayoutAdmin>
         <section className="min-h-screen flex items-center justify-center mt-12">
                     <div className="max-w-md w-full p-6 bg-white rounded-md shadow-md">
 
@@ -214,6 +215,7 @@ function UploadImage(){
 
       <ToastContainer/>
     </section>
+    </LayoutAdmin>
     )
 }
 
