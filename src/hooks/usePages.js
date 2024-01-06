@@ -1,8 +1,13 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
-const storedCart = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('cart')) || [] : [];
-const storedFavorites = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('favorites')) || [] : [];
-
+const storedCart =
+  typeof window !== "undefined"
+    ? JSON.parse(localStorage.getItem("cart")) || []
+    : [];
+const storedFavorites =
+  typeof window !== "undefined"
+    ? JSON.parse(localStorage.getItem("favorites")) || []
+    : [];
 
 export const useProductStore = create((set, get) => ({
   products: [],
@@ -15,9 +20,9 @@ export const useProductStore = create((set, get) => ({
     brand: null,
   },
   dataId: {
-    category: '',
-    species: '',
-    brand: '',
+    category: "",
+    species: "",
+    brand: "",
   },
   originalProducts: [],
   favorites: storedFavorites,
@@ -25,6 +30,7 @@ export const useProductStore = create((set, get) => ({
     orderID: null,
     status: null,
   },
+  sortOrder: "desc",
 
   getTotalPages: () => {
     const { products, sizeGroup } = get();
@@ -60,6 +66,21 @@ export const useProductStore = create((set, get) => ({
     }
   },
 
+  setSortOrder: (order) => set({ sortOrder: order }),
+
+  sortProducts: () => {
+    const { products, sortOrder } = get();
+    const sortedProducts = [...products].sort((a, b) => {
+      if (sortOrder === "desc") {
+        return b.price - a.price;
+      } else {
+        return a.price - b.price;
+      }
+    });
+    set({ products: sortedProducts });
+    return sortedProducts;
+  },
+
   getArrayPage: () => {
     const { products, sizeGroup, currentPage } = get();
     const currentPageIndex = currentPage - 1;
@@ -75,38 +96,46 @@ export const useProductStore = create((set, get) => ({
 
   setOriginalProducts: (products) => set({ originalProducts: [...products] }),
 
-  resetFilters: () => set((state) => ({
-    filter: {
-      category: null,
-      species: null,
-      brand: null,
-    },
-  })),
-  
+  resetFilters: () =>
+    set((state) => ({
+      filter: {
+        category: null,
+        species: null,
+        brand: null,
+      },
+    })),
+
   addToCart: (product) => {
     set((state) => {
-      const existingProduct = state.cartProducts.find((p) => p.id === product.id);
-  
+      const existingProduct = state.cartProducts.find(
+        (p) => p.id === product.id
+      );
+
       if (existingProduct) {
         // Si el producto ya está en el carrito, actualiza la cantidad
         const updatedCart = state.cartProducts.map((p) =>
           p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
         );
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
         return { cartProducts: updatedCart };
       } else {
         // Si el producto no está en el carrito, agrégalo con cantidad 1
-        const updatedCart = [...state.cartProducts, { ...product, quantity: 1 }];
-        localStorage.setItem('cart', JSON.stringify(updatedCart));
+        const updatedCart = [
+          ...state.cartProducts,
+          { ...product, quantity: 1 },
+        ];
+        localStorage.setItem("cart", JSON.stringify(updatedCart));
         return { cartProducts: updatedCart };
       }
     });
   },
-  
+
   removeFromCart: (products) => {
     set((state) => {
-      const updatedCart = state.cartProducts.filter((p) => p.id !== products.id);
-      localStorage.setItem('cart', JSON.stringify(updatedCart));
+      const updatedCart = state.cartProducts.filter(
+        (p) => p.id !== products.id
+      );
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
       return { cartProducts: updatedCart };
     });
   },
@@ -123,7 +152,7 @@ export const useProductStore = create((set, get) => ({
   addToFavorites: (productId) => {
     set((state) => {
       const updatedFavorites = [...state.favorites, productId];
-      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
       return { favorites: updatedFavorites };
     });
   },
@@ -131,7 +160,7 @@ export const useProductStore = create((set, get) => ({
   removeFromFavorites: (productId) => {
     set((state) => {
       const updatedFavorites = state.favorites.filter((id) => id !== productId);
-      localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
       return { favorites: updatedFavorites };
     });
   },
@@ -144,14 +173,12 @@ export const useProductStore = create((set, get) => ({
   updateOrderState: (newOrder) => {
     set({ order: newOrder });
   },
-  
 }));
 
 export const useFavorites = () => {
-  const favorites = useProductStore((state) => state.favorites);  
+  const favorites = useProductStore((state) => state.favorites);
   return favorites;
 };
-
 
 export const useOriginalProducts = () => {
   const originalProducts = useProductStore((state) => state.originalProducts);
@@ -162,4 +189,3 @@ export const useCurrentPage = () => {
   const currentPage = useProductStore((state) => state.currentPage);
   return currentPage;
 };
-
