@@ -20,6 +20,17 @@ body {
   color: rgb(var(--foreground-rgb));
   background: rgb(var(--background-rgb));
 
+  .tippy-box {
+    @apply font-semibold text-white bg-white border drop-shadow-lg;
+
+    .tippy-arrow::before {
+      @apply text-white border;
+    }
+    .tippy-content {
+      @apply p-2 text-[#143146];
+    }
+  }
+
   @media (max-width: 1220px) {
     .main-container {
       @apply px-10;
@@ -41,5 +52,64 @@ body {
     .main-container {
       @apply px-1;
     }
+  }
+}
+
+@-webkit-keyframes wobble-ver-right {
+  0%,
+  100% {
+    -webkit-transform: translateY(0) rotate(0);
+    transform: translateY(0) rotate(0);
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+  }
+  15% {
+    -webkit-transform: translateY(-3px) rotate(6deg);
+    transform: translateY(-3px) rotate(6deg);
+  }
+  30% {
+    -webkit-transform: translateY(4px) rotate(-6deg);
+    transform: translateY(4px) rotate(-6deg);
+  }
+  45% {
+    -webkit-transform: translateY(-6px) rotate(2.6deg);
+    transform: translateY(-6px) rotate(2.6deg);
+  }
+  60% {
+    -webkit-transform: translateY(3px) rotate(-2.4deg);
+    transform: translateY(3px) rotate(-2.4deg);
+  }
+  75% {
+    -webkit-transform: translateY(-2px) rotate(1.2deg);
+    transform: translateY(-2px) rotate(1.2deg);
+  }
+}
+@keyframes wobble-ver-right {
+  0%,
+  100% {
+    -webkit-transform: translateY(0) rotate(0);
+    transform: translateY(0) rotate(0);
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+  }
+  15% {
+    -webkit-transform: translateY(-3px) rotate(6deg);
+    transform: translateY(-3px) rotate(6deg);
+  }
+  30% {
+    -webkit-transform: translateY(4px) rotate(-6deg);
+    transform: translateY(4px) rotate(-6deg);
+  }
+  45% {
+    -webkit-transform: translateY(-6px) rotate(2.6deg);
+    transform: translateY(-6px) rotate(2.6deg);
+  }
+  60% {
+    -webkit-transform: translateY(3px) rotate(-2.4deg);
+    transform: translateY(3px) rotate(-2.4deg);
+  }
+  75% {
+    -webkit-transform: translateY(-2px) rotate(1.2deg);
+    transform: translateY(-2px) rotate(1.2deg);
   }
 }

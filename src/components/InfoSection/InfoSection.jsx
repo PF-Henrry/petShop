@@ -34,7 +34,7 @@ const InfoSection = () => {
       </div>
 
       <div className="pickup-container">
-        <Storefront size={10} className="icon-info" />
+        <Storefront size={48} className="icon-info" />
         <div>
           <p>Retiro gratis en nuestra sucursal </p>
           <p>de lunes a sábados de 9 a 21hs</p>
@@ -42,7 +42,7 @@ const InfoSection = () => {
       </div>
 
       <div className="delivery-container">
-        <Truck size={10} className="icon-info" />
+        <Truck size={48} className="icon-info" />
         <div>
           <p>Envío gratis en el día</p>
           <p>de lunes a sábados de 9 a 21hs</p>
