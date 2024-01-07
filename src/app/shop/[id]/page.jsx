@@ -1,13 +1,13 @@
 // pages/shop/[id].js
 "use client";
 
+import RelatedProducts from "@/components/CarouselProducts/RelatedProducts";
+import { useProductStore } from "@/hooks/usePages";
 import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { useProductStore } from "@/hooks/usePages";
 import Image from "next/image";
 import Link from "next/link";
 import Zoom from "react-medium-image-zoom";
-import Slider from "react-slick";
 import { useSession } from "next-auth/react";
 import { Breadcrumbs, Rating, Typography } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
@@ -17,11 +17,16 @@ import {
   Package,
   ShoppingCartSimple,
 } from "@phosphor-icons/react/dist/ssr";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css";
+import "tippy.js/dist/svg-arrow.css";
 import "react-medium-image-zoom/dist/styles.css";
 import "react-toastify/dist/ReactToastify.css";
 import "./Details.css";
+import {
+  TippyDetailsPayment,
+  TippyDetailsPickup,
+} from "@/components/Tooltips/TippyDetails";
 
 const DetailProduct = () => {
   const paramsQuery = useSearchParams();
@@ -136,38 +141,6 @@ const DetailProduct = () => {
 
   const formattedPrice = priceFormatter.format(product.price);
 
-  function NextArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        size={32}
-        className={`${className} nextArrow`}
-        onClick={onClick}
-      ></div>
-    );
-  }
-
-  function PrevArrow(props) {
-    const { className, style, onClick } = props;
-    return (
-      <div
-        size={32}
-        className={`${className} prevArrow`}
-        onClick={onClick}
-      ></div>
-    );
-  }
-
-  const confiSlider = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 4,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-  };
-
   // Renderiza los detalles del producto
   return (
     <div className="detail-product-container">
@@ -199,7 +172,7 @@ const DetailProduct = () => {
           </Zoom>
         </div>
         <span className="detail-product-info">
-          <div className="flex gap-1 flex-col">
+          <div className="flex flex-col gap-1">
             <p className="category-detail">
               {product.category && product.category[0]?.name}
             </p>
@@ -219,14 +192,30 @@ const DetailProduct = () => {
           </div>
           <p className="price-detail">{formattedPrice} ARS</p>
           <div className="payment-pickup">
-            <span>
-              <Cardholder size={32} />
-              Metodos de pago
-            </span>
-            <span>
-              <Package size={32} />
-              Opciones de entrega
-            </span>
+            <Tippy
+              content={<TippyDetailsPayment />}
+              arrow={true}
+              delay={0}
+              allowHTML={true}
+              interactive={true}
+            >
+              <span className="cursor-help">
+                <Cardholder size={32} />
+                <p>Metodos de pago</p>
+              </span>
+            </Tippy>
+            <Tippy
+              content={<TippyDetailsPickup />}
+              arrow={true}
+              delay={0}
+              allowHTML={true}
+              interactive={true}
+            >
+              <span className="cursor-help">
+                <Package size={32} />
+                <p>Opciones de entrega</p>
+              </span>
+            </Tippy>
           </div>
 
           <span className="description-detail">
@@ -248,88 +237,26 @@ const DetailProduct = () => {
       </section>
 
       <span className="related-products">
-        <p className="title-related">Más de {product?.species[0]?.name}:</p>
-        <Slider {...confiSlider} className="slider-related">
-          {relatedProducts
-            .filter(
-              (relatedProduct) =>
-                relatedProduct.species[0]?.name === product?.species[0]?.name
-            )
-            .sort(
-              (a, b) => relatedProducts.indexOf(b) - relatedProducts.indexOf(a)
-            )
-            .map((relatedProduct, index) => (
-              <div key={index} className="related-product-card">
-                <Link
-                  href={`/shop/${relatedProduct?._id}?rating=${relatedProduct?.rating}`}
-                >
-                  <Image
-                    src={relatedProduct?.image}
-                    alt={relatedProduct?.name}
-                    width={200}
-                    height={200}
-                  />
-                  <section className="related-product-info">
-                    <p className="category-related">
-                      {relatedProduct?.category[0]?.name} para{" "}
-                      {relatedProduct?.species[0]?.name}
-                    </p>
-                    <span className="related-product-info-name">
-                      <p className="name-related">{relatedProduct?.name}</p>
-                      <p className="brand-related">
-                        {relatedProduct?.brand?.name}
-                      </p>
-                    </span>
-
-                    <p className="price-detail">
-                      {priceFormatter.format(relatedProduct?.price)} ARS
-                    </p>
-                  </section>
-                </Link>
-              </div>
-            ))}
-        </Slider>
+        <span className="title-related">
+          Productos similares a <p>{product?.species[0]?.name}</p>
+        </span>
+        <RelatedProducts
+          product={product}
+          relatedProducts={relatedProducts}
+          priceFormatter={priceFormatter}
+          filter={species[0]?.name}
+        />
       </span>
-      <span className="related-products mt-8">
-        <p className="title-related">Más de {product?.category[0]?.name}:</p>
-
-        <Slider {...confiSlider} className="slider-related">
-          {relatedProducts
-            .filter(
-              (relatedProduct) =>
-                relatedProduct.category[0]?.name === product?.category[0]?.name
-            )
-            .map((relatedProduct, index) => (
-              <div key={index} className="related-product-card">
-                <Link
-                  href={`/shop/${relatedProduct?._id}?rating=${relatedProduct?.rating}`}
-                >
-                  <Image
-                    src={relatedProduct?.image}
-                    alt={relatedProduct?.name}
-                    width={200}
-                    height={200}
-                  />
-                  <section className="related-product-info">
-                    <p className="category-related">
-                      {relatedProduct?.category[0]?.name} para{" "}
-                      {relatedProduct?.species[0]?.name}
-                    </p>
-                    <span className="related-product-info-name">
-                      <p className="name-related">{relatedProduct?.name}</p>
-                      <p className="brand-related">
-                        {relatedProduct?.brand?.name}
-                      </p>
-                    </span>
-
-                    <p className="price-detail">
-                      {priceFormatter.format(relatedProduct?.price)} ARS
-                    </p>
-                  </section>
-                </Link>
-              </div>
-            ))}
-        </Slider>
+      <span className="related-products">
+        <span className="title-related">
+          Productos similares a <p>{product?.category[0]?.name}</p>
+        </span>
+        <RelatedProducts
+          product={product}
+          relatedProducts={relatedProducts}
+          priceFormatter={priceFormatter}
+          filter={category[0]?.name}
+        />
       </span>
       <ToastContainer position="top-center" />
     </div>
