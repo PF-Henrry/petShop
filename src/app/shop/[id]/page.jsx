@@ -110,19 +110,19 @@ const DetailProduct = () => {
 
   const handleAddToCart = () => {
     if (session && sessionStatus === "authenticated") {
-      const product = {
+      const cartProduct = {
         id,
         rating,
         name,
         price,
         detail,
         image,
-        brand,
-        category,
-        species,
+        brand: product.brand?.name || "", // Extraer la marca
+        category: product.category[0]?.name || "", // Extraer la primera categoría
+        species: product.species[0]?.name || "", //  Extraer la primera especie
       };
 
-      addToCart(product);
+      addToCart(cartProduct);
       toast.success("Producto agregado al carrito con éxito");
     } else {
       router.push("/login");
