@@ -10,39 +10,12 @@
   list-style: none;
 }
 
-.nextArrow {
-  @apply flex items-center right-0 h-full w-auto text-[#143146] z-20 duration-150;
-
-  &::before {
-    @apply text-[#143146] text-4xl duration-150 flex items-center;
-  }
-
-  &:hover {
-    &::before {
-      @apply text-[#2d638b];
-    }
-    @apply drop-shadow-[0_2px_1px_rgba(0,0,0,0.4)];
-  }
-}
-
-.prevArrow {
-  @apply flex items-center left-0 h-full w-auto text-[#143146] z-20 duration-150;
-
-  &::before {
-    @apply text-[#143146] text-4xl duration-150 flex items-center;
-  }
-
-  &:hover {
-    &::before {
-      @apply text-[#2d638b];
-    }
-    @apply drop-shadow-[0_2px_1px_rgba(0,0,0,0.4)];
-  }
-}
-
 .detail-product-container {
-  @apply flex flex-col gap-10 mx-28 my-10 p-10 bg-white rounded-2xl shadow-lg;
+  @apply flex flex-col gap-10 mx-28 my-10 bg-white rounded-2xl shadow-lg overflow-hidden p-4;
 
+  .nav-breadcrumbs {
+    @apply px-6 pt-6;
+  }
   .nav-breadcrumbs ol li,
   > a {
     @apply text-[#7A8D9B] duration-200;
@@ -60,7 +33,7 @@
   }
 
   .detail-product {
-    @apply flex flex-row items-start gap-6 w-full h-[43rem] relative object-contain overflow-hidden;
+    @apply flex flex-row items-start gap-6 w-full h-[43rem] relative object-contain overflow-hidden px-10;
 
     .detail-product-img-container {
       @apply h-full w-full object-contain;
@@ -100,11 +73,18 @@
       }
 
       .payment-pickup {
-        @apply flex flex-row gap-4;
+        @apply flex flex-row gap-4 items-center;
+
+        & span {
+          @apply text-[#7A8D9B] text-base w-[5.5rem] h-auto flex flex-col items-center justify-center;
+          & p {
+            @apply text-sm text-center;
+          }
+        }
       }
 
       .description-detail {
-        @apply text-[#0d1d29] text-base mt-10 py-4 border-y border-[#DABEB6];
+        @apply text-[#0d1d29] text-base my-8 py-4 border-y border-[#DABEB6];
 
         & p {
           @apply mb-3 font-medium;
@@ -194,14 +174,18 @@
   }
 
   .related-products {
-    @apply w-full flex flex-col gap-4;
+    @apply w-full flex flex-col gap-4 bg-slate-50 p-5 rounded-lg shadow-lg mt-10;
 
     .title-related {
-      @apply text-[#143146] text-lg font-semibold underline;
+      @apply text-[#143146] text-lg font-semibold flex gap-1;
+
+      & p {
+        @apply text-[#143146] text-lg font-semibold underline;
+      }
     }
 
     .slider-related {
-      @apply cursor-grab;
+      @apply cursor-grab overflow-hidden;
 
       .slick-list {
         @apply relative p-0 m-0 flex flex-row justify-center items-center gap-6;
@@ -211,8 +195,11 @@
         @apply flex flex-row items-center p-0 m-0 w-[90%];
 
         .slick-slide {
+          & div {
+            @apply h-[27rem] p-1;
+          }
           .related-product-card {
-            @apply m-0 h-[25rem] bg-white shadow-md rounded-md overflow-hidden;
+            @apply m-0 p-0 h-full bg-white shadow-md rounded-md duration-150 overflow-hidden;
 
             & a {
               @apply w-full h-full flex justify-start flex-col;
@@ -226,24 +213,258 @@
 
                 .related-product-info-name {
                   .name-related {
-                    @apply text-[#143146] text-base font-semibold;
+                    @apply text-[#143146] text-base font-semibold duration-200;
                   }
 
                   .brand-related {
-                    @apply text-[#2d638b] text-sm;
+                    @apply text-[#2d638b] text-sm duration-200;
                   }
                 }
                 .price-detail {
-                  @apply text-[#0d1d29] text-lg font-semibold mt-4;
+                  @apply text-[#0d1d29] text-lg font-semibold mt-4 duration-200;
+                }
+              }
+
+              .related-product-img {
+                @apply w-full h-52 flex justify-center items-center overflow-hidden border-b border-[#DABEB6];
+                & img {
+                  @apply object-contain w-full h-full rounded-md duration-200;
                 }
               }
             }
-            & img {
-              @apply object-contain w-full h-52 rounded-md;
+
+            &:hover {
+              .related-product-img {
+                & img {
+                  @apply scale-110;
+                }
+              }
+
+              .related-product-info .price-detail {
+                @apply text-[#143146];
+              }
+
+              .related-product-info .related-product-info-name {
+                .name-related {
+                  @apply text-[#5f8dad];
+                }
+
+                .brand-related {
+                  @apply text-[#7a8d9bb4];
+                }
+              }
             }
           }
         }
       }
+    }
+  }
+
+  @media (max-width: 1300px) {
+    @apply mx-16;
+  }
+  @media (max-width: 1240px) {
+    @apply mx-10;
+  }
+  @media (max-width: 1024px) {
+    @apply mx-4;
+  }
+
+  @media (max-width: 858px) {
+    @apply mx-3;
+
+    .nav-breadcrumbs {
+      @apply px-2 pt-3;
+    }
+
+    .nav-breadcrumbs ol li,
+    > a {
+      @apply text-xs;
+
+      & p {
+        @apply text-xs;
+      }
+    }
+
+    .related-products {
+      @apply shadow-none p-2 py-5 bg-slate-100;
+
+      .title-related {
+        @apply text-[#143146] text-base font-semibold flex gap-1;
+
+        & p {
+          @apply text-[#143146] text-base font-semibold underline;
+        }
+      }
+      .slider-related {
+        .slick-track {
+          .slick-slide {
+            & div {
+              @apply h-[25rem] p-1;
+            }
+            .related-product-card a {
+              .related-product-info {
+                @apply p-1 pt-4;
+                .related-product-info-name {
+                  .name-related {
+                    @apply text-sm;
+                  }
+
+                  .brand-related {
+                    @apply text-xs;
+                  }
+                }
+                .price-detail {
+                  @apply text-base;
+                }
+              }
+              .related-product-img {
+                @apply h-48;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    @apply mx-1 p-0;
+
+    .detail-product .detail-product-info {
+      @apply p-4;
+    }
+
+    .detail-product {
+      @apply flex flex-col gap-6 px-0 h-auto;
+
+      .detail-product-info {
+        @apply flex flex-col gap-6;
+
+        .title-detail {
+          @apply text-2xl font-semibold m-0;
+        }
+
+        .brand-detail {
+          @apply text-sm;
+        }
+
+        .price-detail {
+          @apply text-2xl font-bold;
+        }
+
+        .payment-pickup {
+          @apply flex flex-row gap-4;
+        }
+
+        .description-detail {
+          @apply text-[#0d1d29] text-base my-5 py-4 border-y border-[#DABEB6];
+
+          & p {
+            @apply mb-3 font-medium;
+          }
+
+          & ul {
+            @apply flex flex-col gap-1;
+
+            & li {
+              @apply text-[#0d1d29] text-sm;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 640px) {
+  }
+
+  @media (max-width: 480px) {
+  }
+
+  @media (max-width: 320px) {
+  }
+}
+
+.nextArrow {
+  @apply flex items-center right-0 h-full w-auto z-20;
+
+  &::before {
+    @apply text-[#143146] text-4xl flex items-center h-[50%] duration-200 bg-[rgba(20,49,70,0.23)] rounded-s-xl p-1 backdrop-blur-sm opacity-0;
+  }
+
+  &:hover {
+    &::before {
+      @apply text-[#2d638b] bg-[rgba(20,49,70,0.3)] backdrop-blur-sm;
+    }
+  }
+
+  &::before:active {
+    @apply bg-[rgba(20,49,70,0.4)];
+  }
+}
+
+.prevArrow {
+  @apply flex items-center left-0 h-full w-auto z-20;
+
+  &::before {
+    @apply text-[#143146] text-4xl flex items-center h-[50%] duration-200 bg-[rgba(20,49,70,0.23)] rounded-e-xl p-1 backdrop-blur-sm opacity-0;
+  }
+
+  &:hover {
+    &::before {
+      @apply text-[#2d638b] bg-[rgba(20,49,70,0.3)] backdrop-blur-sm;
+    }
+  }
+
+  &::before:active {
+    @apply bg-[rgba(20,49,70,0.4)];
+  }
+}
+
+.related-products .slider-related:hover {
+  .nextArrow::before {
+    @apply opacity-100;
+  }
+
+  .prevArrow::before {
+    @apply opacity-100;
+  }
+}
+
+@media (max-width: 768px) {
+  .nextArrow {
+    @apply flex items-center right-0 h-full w-auto z-20;
+
+    &::before {
+      @apply bg-transparent text-[#143146] text-3xl h-auto opacity-100 backdrop-blur-0;
+    }
+
+    &:hover {
+      &::before {
+        @apply bg-transparent backdrop-blur-0;
+      }
+    }
+
+    &::before:active {
+      @apply bg-transparent;
+    }
+  }
+  .prevArrow {
+    @apply flex items-center left-0 h-full w-auto z-20;
+
+    &::before {
+      @apply bg-transparent text-[#143146] text-3xl h-auto opacity-100 backdrop-blur-0;
+    }
+
+    &:hover {
+      &::before {
+        @apply bg-transparent backdrop-blur-0;
+      }
+    }
+
+    &::before:active {
+      @apply bg-transparent;
     }
   }
 }
