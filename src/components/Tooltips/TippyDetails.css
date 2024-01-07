@@ -1,0 +1,34 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.tippy-box {
+  @apply font-semibold text-white bg-white border drop-shadow-lg;
+
+  .tippy-arrow::before {
+    @apply text-white border;
+  }
+  .tippy-content {
+    @apply p-2 text-[#143146];
+
+    .payment-options {
+      @apply flex flex-col gap-2;
+
+      .payment-option {
+        @apply flex items-center gap-2 border-b;
+
+        & figure {
+          @apply w-6 h-6;
+
+          .icon-pickup {
+            @apply w-full h-full;
+          }
+        }
+
+        & p {
+          @apply text-xs;
+        }
+      }
+    }
+  }
+}
