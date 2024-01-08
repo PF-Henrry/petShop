@@ -61,7 +61,7 @@ export async function POST(request,{params}){
 
 
     const updateFavorite = await favorite.findByIdAndUpdate(
-         findFavoriteUser._id,
+         id,
         { $push: { products: formatID } },
         { new: true });
 
