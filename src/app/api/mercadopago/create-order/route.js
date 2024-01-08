@@ -64,6 +64,7 @@ try {
         amount:0,
         orderID:response.body.id,
         fecha:response.body.date_created,
+        link: response.body.init_point,
         items:[...productsOrder]
     });
 

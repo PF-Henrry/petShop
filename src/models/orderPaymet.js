@@ -18,6 +18,9 @@ const orderPaymetSchemma = new Schema({
     fecha:{
         type: String
     },
+    link:{
+        type: String
+    },
     items:[{type: Types.ObjectId, ref:"Products"}]
 });
 
