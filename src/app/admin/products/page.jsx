@@ -118,7 +118,7 @@ const ProductsPage = () => {
 
         {!isLoading && filteredProducts.length === 0 && !error && (
           <div className="mb-4">
-           <p>No se encontraron coincidencias con "{searchTerm}".</p>
+           <p>`No se encontraron coincidencias con {searchTerm}`.</p>
           </div>
         )}
 
