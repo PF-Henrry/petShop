@@ -53,7 +53,7 @@ export default function Ordenes({ id }) {
   console.log(data);
   return (
     <section className="orden-container">
-      {data.map((order, index) => (
+      { data && data.map((order, index) => (
         <div key={index} className="orden-card">
           <section className="orden-info-container">
             <span className="orden-header">
@@ -94,7 +94,7 @@ export default function Ordenes({ id }) {
               Productos <CaretDown size={15} className="summary-caret" />
             </summary>
             <div className="orden-items">
-              {order.items.map((product) => (
+              {order?.items?.map((product) => (
                 <div key={product._id} className="card-order-item">
                   <Link href={`/shop/${product._id}`}>
                     <figure>
