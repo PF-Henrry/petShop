@@ -1,0 +1,176 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+.orders-container {
+  @apply flex flex-col gap-10 mx-28 my-10 bg-white rounded-2xl shadow-lg overflow-hidden p-4;
+
+  .nav-breadcrumbs {
+    @apply px-6 pt-6;
+  }
+  .nav-breadcrumbs ol li,
+  > a {
+    @apply text-[#7A8D9B] duration-200;
+
+    & a:hover {
+      @apply text-[#7a8d9bb4] underline;
+    }
+    & p {
+      @apply text-[#143146];
+    }
+  }
+
+  .orders-info {
+    @apply flex flex-col gap-4 px-6;
+
+    & section a {
+      @apply flex flex-row items-center gap-3;
+
+      & figure {
+        @apply object-cover w-12 h-12 overflow-hidden bg-slate-50 rounded-full shadow-md;
+
+        & img {
+          @apply object-contain w-full h-full duration-200;
+        }
+      }
+
+      & p {
+        @apply text-xl text-[#0d1d29] font-semibold uppercase duration-200;
+      }
+
+      &:hover {
+        & figure img {
+          @apply scale-105;
+        }
+
+        & p {
+          @apply text-[#2d638b];
+        }
+      }
+    }
+
+    .orders-title {
+      @apply text-2xl text-[#143146] font-semibold uppercase border-b py-2 border-[#DABEB6];
+    }
+  }
+
+  .orden-container {
+    @apply w-full h-full flex flex-col gap-14 p-6;
+
+    .orden-card {
+      @apply flex flex-col p-5 gap-5 bg-slate-50 shadow-md rounded-lg;
+
+      .orden-info-container {
+        @apply flex flex-row items-center justify-between gap-4 border-b pb-4 border-[#DABEB6];
+
+        .orden-header {
+          .orden-number {
+            @apply text-xl text-[#143146] font-medium duration-200;
+          }
+
+          .orden-date {
+            @apply text-base text-[#7A8D9B] font-normal duration-200;
+          }
+        }
+
+        .orden-pago {
+          @apply flex flex-row items-center gap-2;
+
+          .orden-pago-title {
+            @apply text-base text-[#2d638b] font-normal duration-200;
+          }
+
+          .orden-pago-pendiente {
+            @apply flex flex-row items-center gap-1 text-[#ee2130] text-base font-normal duration-200;
+          }
+
+          .orden-pago-completado {
+            @apply flex flex-row items-center gap-1 text-[#7A8D9B] text-base font-normal duration-200;
+          }
+        }
+
+        .orden-button-container {
+          & a {
+            @apply relative flex flex-row justify-center items-center gap-3 px-4 py-3 rounded-lg duration-200 overflow-hidden;
+
+            & p {
+              @apply text-base text-[#143146] font-medium duration-200;
+            }
+
+            & span {
+              @apply absolute flex flex-row items-center justify-center gap-1 text-[#eee0dd] translate-x-[-200%] opacity-0 duration-200;
+            }
+
+            &:hover {
+              @apply bg-[#143146];
+
+              & p {
+                @apply opacity-0 translate-x-[200%] text-[#eee0dd];
+              }
+
+              & span {
+                @apply translate-x-0 opacity-100;
+              }
+            }
+          }
+        }
+      }
+      .orden-details {
+        .orden-summary {
+          @apply flex flex-row items-center gap-2 text-base text-[#2d638b] font-normal duration-200 cursor-pointer;
+
+          .summary-caret {
+            @apply duration-200;
+          }
+
+          &:hover {
+            @apply text-[#143146];
+          }
+
+          &:active {
+            @apply text-[#2d628bc9];
+          }
+        }
+
+        &[open] {
+          .orden-summary .summary-caret {
+            @apply rotate-180;
+          }
+        }
+
+        .orden-items {
+          @apply flex flex-wrap justify-around gap-5 p-4;
+
+          .card-order-item {
+            @apply bg-white shadow-md rounded-lg overflow-hidden;
+            & a {
+              @apply flex flex-col w-52 items-start gap-3 pb-2;
+
+              & figure {
+                @apply object-cover w-full h-40 overflow-hidden border-b border-[#DABEB6];
+
+                & img {
+                  @apply object-contain w-full h-full duration-200;
+                }
+              }
+            }
+            .item-name {
+              @apply text-base w-full text-[#143146] font-medium duration-200 px-2;
+            }
+            .item-price {
+              @apply text-base w-full text-[#143146] font-semibold duration-200 p-2;
+            }
+          }
+        }
+      }
+    }
+  }
+}
