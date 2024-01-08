@@ -3,8 +3,6 @@ import React, { useState, useEffect } from "react";
 import { useProductStore } from "@/hooks/usePages";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import "./CartShop.css";
 import {
   ArrowRight,
@@ -100,9 +98,7 @@ const Cart = () => {
       clearCart();
     } catch (error) {
       console.error(error);
-      toast.error(
-        "Ocurrió un error al procesar la orden, inténtelo nuevamente"
-      );
+      
     }
   };
 
@@ -225,7 +221,6 @@ const CartItem = ({
           className="remove-icon-trash remove-icon"
         />
       </button>
-      <ToastContainer position="top-center" />
     </div>
   );
 };
