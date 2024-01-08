@@ -39,13 +39,13 @@ try {
         items : [
             ...itemsProducts
         ],
-        // back_urls:{
-        //     success:`${URL_BACK}/api/mercadopago/success`,
-        //     failure:`${URL_BACK}/api/mercadopago/failure`,
-        //     pending:`${URL_BACK}/api/mercadopago/pending`,
-        // },
-        // notification_url: `${URL_BACK}/api/mercadopago/webhook`,
-        // auto_return:"approved"
+        back_urls:{
+            success:`${URL_BACK}/api/mercadopago/success`,
+            failure:`${URL_BACK}/api/mercadopago/failure`,
+            pending:`${URL_BACK}/api/mercadopago/pending`,
+        },
+        notification_url: `${URL_BACK}/api/mercadopago/webhook`,
+        auto_return:"approved"
     });
     
     if(!response) throw TypeError('Error')
