@@ -29,7 +29,7 @@ const ProductsPage = () => {
         setError(null);
       } catch (error) {
         console.error(error.message);
-        setError(`No se encontraron coincidencias con "${searchTerm}"`);
+        setError(`No se encontraron coincidencias con ${searchTerm}`);
       } finally {
         setIsLoading(false);
       }
@@ -117,7 +117,7 @@ const ProductsPage = () => {
 
         {!isLoading && filteredProducts.length === 0 && !error && (
           <div className="mb-4">
-            <p>`No se encontraron coincidencias con ${searchTerm}`.</p>
+            <p>No se encontraron coincidencias con {searchTerm}.</p>
           </div>
         )}
 
