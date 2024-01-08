@@ -1,10 +1,23 @@
+import dotenv from 'dotenv';
 import { Resend } from 'resend';
 
-const resend = new Resend({apiKey: process.env.RESEND_API_KEY});
+dotenv.config({ path: './.env.local' });
 
-await resend.emails.send({
-    from: 'Kimey <onboarding@resend.dev>',
+console.log('RESEND_API_KEY:', process.env.RESEND_API_KEY);
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+(async function () {
+  const { data, error } = await resend.emails.send({
+    from: 'Acme <onboarding@resend.dev>',
     to: ['adnmtz1987@gmail.com'],
-    subject: 'Hola, Bienvenido a Kimey',
-    html: '<strong>Funciona?</strong><br>Seguro<br>probando con key en .env'
-});
+    subject: 'Hello World',
+    html: '<strong>Funciona!!!! configuracion de dotenv y script modificado</strong>',
+  });
+
+  if (error) {
+    return console.error({ error });
+  }
+
+  console.log({ data });
+})();
