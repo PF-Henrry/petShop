@@ -46,6 +46,10 @@ const productSchema = new Schema({
         type: Boolean,
         default: true
     },
+    stock:{
+        type: Number,
+        default: 10
+    },
     updatedAt:{
         type: Date,
     }
