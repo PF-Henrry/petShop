@@ -39,49 +39,51 @@ const DashboardInicio = () => {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "100vh",
+          minHeight: "86vh",
         }}
       >
-        <Grid container spacing={3}>
-          <Grid item xs={8} md={4}>
-            <Paper
-              elevation={3}
-              style={{ padding: "20px", textAlign: "center" }}
-            >
-              <Typography variant="h6" gutterBottom>
-                Ventas totales
-              </Typography>
-              <Typography variant="h4"> 1000</Typography>
-            </Paper>
+        <Grid container spacing={2}>
+          <Grid container spacing={1}>
+            <Grid item xs={12} md={4}>
+              <Paper
+                elevation={3}
+                style={{ padding: "20px", textAlign: "center", width: "80%" }}
+              >
+                <Typography variant="h6" gutterBottom>
+                  Ventas totales
+                </Typography>
+                <Typography variant="h4"> 1000</Typography>
+              </Paper>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <Paper
+                elevation={3}
+                style={{ padding: "20px", textAlign: "center", width: "80%" }}
+              >
+                <Typography variant="h6" gutterBottom>
+                  Usuarios registrados
+                </Typography>
+                <Typography variant="h4">
+                  {numUsersReg !== null ? numUsersReg : "Cargando..."}
+                </Typography>
+              </Paper>
+            </Grid>
+
+            <Grid item xs={12} md={4}>
+              <Paper
+                elevation={3}
+                style={{ padding: "23px", textAlign: "center", width: "80%" }}
+              >
+                <Typography variant="h6">Productos disponibles</Typography>
+                <Typography variant="h4">
+                  {numProductos !== null ? numProductos : "Cargando..."}
+                </Typography>
+              </Paper>
+            </Grid>
           </Grid>
 
-          <Grid item xs={12} md={4}>
-            <Paper
-              elevation={3}
-              style={{ padding: "20px", textAlign: "center" }}
-            >
-              <Typography variant="h6" gutterBottom>
-                Usuarios registrados
-              </Typography>
-              <Typography variant="h4">
-                {numUsersReg !== null ? numUsersReg : "Cargando..."}
-              </Typography>
-            </Paper>
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Paper
-              elevation={3}
-              style={{ padding: "20px", textAlign: "center" }}
-            >
-              <Typography>Productos disponibles</Typography>
-              <Typography variant="h4">
-                {numProductos !== null ? numProductos : "Cargando..."}
-              </Typography>
-            </Paper>
-          </Grid>
-
-          <Grid item xs={12} md={12}>
+          <Grid item xs={12} md={11}>
             <Paper
               elevation={3}
               style={{ padding: "20px", textAlign: "center" }}
