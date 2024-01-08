@@ -92,7 +92,7 @@ const [selectedUser, setSelectedUser] = useState(null);
   return (
     <LayoutAdmin>
     <div className="p-4">
-      <h1 className="text-2xl font-semibold mb-4">Lista de Usuarios</h1>
+    <h1 className="text-2xl font-semibold mb-4">Lista de Usuarios</h1>
 
       <input
         type="text"
@@ -162,11 +162,11 @@ style={{
         {isEditing ? (
           <>
             <button
-              className="bg-green-500 text-white px-2 py-1 rounded mr-2"
-              onClick={saveChanges}
-            >
-              <FloppyDisk size={24} />
-            </button>
+  className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+  onClick={saveChanges}
+>
+  <FloppyDisk size={24} />
+</button>
             <button
               className="bg-gray-500 text-white px-2 py-1 rounded"
               onClick={() => setIsEditing(false)}

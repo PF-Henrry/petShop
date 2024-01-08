@@ -1,14 +1,19 @@
 // Importaciones necesarias
-'use client'
-import React, { useState, useEffect } from 'react';
-import LayoutAdmin from '@/components/LayoutAdmin/LayoutAdmin';
-import Image from 'next/image';
-import Modal from 'react-modal';
-import { Pencil, XCircle, FloppyDisk, Prohibit } from '@phosphor-icons/react/dist/ssr';
+"use client";
+import React, { useState, useEffect } from "react";
+import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
+import Image from "next/image";
+import Modal from "react-modal";
+import {
+  Pencil,
+  XCircle,
+  FloppyDisk,
+  Prohibit,
+} from "@phosphor-icons/react/dist/ssr";
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,9 +24,9 @@ const ProductsPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/products');
+        const response = await fetch("/api/products");
         if (!response.ok) {
-          throw new Error('Error al obtener la lista de productos');
+          throw new Error("Error al obtener la lista de productos");
         }
 
         const data = await response.json();
@@ -41,7 +46,7 @@ const ProductsPage = () => {
   const filteredProducts = products.filter((product) => {
     const productName = product.name.toLowerCase();
     const searchTermLower = searchTerm.toLowerCase();
-    const searchWords = searchTermLower.split(' ');
+    const searchWords = searchTermLower.split(" ");
     return searchWords.every((word) => productName.includes(word));
   });
 
@@ -81,12 +86,12 @@ const ProductsPage = () => {
         reader.readAsDataURL(file);
       }
     } catch (error) {
-      console.error('Error al cargar la imagen:', error);
+      console.error("Error al cargar la imagen:", error);
     }
   };
 
   const saveChanges = () => {
-    console.log('Guardando cambios:', editedProduct);
+    console.log("Guardando cambios:", editedProduct);
     setIsEditing(false);
   };
 
@@ -109,15 +114,11 @@ const ProductsPage = () => {
           </div>
         )}
 
-        {error && (
-          <div className="mb-4 text-red-500">
-            {error}
-          </div>
-        )}
+        {error && <div className="mb-4 text-red-500">{error}</div>}
 
         {!isLoading && filteredProducts.length === 0 && !error && (
           <div className="mb-4">
-            <p>No se encontraron coincidencias con "{searchTerm}".</p>
+           <p>No se encontraron coincidencias con "{searchTerm}".</p>
           </div>
         )}
 
@@ -130,9 +131,15 @@ const ProductsPage = () => {
                 onClick={() => openModal(product)}
               >
                 <span className="hover:font-bold">{product.name}</span>
-                <span className="ml-2 text-gray-500">Stock: {product.stock}</span>
-                <span className={`ml-2 ${product.active ? 'text-green-500' : 'text-red-500'}`}>
-                  Estado: {product.active ? 'Activo' : 'Inactivo'}
+                <span className="ml-2 text-gray-500">
+                  Stock: {product.stock}
+                </span>
+                <span
+                  className={`ml-2 ${
+                    product.active ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  Estado: {product.active ? "Activo" : "Inactivo"}
                 </span>
               </li>
             ))}
@@ -145,17 +152,19 @@ const ProductsPage = () => {
           contentLabel="Editar Producto"
           style={{
             overlay: {
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
             },
             content: {
-              width: '500px',
-              margin: 'auto',
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-              background: isEditing ? 'rgba(255, 182, 193, 0.8)' : 'rgba(255, 255, 255, 0.95)',
-              marginTop: '50px',
-              border: '2px solid #FFB6C1',
+              width: "500px",
+              margin: "auto",
+              padding: "20px",
+              borderRadius: "8px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+              background: isEditing
+                ? "rgba(255, 182, 193, 0.8)"
+                : "rgba(255, 255, 255, 0.95)",
+              marginTop: "50px",
+              border: "2px solid #FFB6C1",
             },
           }}
         >
@@ -216,7 +225,7 @@ const ProductsPage = () => {
                   <input
                     type="text"
                     value={editedProduct.price}
-                    onChange={(e) => handleInputChange('price', e.target.value)}
+                    onChange={(e) => handleInputChange("price", e.target.value)}
                     className="border border-rosybrown rounded p-1 mb-2"
                   />
 
@@ -224,7 +233,9 @@ const ProductsPage = () => {
                   <input
                     type="text"
                     value={editedProduct.detail}
-                    onChange={(e) => handleInputChange('detail', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("detail", e.target.value)
+                    }
                     className="border border-rosybrown rounded p-1 mb-2"
                   />
 
@@ -232,7 +243,7 @@ const ProductsPage = () => {
                   <input
                     type="text"
                     value={editedProduct.brand}
-                    onChange={(e) => handleInputChange('brand', e.target.value)}
+                    onChange={(e) => handleInputChange("brand", e.target.value)}
                     className="border border-rosybrown rounded p-1 mb-2"
                   />
 
@@ -248,14 +259,16 @@ const ProductsPage = () => {
                   <input
                     type="number"
                     value={editedProduct.stock}
-                    onChange={(e) => handleInputChange('stock', e.target.value)}
+                    onChange={(e) => handleInputChange("stock", e.target.value)}
                     className="border border-rosybrown rounded p-1 mb-2"
                   />
 
                   <label className="font-bold block mb-2">Estado:</label>
                   <select
                     value={editedProduct.active}
-                    onChange={(e) => handleInputChange('active', e.target.value === 'true')}
+                    onChange={(e) =>
+                      handleInputChange("active", e.target.value === "true")
+                    }
                     className="border border-rosybrown rounded p-1 mb-2"
                   >
                     <option value={true}>Activo</option>
@@ -264,14 +277,50 @@ const ProductsPage = () => {
                 </>
               ) : (
                 <>
-                  <p><span className="font-bold">Precio:</span> {selectedProduct.price}</p>
-                  <p><span className="font-bold">Detalle:</span> {selectedProduct.detail}</p>
-                  <p><span className="font-bold">Imagen:</span> {selectedProduct.image && <Image src={selectedProduct.image} alt={selectedProduct.name} width={300} height={300} className="rounded-lg" />}</p>
-                  <p><span className="font-bold">Marca:</span> {selectedProduct.brand.name}</p>
-                  <p><span className="font-bold">Especies:</span> {selectedProduct.species.map(species => species.name).join(', ')}</p>
-                  <p><span className="font-bold">Categorías:</span> {selectedProduct.category.map(category => category.name).join(', ')}</p>
-                  <p><span className="font-bold">Stock:</span> {selectedProduct.stock}</p>
-                  <p><span className="font-bold">Estado:</span> {selectedProduct.active ? 'Activo' : 'Inactivo'}</p>
+                  <p>
+                    <span className="font-bold">Precio:</span>{" "}
+                    {selectedProduct.price}
+                  </p>
+                  <p>
+                    <span className="font-bold">Detalle:</span>{" "}
+                    {selectedProduct.detail}
+                  </p>
+                  <p>
+                    <span className="font-bold">Imagen:</span>{" "}
+                    {selectedProduct.image && (
+                      <Image
+                        src={selectedProduct.image}
+                        alt={selectedProduct.name}
+                        width={300}
+                        height={300}
+                        className="rounded-lg"
+                      />
+                    )}
+                  </p>
+                  <p>
+                    <span className="font-bold">Marca:</span>{" "}
+                    {selectedProduct.brand.name}
+                  </p>
+                  <p>
+                    <span className="font-bold">Especies:</span>{" "}
+                    {selectedProduct.species
+                      .map((species) => species.name)
+                      .join(", ")}
+                  </p>
+                  <p>
+                    <span className="font-bold">Categorías:</span>{" "}
+                    {selectedProduct.category
+                      .map((category) => category.name)
+                      .join(", ")}
+                  </p>
+                  <p>
+                    <span className="font-bold">Stock:</span>{" "}
+                    {selectedProduct.stock}
+                  </p>
+                  <p>
+                    <span className="font-bold">Estado:</span>{" "}
+                    {selectedProduct.active ? "Activo" : "Inactivo"}
+                  </p>
                 </>
               )}
             </div>
