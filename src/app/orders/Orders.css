@@ -73,7 +73,13 @@
 
         .orden-header {
           .orden-number {
-            @apply text-xl text-[#143146] font-medium duration-200;
+            .orden-number-title {
+              @apply text-xl text-[#143146] font-medium duration-200;
+            }
+
+            .orden-id {
+              @apply text-[#7A8D9B] font-normal text-xs pb-2;
+            }
           }
 
           .orden-date {
@@ -90,6 +96,10 @@
 
           .orden-pago-pendiente {
             @apply flex flex-row items-center gap-1 text-[#ee2130] text-base font-normal duration-200;
+
+            .icon-pendiente {
+              @apply cursor-help;
+            }
           }
 
           .orden-pago-completado {
@@ -106,7 +116,7 @@
             }
 
             & span {
-              @apply absolute flex flex-row items-center justify-center gap-1 text-[#eee0dd] translate-x-[-200%] opacity-0 duration-200;
+              @apply absolute flex flex-row items-center gap-1 text-[#eee0dd] translate-x-[-200%] opacity-0 duration-200;
             }
 
             &:hover {
@@ -121,18 +131,26 @@
               }
             }
           }
+
+          .orden-completado-text {
+            @apply relative flex flex-row justify-center items-center gap-3 px-4 py-3 rounded-lg text-base text-[#7A8D9B] font-medium duration-200 overflow-hidden;
+
+            &:hover {
+              @apply text-[rgba(122,141,155,0.5)] cursor-not-allowed;
+            }
+          }
         }
       }
       .orden-details {
         .orden-summary {
-          @apply flex flex-row items-center gap-2 text-base text-[#2d638b] font-normal duration-200 cursor-pointer;
+          @apply flex flex-row items-center gap-2 text-base text-[#2d638b] font-normal p-2 rounded-lg duration-200 cursor-pointer;
 
           .summary-caret {
             @apply duration-200;
           }
 
           &:hover {
-            @apply text-[#143146];
+            @apply text-[#143146] bg-slate-100;
           }
 
           &:active {
@@ -166,8 +184,125 @@
               @apply text-base w-full text-[#143146] font-medium duration-200 px-2;
             }
             .item-price {
-              @apply text-base w-full text-[#143146] font-semibold duration-200 p-2;
+              @apply text-base w-full text-[#0d1d29] font-semibold duration-200 p-2;
             }
+
+            &:hover {
+              & a {
+                & figure {
+                  & img {
+                    @apply scale-105;
+                  }
+                }
+                .item-name {
+                  @apply text-[#2d638b];
+                }
+                .item-price {
+                  @apply text-[#143146];
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1020px) {
+    @apply mx-16;
+  }
+  @media (max-width: 952px) {
+  }
+  @media (max-width: 858px) {
+    @apply mx-4 p-0 gap-6;
+    .orden-container {
+      @apply p-3;
+      .orden-card {
+        @apply p-3;
+        .orden-info-container {
+          .orden-header {
+            .orden-number {
+              .orden-number-title {
+                @apply text-lg text-[#143146] font-semibold duration-200;
+              }
+
+              .orden-id {
+                @apply text-[#7A8D9B] font-normal text-[.7rem] pb-2;
+              }
+            }
+
+            .orden-date {
+              @apply text-xs text-[#7A8D9B] font-normal duration-200;
+            }
+          }
+
+          .orden-pago {
+            @apply gap-1;
+
+            .orden-pago-title {
+              @apply text-xs;
+            }
+
+            .orden-pago-pendiente {
+              @apply text-xs;
+            }
+
+            .orden-pago-completado {
+              @apply text-xs;
+            }
+          }
+
+          .orden-button-container {
+            & a {
+              @apply p-3;
+
+              & p {
+                @apply text-sm;
+              }
+
+              & span .icon-pendiente {
+                @apply w-6 h-6;
+              }
+            }
+
+            .orden-completado-text {
+              @apply p-3 text-sm;
+            }
+          }
+        }
+
+        .orden-details {
+          .orden-summary {
+            @apply text-sm;
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 768px) {
+    @apply mx-0 p-0 pb-6;
+
+    .orden-container .orden-card {
+      .orden-info-container {
+        .orden-pago {
+          @apply hidden;
+        }
+
+        .orden-button-container {
+          & a {
+            @apply p-3;
+
+            & p {
+              @apply text-[.7rem];
+            }
+
+            & span .icon-pendiente {
+              @apply w-6 h-6;
+            }
+          }
+
+          .orden-completado-text {
+            @apply p-3 text-[.7rem];
           }
         }
       }
