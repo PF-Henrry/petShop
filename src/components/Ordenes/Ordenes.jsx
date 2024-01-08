@@ -78,7 +78,7 @@ export default function Ordenes({ id }) {
 
             <div className="orden-button-container">
               {order.status === false && (
-                <Link href={order.link}>
+                <Link href={order?.link || '/'}>
                   <p>Ver pedido</p>
                   <span>
                     <ArrowRight size={32} />
