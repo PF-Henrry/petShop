@@ -17,7 +17,7 @@ try {
 
     // data , para usar esta funcionalidad en local deben cambiar el url, por el que le de ngrok.exe
 
-    const URL_BACK = process.env.NEXT_URL_BACK || "https://8679-181-167-128-66.ngrok-free.app";
+    const URL_BACK = process.env.NEXT_URL_BACK || "https://pet-shop-kimeipetshop.vercel.app";
 
 
     const dataRequest = await request.json();
