@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+.favorites-container {
+  @apply flex flex-col gap-10 p-4 my-10 overflow-hidden mx-28;
+
+  .nav-breadcrumbs {
+    @apply p-0;
+  }
+  .nav-breadcrumbs ol li,
+  > a {
+    @apply text-[#7A8D9B] duration-200;
+
+    & a:hover {
+      @apply text-[#7a8d9bb4] underline;
+    }
+    & p {
+      @apply text-[#143146];
+    }
+  }
+
+  .MuiBreadcrumbs-separator {
+    @apply m-1;
+  }
+
+  .favorites-title {
+    @apply text-3xl text-[#143146] font-bold border-b pb-4 border-[#DABEB6] flex items-center gap-2 uppercase;
+  }
+  .favorite-products-container {
+    @apply flex flex-col w-full h-full gap-5 p-4 bg-white rounded-lg shadow-md;
+
+    .favorite-products {
+      @apply flex flex-wrap justify-around gap-10 p-10;
+    }
+    .favorite-products-info {
+      @apply text-[#143146] text-xl font-normal flex items-end flex-wrap gap-1 p-4;
+
+      .favorite-products-text-2 {
+        @apply text-[#7A8D9B] text-xs;
+      }
+    }
+  }
+
+  .favorites-empty {
+    @apply flex flex-col items-center justify-center gap-4 w-full bg-[#143146] h-96 rounded-lg;
+
+    .empty-title {
+      @apply text-4xl text-[#eee0dd] font-bold flex items-center gap-2;
+    }
+
+    .empty-text {
+      @apply text-base text-[#DABEB6] font-normal;
+    }
+
+    .go-to-shop {
+      @apply bg-[#143146] px-10 py-4 mt-4 rounded-lg flex items-center justify-center relative overflow-hidden duration-300;
+
+      & p {
+        @apply text-lg text-[#eee0dd] font-normal opacity-100 duration-300 underline;
+      }
+
+      & span {
+        @apply text-3xl text-[#eee0dd] absolute flex flex-row gap-2 items-center justify-center translate-x-[-200%] opacity-0 duration-300;
+      }
+
+      &:hover {
+        @apply bg-[#2d638b];
+
+        & p {
+          @apply opacity-0 translate-x-[200%];
+        }
+
+        & span {
+          @apply translate-x-0 opacity-100;
+        }
+      }
+    }
+  }
+  @media (max-width: 1240px) {
+    @apply mx-10;
+  }
+  @media (max-width: 1020px) {
+    @apply mx-6;
+  }
+  @media (max-width: 952px) {
+    @apply mx-3;
+  }
+  @media (max-width: 858px) {
+    @apply p-2;
+
+    .favorite-products-container .favorite-products-info {
+      @apply p-0;
+    }
+  }
+  @media (max-width: 768px) {
+    @apply mx-0;
+  }
+}
