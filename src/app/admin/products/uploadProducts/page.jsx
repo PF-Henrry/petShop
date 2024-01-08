@@ -1,223 +1,219 @@
 'use client'
-
-import { useState } from "react"
+import { useState } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import {  useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import toastNotify from "@/libs/toast";
 import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
 
-function UploadImage(){
-    
-    const {showNotify,ToastContainer} = toastNotify();
+function UploadImage() {
+  const { showNotify, ToastContainer } = toastNotify();
 
-    const [url, setUrl] = useState(null);
-    const [data,setData] = useState({})
-    const [categorys,setCategorys] = useState([]);
-    const [species,setSpecies] = useState([]);
-    const router = useRouter();
+  const [url, setUrl] = useState(null);
+  const [data, setData] = useState({});
+  const [categorys, setCategorys] = useState([]);
+  const [species, setSpecies] = useState([]);
+  const router = useRouter();
 
+  const { data: session, status } = useSession();
 
-
-    const { data: session, status } = useSession()
-
-    
-    const handleOptions = (e) => {
-        const eventName = e.target.name;
-        if (eventName === 'addCategory') {
-            const categoryInput = document.querySelector('input[name="category"]');
-            if (categoryInput) {
-                const newCategory = categoryInput.value.trim();
-                if (newCategory !== '') {
-                    setCategorys((prevCategories) => [...prevCategories, newCategory]);
-                    categoryInput.value = ''; // Limpiar el input después de agregar la categoría
-                }
-            }
-            
-        } else if (eventName === 'addSpecie') {
-            const specieInput = document.querySelector('input[name="specie"]');
-            const ageInput = document.querySelectorAll('input[name="age"]:checked');
-            const sizeInput = document.querySelectorAll('input[name="size"]:checked');
-
-            const ageData = Array.from(ageInput).map((age) => age.value);
-
-            const sizeData = Array.from(sizeInput).map((size) => size.value);
-
-            
-
-            if (specieInput) {
-                const newSpecie = specieInput.value.trim();
-                if (newSpecie !== '') {
-                    setSpecies((prevSpecies) => [
-                        ...prevSpecies, 
-                        { name: newSpecie, size: sizeData[0], age: ageData[0] }
-                    ]);
-
-                    console.log(sizeData[0],ageData[0]);
-                    specieInput.value = ''; // Limpiar el input después de agregar la especie
-                }
-            }
-        }
-    };
-
-    const handleDelete = (e) => {
-        const deletedItemName = e.target.getAttribute('name');
-    
-        if (deletedItemName) {
-                const updatedSpecies = species.filter(specie => specie.name !== deletedItemName);
-                setSpecies(updatedSpecies);
-                const updatedCategories = categorys.filter(category => category !== deletedItemName);
-                setCategorys(updatedCategories);
-            }
-        }
-    
-
-    const handleOnChange = (e) => {
-        try {     
-            if(e.target.files.length){
-                const file = e.target.files[0];
-                const reader = new FileReader();
-    
-                reader.onload = (event) => {
-                    const imageUrl = event.target.result;
-                    setUrl(imageUrl); // Almacena la URL de datos en el estado
-                };
-                reader.readAsDataURL(file);
-            } 
-        } catch (error) {
-            showNotify('error','Error al cargar imagen');
-            console.log(error.message);
-        }
+  const handleOnChange = async (e) => {
+    try {
+      const file = e.target.files[0];
+      if (file) {
+        const imageUrl = await getImageDataUrl(file);
+        setUrl(imageUrl);
+      }
+    } catch (error) {
+      showNotify('error', 'Error al cargar imagen');
+      console.error(error.message);
     }
+  };
 
-    
+  const getImageDataUrl = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => resolve(event.target.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  };
 
-    
-        const handleOnSubmit = async (e) => {
-            e.preventDefault();
-            try {
-                    if (status === "authenticated") {
-                        
-                        const dataToSend = {
-                            name: e.target.querySelector('input[name="name"]').value,
-                            price: e.target.querySelector('input[name="price"]').value,
-                            detail: e.target.querySelector('textarea[name="detail"]').value,
-                            image: url,
-                            brand: e.target.querySelector('input[name="brand"]').value,
-                            specie:[...species],
-                            category: categorys
-                        };
-                        const response = await fetch('/api/products', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(dataToSend),
-                        }).then((res) => res.json());
-        
-                        console.log(response);
-                        if(response.ok){
-                            showNotify('success','Producto subido')
+  const handleOptions = (type) => {
+    const inputName = type === 'addCategory' ? 'category' : 'specie';
+    const inputValue = document.querySelector(`input[name="${inputName}"]`).value.trim();
 
-                        }
-                    } else {
-                        router.push('/login');
-                    }
-            
-            } catch (error) {
-                showNotify('error', 'Error al subir a cloudinary');
-                console.log(error.message);
-            }
+    if (inputValue !== '') {
+      if (type === 'addCategory') {
+        setCategorys((prevCategories) => [...prevCategories, inputValue]);
+      } else {
+        const ageInputs = document.querySelectorAll('input[name="age"]:checked');
+        const sizeInputs = document.querySelectorAll('input[name="size"]:checked');
+        const ageData = Array.from(ageInputs).map((age) => age.value);
+        const sizeData = Array.from(sizeInputs).map((size) => size.value);
+
+        setSpecies((prevSpecies) => [
+          ...prevSpecies,
+          { name: inputValue, size: sizeData[0], age: ageData[0] }
+        ]);
+      }
+
+      document.querySelector(`input[name="${inputName}"]`).value = '';
+    }
+  };
+
+  const handleDelete = (name, type) => {
+    if (type === 'category') {
+      setCategorys((prevCategories) => prevCategories.filter((category) => category !== name));
+    } else {
+      setSpecies((prevSpecies) => prevSpecies.filter((specie) => specie.name !== name));
+    }
+  };
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (status === "authenticated") {
+        const dataToSend = {
+          name: e.target.querySelector('input[name="name"]').value,
+          price: e.target.querySelector('input[name="price"]').value,
+          detail: e.target.querySelector('textarea[name="detail"]').value,
+          image: url,
+          brand: e.target.querySelector('input[name="brand"]').value,
+          specie: [...species],
+          category: categorys
         };
-        
-    
 
-    return(
-<LayoutAdmin>
-        <section className="min-h-screen flex items-center justify-center mt-12">
-                    <div className="max-w-md w-full p-6 bg-white rounded-md shadow-md">
+        const response = await fetch('/api/products', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataToSend),
+        }).then((res) => res.json());
 
-        <form onSubmit={(e)=> handleOnSubmit(e)} className="grid grid-cols-2 gap-4 items-center">
-        <input type="file" onChange={(e)=> handleOnChange(e)} />
-        <div>
-        {
-            url && <Image src={url} alt='image_upload' width={150} height={100} />
+        console.log(response);
+
+        if (response.ok) {
+          showNotify('success', 'Producto subido');
         }
+      } else {
+        router.push('/login');
+      }
+    } catch (error) {
+      showNotify('error', 'Error al subir a cloudinary');
+      console.error(error.message);
+    }
+  };
+
+  return (
+    <LayoutAdmin>
+      <section className="min-h-screen flex items-center justify-center mt-12">
+        <div className="max-w-md w-full p-6 bg-white rounded-md shadow-md">
+
+          <form onSubmit={(e) => handleOnSubmit(e)} className="grid grid-cols-2 gap-4 items-center">
+            <div>
+              <label htmlFor="image" className="block text-sm font-medium text-gray-700">
+                Imagen:
+              </label>
+              <input
+                type="file"
+                id="image"
+                name="image"
+                onChange={(e) => handleOnChange(e)}
+                className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
+              />
+              {url && <Image src={url} alt='image_upload' width={150} height={100} />}
+            </div>
+            <label className="block text-sm font-medium text-gray-700 mt-4">
+                Nombre del Producto
+                <input
+                  type="text"
+                  name="name"
+                  className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
+                />
+              </label>
+
+              <label className="block text-sm font-medium text-gray-700 mt-4">
+                Precio
+                <div className="flex">
+                  <span className="p-2 border border-gray-300 rounded-l focus:outline-none focus:border-indigo-500 block w-full sm:text-sm">$</span>
+                  <input
+                    type="number"
+                    name="price"
+                    placeholder="100"
+                    className="p-2 border border-gray-300 rounded-r focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
+                  />
+                </div>
+              </label>
+
+              <label className="block text-sm font-medium text-gray-700 mt-4">
+                Detalles
+                <textarea
+                  name="detail"
+                  className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
+                />
+              </label>
+
+              <label className="block text-sm font-medium text-gray-700 mt-4">
+                Marca
+                <input
+                  type="text"
+                  name="brand"
+                  className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
+                />
+              </label>
+            <div className="col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mt-4">
+                Categoría
+                <input type="text" name="category" className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm" />
+                <div className="flex space-x-2 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => handleOptions('addCategory')}
+                    className="bg-pink-500 text-white px-3 py-1 rounded hover:bg-pink-600 focus:outline-none focus:ring focus:border-blue-300"
+                  >
+                    Add
+                  </button>
+                  {categorys.length > 0 ? (
+                    <span className="text-red-500 cursor-pointer" onClick={() => handleDelete(categorys[categorys.length - 1], 'category')}>Undo</span>
+                  ) : null}
+                </div>
+              </label>
+
+              <label className="block text-sm font-medium text-gray-700 mt-4">
+                Especie
+                <input type="text" name="specie" className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm" />
+                <div className="flex space-x-2 mt-2">
+                  <button
+                    type="button"
+                    onClick={() => handleOptions('addSpecie')}
+                    className="bg-pink-500 text-white px-3 py-1 rounded hover:bg-pink-600 focus:outline-none focus:ring focus:border-blue-300"
+                  >
+                    Add
+                  </button>
+                  {species.length > 0 ? (
+                    <span className="text-red-500 cursor-pointer" onClick={() => handleDelete(species[species.length - 1].name, 'specie')}>Undo</span>
+                  ) : null}
+                </div>
+                
+                
+              </label>
+
+              <button
+                type="submit"
+                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                Subir Producto
+              </button>
+            </div>
+          </form>
         </div>
-        <h2>Detalles del producto</h2>
-        <label>Nombre:
-        <input type="text" name="name" placeholder="Nombre del producto"/>
-        </label>
-        <label>Precio:
-        <div className="flex"><span>$<input type="number" name="price" placeholder="100"/></span></div>
-        </label>
-        <label>Detalles:
-        <textarea name="detail" />
-        </label>
-        <label>Marca
-            <input type="text" name="brand"/>
-        </label>
-        <label>Especie
-            <input text="text" name="specie" />
-            <fieldset className="flex flex-column justify-evenly">
-        <legend>Age</legend>
-        <label>
-            <input type="checkbox" name="age" value="adult" />
-              Adult
-        </label>
-        <label>
-            <input type="checkbox" name="age" value="puppy/kitten" />
-              Puppy/Kitten
-        </label>
-    </fieldset>
-    <fieldset className="flex flex-column justify-evenly">
-        <legend>Size</legend>
-        <label>
-            <input type="checkbox" name="size" value="small" />
-              Small
-        </label>
-        <label>
-            <input type="checkbox" name="size" value="big" />
-              Big
-        </label>
-        <label>
-            <input type="checkbox" name="size" value="medium" />
-              Medium
-        </label>
-    </fieldset>
-            <button type="button" onClick={ (e) => handleOptions(e)} name="addSpecie" >Add</button>
-            {
-                species.length ? species.map(specie => (
-                    <div key={specie.name} className="flex justify-around">
-                        {console.log(specie.name)}
-                    <span>{specie.name}</span><span onClick={(e) => handleDelete(e)} name={specie.name}>X</span>
-                    </div>
-                    )
-                ) : <span>Ninguna Especie seleccionada</span>
-                }
-        </label>
-        <label>Category
-            <input text="text" name="category" />
-            <button type="button" onClick={ (e) => handleOptions(e)} name="addCategory" >Add</button>
-            {
-                categorys.length ? categorys.map(category => (
-                    <div key={category} className="flex justify-around">
-                    <span>{category}</span><span onClick= {(e) => handleDelete(e)} name={category}>X</span>
-                    </div>
-                    )
-                ) : <span>Ninguna categoria seleccionada</span>
-                }
-        </label>
 
-        <button type="submit">Subir Producto</button>
-      </form>
-    </div>
-
-      <ToastContainer/>
-    </section>
+        <ToastContainer />
+      </section>
     </LayoutAdmin>
-    )
+  );
 }
 
-
-export default UploadImage
+export default UploadImage;

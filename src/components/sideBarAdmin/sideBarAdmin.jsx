@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { User, Storefront, SignOut, House } from "@phosphor-icons/react/dist/ssr"; 
+import { User, Storefront, SignOut, House, CurrencyDollar } from "@phosphor-icons/react/dist/ssr"; 
 
 // Define el componente SidebarLink con icono de usuario
 const SidebarLink = ({ href, text, isActive, icon }) => {
@@ -60,6 +60,7 @@ const Sidebar = () => {
           <ul className="ml-4">
             <SidebarSubLink href="/admin/products/uploadProducts" text="Agregar Producto" />
           </ul>
+          <SidebarLink href="/admin/sales" text="Ventas" isActive={false} icon={<CurrencyDollar size={32} />} />
           {/* ... (resto de tus enlaces) */}
         </ul>
 
