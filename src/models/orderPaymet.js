@@ -9,6 +9,9 @@ const orderPaymetSchemma = new Schema({
     status:{
        type: Boolean 
     },
+    sendStatus:{
+        type: String
+    },
     amount:{
         type: Number
     },
@@ -33,6 +36,16 @@ orderPaymetSchemma.methods.changeStatus = function() {
 orderPaymetSchemma.methods.addTotalAmount = function(num){
      this.amount = num
      return this.save();
+}
+
+orderPaymetSchemma.methods.updateStatus = function(state) {
+    this.sendStatus = state;
+    return this.save();
+}
+
+orderPaymetSchemma.methods.renewLink = function (url){
+    this.link = url;
+    return this.save();
 }
 
 export default models.OrderPatmets || model('OrderPatmets',orderPaymetSchemma);
