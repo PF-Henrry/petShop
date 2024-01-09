@@ -100,7 +100,7 @@
         @apply relative flex items-center justify-center cursor-pointer;
 
         .remove-icon {
-          @apply text-[#7A8D9B] text-3xl duration-200 absolute;
+          @apply text-[#7A8D9B] text-3xl mr-4 duration-200;
         }
 
         .remove-icon-x {
@@ -108,7 +108,7 @@
         }
 
         .remove-icon-trash {
-          @apply opacity-0;
+          @apply opacity-0 absolute;
         }
 
         &:hover {
@@ -128,10 +128,32 @@
         }
       }
     }
+    .item-delivery-method {
+      @apply flex flex-col items-start gap-2;
+
+      .item-delivery-method-title {
+        @apply text-xl text-[#0d1d29] font-semibold;
+      }
+
+      .item-delivery-method-text {
+        @apply text-[#2d638b] text-base pt-2 font-normal;
+      }
+
+      .item-delivery-method-select {
+        @apply text-[#143146] font-medium p-2 shadow-md rounded-md cursor-pointer duration-200;
+
+        &:focus {
+          @apply outline-0;
+        }
+      }
+      .item-delivery-method-info {
+        @apply text-[#7A8D9B] text-xs flex gap-1 items-center;
+      }
+    }
   }
 
   .total-price {
-    @apply border-b pb-4 px-4 border-[#DABEB6] flex items-center justify-between gap-2;
+    @apply border-b pb-4 border-[#DABEB6] flex items-center justify-between gap-2;
 
     & p {
       @apply text-2xl text-[#143146] font-bold;

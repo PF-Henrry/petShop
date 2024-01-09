@@ -7,6 +7,7 @@ import "./CartShop.css";
 import {
   ArrowRight,
   Cardholder,
+  Info,
   ShoppingCartSimple,
   Storefront,
   Trash,
@@ -109,7 +110,6 @@ const Cart = () => {
       clearCart();
     } catch (error) {
       console.error(error);
-      
     }
   };
 
@@ -119,7 +119,7 @@ const Cart = () => {
   });
 
   const formatedTotal = priceFormatter.format(total);
-  
+
   const handleDeliveryMethodChange = (event) => {
     const newDeliveryMethod = event.target.value;
     const updatedCart = cartProducts.map((p) => ({
@@ -135,7 +135,6 @@ const Cart = () => {
       <h2 className="cart-title">
         Carrito de Compras <ShoppingCartSimple size={40} />
       </h2>
-      
 
       {cartProducts.length === 0 ? (
         <div className="empty-cart">
@@ -166,26 +165,41 @@ const Cart = () => {
             />
           ))}
           <label className="item-delivery-method">
-        <p className="delivery-method-label">Método de entrega:</p>
-        <div className="text-sm text-gray-500 mt-1 mb-3">Si no selecciona un método de entrega, el pedido se retirará en la tienda.</div>
-        <div className="text-sm text-gray-500 mt-1 mb-3" > Para envíos fuera de CABA, seleccione retiro en tienda y <a 
-    href="https://api.whatsapp.com/send?phone=TUNUMERO&text=Hola%2C%20quiero%20coordinar%20el%20envio%20de%20una%20compra%20fuera%20de%20CABA"
-    target="_blank"
-    rel="noopener noreferrer"
-    className="text-blue-500 hover:underline"
-  > contactarse con el vendedor </a> dentro de las 24hs.
-</div>
+            <p className="item-delivery-method-title">Método de entrega:</p>
+            <p className="item-delivery-method-text">
+              Si no selecciona un método de entrega, el pedido se retirará en la
+              tienda.
+            </p>
 
-
-
-        <select
-          onChange={handleDeliveryMethodChange}
-          value={cartProducts.length > 0 ? cartProducts[0].deliveryMethod : ""}
-        >
-          <option value="Retiro en tienda">Retiro en tienda (lun a sab de 9 a 21h)</option>
-          <option value="Envío gratis">Envío gratis (lun a sab de 9 a 21hs)</option>
-        </select>
-      </label>
+            <select
+              onChange={handleDeliveryMethodChange}
+              value={
+                cartProducts.length > 0 ? cartProducts[0].deliveryMethod : ""
+              }
+              className="item-delivery-method-select"
+            >
+              <option value="Retiro en tienda">
+                Retiro en tienda (lun a sab de 9 a 21h)
+              </option>
+              <option value="Envío gratis">
+                Envío gratis (lun a sab de 9 a 21hs)
+              </option>
+            </select>
+            <span className="item-delivery-method-info">
+              <Info size={15} />
+              Para envíos fuera de CABA, seleccione retiro en tienda y{" "}
+              <Link
+                href="https://api.whatsapp.com/send?phone=TUNUMERO&text=Hola%2C%20quiero%20coordinar%20el%20envio%20de%20una%20compra%20fuera%20de%20CABA"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline"
+              >
+                {" "}
+                contactarse con el vendedor{" "}
+              </Link>{" "}
+              dentro de las 24hs.
+            </span>
+          </label>
           <span className="total-price">
             <p>Precio Total: {formatedTotal} ARS</p>
             <button onClick={handleCheckout} className="finish-button">
@@ -208,7 +222,6 @@ const CartItem = ({
   updateQuantity,
   priceFormatter,
 }) => {
-
   const handleRemove = () => {
     removeFromCart(product);
   };
@@ -259,8 +272,6 @@ const CartItem = ({
           ))}
         </select>
       </label>
-
-      
 
       <button onClick={handleRemove} className="remove-item-button">
         <X size={30} weight="bold" className="remove-icon-x remove-icon" />
