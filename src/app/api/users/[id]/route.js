@@ -74,6 +74,7 @@ export async function PUT(request, {params}) {
         console.log('Datos recibidos del cliente:', data);
 
         if (findUser) {
+            console.log('entra al primer if')
             const newImagen = await postImage(dataSinPass.img, idUser);
             if (password) {
                 findUser.password = password;
@@ -81,11 +82,14 @@ export async function PUT(request, {params}) {
             }
 
             if (dataSinPass && newImagen) {
+                console.log('entra al segundo if')
                 if (dataSinPass.hasOwnProperty('province')) {
+                    console.log('entra al tercer if')
                     const newProvince = await findOrCreateModel(Provinces, {name: dataSinPass.province});
                     dataSinPass.province = newProvince._id;
                 }
                 if (dataSinPass.hasOwnProperty('city')) {
+                    console.log('entra al cuarto if')
                     const newCity = await findOrCreateModel(Citys, {name: dataSinPass.city});
                     dataSinPass.city = newCity._id;
                 }
@@ -104,7 +108,17 @@ export async function PUT(request, {params}) {
             }
         }
     } catch (err) {
-        console.error(err);
-        return NextResponse.json(err.message, {status: 400});
-    }
+        if (err.name === 'ValidationError') {
+            const validationErrors = {};
+            for (const field in err.errors) {
+                validationErrors[field] = err.errors[field].message;
+            }
+            console.error('Errores de validación:', validationErrors);
+            return NextResponse.json(validationErrors, { status: 400 });
+        } else {
+            console.error(err);
+            return NextResponse.json('Error interno del servidor', { status: 500 });
+        }
+}
+
 }
