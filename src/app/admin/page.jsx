@@ -6,9 +6,9 @@ const adminPage = () => {
   return (
     <LayoutAdmin>
       <div>
-        {/* Contenido específico de la página de usuarios */}
+      
         <DashboardInicio />
-        {/* ... */}
+       
       </div>
     </LayoutAdmin>
   );
