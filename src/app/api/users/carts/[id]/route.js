@@ -37,3 +37,46 @@ export async function GET(request,{params}){
     }
 
 }
+
+
+export async function PUT(request,{params}){
+
+    try {
+            const id = params.id;
+            const idOrder = new Types.ObjectId(id);
+            const findOrder = await orderPaymet.findById(idOrder);
+            const datos = await request.json();
+            const {sendStatus} = datos;
+
+            if(!findOrder) throw TypeError('Id order is not found');
+            
+            await findOrder.updateStatus(sendStatus);
+
+            return NextResponse.json(findOrder,{status:200})
+
+
+    } catch (error) {
+        return NextResponse.json(error.message,{status:400})
+    }
+
+}
+
+
+export async function DELETE(request,{params}){
+    try {
+        const id = params.id;
+        if(!id) throw TypeError('Id is undefined or null');
+        const idOrder = new Types.ObjectId(id);
+        const findOrder = await orderPaymet.findByIdAndDelete(idOrder);
+
+        
+
+        if(!findOrder) throw TypeError('Id order is not found');
+
+        return NextResponse.json(findOrder,{status:200});
+        
+    } catch (error) {
+        console.log(error.message)
+        return NextResponse.json(error.message,{status:400})
+    }
+}
