@@ -11,7 +11,12 @@ const storedFavorites =
 
 export const useProductStore = create((set, get) => ({
   products: [],
-  cartProducts: storedCart,
+
+  cartProducts: storedCart.map((product) => ({
+    ...product,
+    deliveryMethod: "Retiro en tienda", 
+  })),
+
   sizeGroup: 9,
   currentPage: 1,
   filter: {
@@ -145,6 +150,17 @@ export const useProductStore = create((set, get) => ({
       const updatedCart = state.cartProducts.map((p) =>
         p.id === products.id ? { ...p, quantity: newQuantity } : p
       );
+      return { cartProducts: updatedCart };
+    });
+  },
+updateDeliveryMethod: (productId, newDeliveryMethod) => {
+    set((state) => {
+      const updatedCart = state.cartProducts.map((product) =>
+        product.id === productId
+          ? { ...product, deliveryMethod: newDeliveryMethod }
+          : product
+      );
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
       return { cartProducts: updatedCart };
     });
   },
