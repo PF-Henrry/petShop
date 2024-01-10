@@ -14,7 +14,7 @@ export async function GET(request){
         
          const userID = new Types.ObjectId(id);
          const findCarts = await orderPaymet.find({userID:{_id:userID}})
-         .populate('items',{
+         .populate('items.product',{
             _id:1,
             name:1,
             price:1,
