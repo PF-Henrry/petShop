@@ -27,39 +27,21 @@ export default function UnificadoShop() {
     getTotalPages,
     getCurrentPage,
     setCurrentPage,
-    setOriginalProducts,
     sortOrder,
   } = useProductStore();
   const currentPage = useCurrentPage();
   const originalProducts = useOriginalProducts();
 
-  // Usamos useEffect para establecer la lista original de productos
   useEffect(() => {
-    const storeProducts = localStorage.getItem("products");
-
-    if (storeProducts) {
-      const data = JSON.parse(storeProducts);
-      setOriginalProducts(data);
-    }
-  }, [setOriginalProducts]);
-
-  useEffect(() => {
-    const storeProducts = localStorage.getItem("products");
-    const storedRatings = localStorage.getItem("ratings");
-    const storedFilterQuery = localStorage.getItem("filterQuery");
-
     const fetchData = async () => {
       try {
+        const storeProducts = localStorage.getItem("storeProducts");
+        const storedRatings = localStorage.getItem("ratings");
+
         if (storeProducts && storedRatings) {
           setRatings(JSON.parse(storedRatings));
           setProductsStore(JSON.parse(storeProducts));
-
-          const filtered = applyFilter(
-            JSON.parse(storeProducts),
-            storedFilterQuery
-          );
-
-          setFilteredProducts(filtered);
+          setFilteredProducts(getArrayPage());
         } else {
           const response = await fetch("api/products");
           const data = await response.json();
@@ -72,11 +54,7 @@ export default function UnificadoShop() {
             localStorage.setItem("ratings", JSON.stringify(randomRatings));
           }
 
-          const filtered = applyFilter(data, storedFilterQuery || "");
-          setFilteredProducts(filtered);
-
-          localStorage.setItem("products", JSON.stringify(data));
-          localStorage.setItem("filterQuery", storedFilterQuery || "");
+          setFilteredProducts(getArrayPage());
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -84,73 +62,37 @@ export default function UnificadoShop() {
     };
 
     fetchData();
-  }, [setProductsStore, setOriginalProducts]);
+  }, [setProductsStore]);
 
   useEffect(() => {
-    const newProducts = getArrayPage();
-    setFilteredProducts(newProducts);
+    setFilteredProducts(getArrayPage());
   }, [currentPage, getArrayPage, sortOrder]);
-
-  const applyFilter = (data, filterQuery) => {
-    if (!filterQuery) {
-      return data;
-    }
-
-    return data.filter(
-      (product) =>
-        product.name.toLowerCase().includes(filterQuery.toLowerCase()) ||
-        product.category[0]?.name
-          .toLowerCase()
-          .includes(filterQuery.toLowerCase()) ||
-        product.brand?.name.toLowerCase().includes(filterQuery.toLowerCase()) ||
-        product.species[0]?.name
-          .toLowerCase()
-          .includes(filterQuery.toLowerCase())
-    );
-  };
 
   const handleSearch = (query) => {
     const filtered = applyFilter(getProducts(), query);
-
-    console.log("entro a filter", filtered);
-
     setProductsStore(filtered);
-    const newProducts = getArrayPage();
-
-    console.log("nueva pag", newProducts);
-    setFilteredProducts(newProducts);
-
+    setFilteredProducts(getArrayPage());
     localStorage.setItem("filteredProducts", JSON.stringify(filtered));
-    localStorage.setItem("filterQuery", query);
-
-    setProductsStore(filtered);
   };
 
   const handleClear = () => {
     setFilter({ name: "name", value: "" });
     setProductsStore(originalProducts);
-
-    const product = getArrayPage();
-    setFilteredProducts(product);
-    localStorage.removeItem("filterQuery");
+    setFilteredProducts(getArrayPage());
   };
 
   const handleOnChange = (e) => {
-    const value = e.target.value;
-    const name = e.target.name;
+    const { value, name } = e.target;
     if (value && name) setFilter({ name, value });
   };
 
   const handleOnClick = () => {
     const filters = getFilter();
-
     const requestFilter = { query: {} };
 
-    if (filters.category)
-      requestFilter.query.category = [{ _id: filters.category }];
-    if (filters.species)
-      requestFilter.query.species = [{ _id: filters.species }];
-    if (filters.brand) requestFilter.query.brand = [{ _id: filters.brand }];
+    ["category", "species", "brand"].forEach((key) => {
+      if (filters[key]) requestFilter.query[key] = [{ _id: filters[key] }];
+    });
 
     fetch("api/products/filter", {
       method: "POST",
@@ -170,14 +112,11 @@ export default function UnificadoShop() {
           setCurrentPage(1);
         }
 
-        const page = getArrayPage();
-        setFilteredProducts(page);
+        setFilteredProducts(getArrayPage());
       });
   };
 
-  const generateRandomRating = () => {
-    return Math.floor(Math.random() * 5) + 1;
-  };
+  const generateRandomRating = () => Math.floor(Math.random() * 5) + 1;
 
   return (
     <div className="container-shop relative">
