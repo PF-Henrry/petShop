@@ -50,13 +50,20 @@ try {
     
     if(!response) throw TypeError('Error')
 
-    console.log(response);
 
     const findUser = await users.findOne({_id:userID});
 
-    const productsOrder = dataRequest.products.map(product => ({
-        _id:  new Types.ObjectId(product._id)
-    }))
+    const productsOrder = dataRequest.products.map(product =>{
+        
+      const newID = new Types.ObjectId(product._id);
+      console.log('este es el valor de newID',newID)
+    return  ({
+        "product": newID,
+        count: product.count
+      })
+});
+
+    console.log(productsOrder)
 
     const newOrder = await orderPaymet.create({
         userID: findUser._id,
@@ -67,6 +74,7 @@ try {
         link: response.body.init_point,
         items:[...productsOrder]
     });
+
 
     newOrder.save();
     return NextResponse.json({url:response.body.init_point, id:response.body.id},{status:200})
