@@ -24,7 +24,13 @@ const orderPaymetSchemma = new Schema({
     link:{
         type: String
     },
-    items:[{type: Types.ObjectId, ref:"Products"}]
+    items:[{ 
+      product:{
+        type: Types.ObjectId,
+        ref:"Products"
+        },
+      count:{type: Number, default:1}
+    }]
 });
 
 
@@ -47,6 +53,7 @@ orderPaymetSchemma.methods.renewLink = function (url){
     this.link = url;
     return this.save();
 }
+
 
 export default models.OrderPatmets || model('OrderPatmets',orderPaymetSchemma);
 

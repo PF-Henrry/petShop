@@ -2,7 +2,7 @@
 
 #utilidad
 ngrok.exe
-
+Products.json
 # dependencies
 /node_modules
 /.pnp
