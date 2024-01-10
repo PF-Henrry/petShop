@@ -11,7 +11,7 @@ export async function GET(request,{params}){
         const id = params.id;
         const orderID = new Types.ObjectId(id);
         const findOrder = await orderPaymet.findById(orderID)
-        .populate('items',{
+        .populate('items.product',{
             _id:1,
             name:1,
             price:1,
