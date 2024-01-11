@@ -165,17 +165,46 @@ updateDeliveryMethod: (productId, newDeliveryMethod) => {
     });
   },
 
-  addToFavorites: (productId) => {
+  addToFavorites: (productId,userid) => {
     set((state) => {
       const updatedFavorites = [...state.favorites, productId];
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+
+      const fetchingFavorite = async() => {
+
+        const response = await fetch(`api/favorite/${userid}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body:JSON.stringify({productId})
+        });
+
+      }
+      fetchingFavorite();
+
       return { favorites: updatedFavorites };
     });
   },
 
-  removeFromFavorites: (productId) => {
+  removeFromFavorites: (productId,userid) => {
     set((state) => {
       const updatedFavorites = state.favorites.filter((id) => id !== productId);
+      const fetchingFavorite = async() => {
+
+        const response = await fetch(`api/favorite/${userid}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body:JSON.stringify({productId})
+        });
+
+      }
+      fetchingFavorite();
+
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
       return { favorites: updatedFavorites };
     });
@@ -185,6 +214,18 @@ updateDeliveryMethod: (productId, newDeliveryMethod) => {
     const { favorites } = get();
     return favorites;
   },
+  updateFavorites: (userid) => {
+     const fetching = async () => {
+        const response = await fetch(`api/favorite/${userid}`)
+        if(response.ok){
+          const datos = await response.json();
+          const productsID = datos?.products?.map(product => product._id);
+          if(productsID) set({favorites: productsID});
+        }
+     }
+     fetching();
+  }
+  ,
 
   updateOrderState: (newOrder) => {
     set({ order: newOrder });
