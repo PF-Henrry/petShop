@@ -23,8 +23,8 @@ try {
     const dataRequest = await request.json();
     
     
-     const {userID} = dataRequest
-    
+     const {userID,address,totalAmount} = dataRequest
+     
     
     
     const itemsProducts = dataRequest.products.map((product) => ({
@@ -56,22 +56,22 @@ try {
     const productsOrder = dataRequest.products.map(product =>{
         
       const newID = new Types.ObjectId(product._id);
-      console.log('este es el valor de newID',newID)
+
     return  ({
         "product": newID,
         count: product.count
       })
 });
 
-    console.log(productsOrder)
 
     const newOrder = await orderPaymet.create({
         userID: findUser._id,
         status:false,
-        amount:0,
+        amount:parseInt(totalAmount),
         orderID:response.body.id,
         fecha:response.body.date_created,
         link: response.body.init_point,
+        address,
         items:[...productsOrder]
     });
 
