@@ -14,12 +14,18 @@ import {
 import { Breadcrumbs, Typography } from "@mui/material";
 import Link from "next/link";
 import Tippy from "@tippyjs/react";
-
+import { useSession } from "next-auth/react";
 const FavoriteProducts = () => {
+
+  const { data: session, status: sessionStatus } = useSession();
+  
   const favorites = useProductStore((state) => state.getFavorites());
+  const updateFavorites = useProductStore((state) => state.updateFavorites);
+
   // console.log("favorites", favorites);
 
   const [favoriteProducts, setFavoriteProducts] = useState([]);
+
   const fetchProductDetails = async (productId) => {
     try {
       const response = await fetch(`/api/products/${productId}`);
@@ -36,6 +42,9 @@ const FavoriteProducts = () => {
 
   useEffect(() => {
     const fetchFavoriteProducts = async () => {
+      const userID = session?.user?.id
+      if(sessionStatus ==='authenticated')  updateFavorites(userID);
+      
       const detailsPromises = favorites.map((productId) =>
         fetchProductDetails(productId)
       );
