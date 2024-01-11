@@ -3,6 +3,9 @@ import logo from "@/public/assets/logoNav.png";
 import { jomhuria } from "@/app/layout";
 import Image from "next/image";
 import Link from "next/link";
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
 import {
   List,
   X,
@@ -21,6 +24,8 @@ import ListUser from "./ListUser";
 import "./NavbarIn.css";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+
 const defaultImage =
   "http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png";
 
@@ -28,6 +33,37 @@ export default function NavbarIn() {
   const { data: session } = useSession();
 
   const userSessionId = session?.user?.id;
+ 
+  const userEmail = session?.user?.email;
+
+  const isAdmin = userEmail && ['nobileevelyn1@gmail.com', 'manudeev7@gmail.com', 'jimemenarodriguez91@gmail.com', 
+  'soyjuan0230@gmail.com', 'felys.aaa@gmail.com', 'adnmtz1987@gmail.com', 'lambdacreationz@gmail.com' ].includes(userEmail);
+ 
+  const [isAdminSwitch, setIsAdminSwitch] = useState(false);
+  const router = useRouter();
+
+  const handleAdminSwitchChange = () => {
+    console.log("Cambiando isAdminSwitch a:", !isAdminSwitch);
+    setIsAdminSwitch(!isAdminSwitch);
+  
+    if (!isAdminSwitch) {
+      console.log("Redirigiendo a /");
+      router.push('/');
+    } else {
+      console.log("Redirigiendo a /admin");
+      router.push('/admin');
+    }
+  };
+  
+  useEffect(() => {
+    if (!isAdminSwitch) {
+      router.push('/');
+    } else {
+      router.push('/admin');
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAdminSwitch]);
+  
 
   const [userData, setUserData] = useState({
     img: "",
@@ -175,6 +211,26 @@ export default function NavbarIn() {
             </Link>
           </li>
         </div>
+      
+        {isAdmin && (
+            <li>
+              <Link href="/admin" className="user-navBar-link">
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={isAdminSwitch}
+                      //onChange={handleAdminSwitchChange}
+                      onClick={handleAdminSwitchChange}
+                      color="primary"
+                    />
+                  }
+                  label="Admin"
+                  labelPlacement="start"
+                  className="admin-switch"
+                />
+              </Link>
+            </li>
+          )}
       </ul>
     </nav>
   );
