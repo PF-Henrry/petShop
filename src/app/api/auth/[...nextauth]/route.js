@@ -18,18 +18,20 @@ export const authOptions = {
                     if(!conn.isConnected) connectDB();
 
                     const findUser = await Users.findOne({email:credentials.email});
-
+                   
                     console.log(findUser?.img)
                     if(!findUser) throw new Error("Credenciales incorrectas")
                     if(findUser?.auth3rd) throw new Error('Account requires access through 3rd party');
-
+                    
                     const matchPassword = await findUser.comparePassword(credentials.password);
                     if(!matchPassword)  throw new Error("Credenciales incorrectas")
                     return {
+                
                         id: findUser._id,
                         name: findUser.username,
                         email: findUser.email,
-                        image: findUser.img,
+                        image: findUser.img, 
+                        
                     }
                 }
             }),
@@ -53,6 +55,7 @@ export const authOptions = {
                 // Realizas tu lógica de redirección aquí
                 if(findUser){
                     findUser.token = account.access_token
+                    
                     await findUser.save();
                 }
 
@@ -63,6 +66,7 @@ export const authOptions = {
                
                 if(findUser){
                     findUser.token =  account.access_token
+                   
                     await findUser.save();
                     return true
                 } else {
@@ -124,17 +128,21 @@ export const authOptions = {
 
             },
             async jwt({ token, account }) {
-                if (account) {                    
-                  token.accessToken = account.access_token
+                if (account) {
+                    
+                    token.accessToken = account.access_token;
+                 
                 }
                 return token
               },
               async session({ session, user, token }) {
+                //console.log('session:', token);
                 if(!conn.isConnected) connectDB()
 
                 const findUser = await Users.findOne({email:token.email});
                 if(findUser) session.user.id = findUser._id
                 session.accessToken = token.accessToken
+              
                 return session
               }
         },
