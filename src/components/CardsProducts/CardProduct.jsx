@@ -46,6 +46,7 @@ export default function CardProduct({
   const { data: session, status: sessionStatus } = useSession();
 
   const router = useRouter();
+
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   useEffect(() => {
@@ -81,20 +82,24 @@ export default function CardProduct({
     (state) => state.removeFromFavorites
   );
   const getFavorites = useProductStore((state) => state.getFavorites);
-
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
-    const favorites = getFavorites();
+    if (session && sessionStatus === "authenticated") {
+      
+     const favorites = getFavorites();
     setIsFavorite(favorites.includes(id));
-  }, [getFavorites, id]);
+    }
+  }, [getFavorites, id,session,sessionStatus]);
 
   const handleToggleFavorite = async () => {
     if (session && sessionStatus === "authenticated") {
+      const idUser = session?.user?.id
+
       if (isFavorite) {
-        await removeFromFavorites(id);
+        await removeFromFavorites(id,idUser);
       } else {
-        await addToFavorites(id);
+        await addToFavorites(id,idUser);
       }
 
       const updatedFavorites = getFavorites();

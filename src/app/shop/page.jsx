@@ -13,9 +13,13 @@ import {
   useOriginalProducts,
 } from "@/hooks/usePages";
 
+import { useSession } from "next-auth/react";
+
 import "./ShopStyles.css";
 
 export default function UnificadoShop() {
+  const { data: session, status: sessionStatus } = useSession();
+
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [ratings, setRatings] = useState([]);
   const {
@@ -24,6 +28,7 @@ export default function UnificadoShop() {
     getArrayPage,
     getFilter,
     setFilter,
+    updateFavorites,
     getTotalPages,
     getCurrentPage,
     setCurrentPage,
@@ -37,6 +42,10 @@ export default function UnificadoShop() {
       try {
         const storeProducts = localStorage.getItem("storeProducts");
         const storedRatings = localStorage.getItem("ratings");
+        const userID = session?.user?.id
+        if(userID){
+          updateFavorites(userID);
+        }
 
         if (storeProducts && storedRatings) {
           setRatings(JSON.parse(storedRatings));
