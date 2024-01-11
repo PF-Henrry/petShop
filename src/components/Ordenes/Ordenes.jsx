@@ -6,6 +6,7 @@ import {
   ArrowRight,
   Cardholder,
   CaretDown,
+  CheckCircle,
   WarningCircle,
 } from "@phosphor-icons/react/dist/ssr";
 import Tippy from "@tippyjs/react";
@@ -19,7 +20,7 @@ export default function Ordenes({ id }) {
         const res = await fetch(`api/users/carts?id=${id}`);
         if (!res.ok) throw TypeError("Error al obtener los datos");
         const newData = await res.json();
-        console.log(newData);
+        // console.log(newData);
 
         setData(newData);
       } catch (error) {
@@ -59,7 +60,7 @@ export default function Ordenes({ id }) {
               <span className="orden-header">
                 <span className="orden-number">
                   <p className="orden-number-title">Pedido N.{index + 1}</p>
-                  <p className="orden-id"># {order._id}</p>
+                  <p className="orden-id">#{order._id}</p>
                 </span>
                 <p className="orden-date">
                   Creado el {formatDate(order.fecha)}
@@ -78,6 +79,9 @@ export default function Ordenes({ id }) {
                   ) : (
                     <span className="orden-pago-completado">
                       <p>Completado</p>
+                      <Tippy content="El pedido se ha completado">
+                        <CheckCircle size={20} className="icon-completado" />
+                      </Tippy>
                     </span>
                   )}
                 </section>
@@ -99,13 +103,41 @@ export default function Ordenes({ id }) {
                 )}
               </div>
             </section>
-
+            <span className="orden-total">
+              {order.status === false ? (
+                <p className="orden-total-pendiente">
+                  Total a pagar:{" "}
+                  {priceFormatter.format(
+                    order?.items?.reduce((total, item) => {
+                      const itemPrice = item.count * item.product.price;
+                      return total + itemPrice;
+                    }, 0)
+                  )}{" "}
+                  ARS
+                </p>
+              ) : (
+                <p className="orden-total-completado">
+                  Total pagado:{" "}
+                  {priceFormatter.format(
+                    order?.items?.reduce((total, item) => {
+                      const itemPrice = item.count * item.product.price;
+                      return total + itemPrice;
+                    }, 0)
+                  )}{" "}
+                  ARS
+                </p>
+              )}
+            </span>
             <details className="orden-details">
               <summary className="orden-summary">
-                Productos <CaretDown size={15} className="summary-caret" />
+                Productos:{" "}
+                {order?.items
+                  .map((item) => item.count)
+                  .reduce((a, b) => a + b, 0)}{" "}
+                <CaretDown size={15} className="summary-caret" />
               </summary>
               <div className="orden-items">
-                {order?.items?.map((product) => (
+                {order?.items?.map(({ count, product }) => (
                   <div key={product._id} className="card-order-item">
                     <Link href={`/shop/${product._id}`}>
                       <figure>
@@ -121,6 +153,7 @@ export default function Ordenes({ id }) {
                       <h5 className="item-price">
                         {priceFormatter.format(product.price)} ARS
                       </h5>
+                      <span className="item-count"> Cantidad: {count}</span>
                     </Link>
                   </div>
                 ))}
