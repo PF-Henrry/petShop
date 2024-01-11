@@ -6,7 +6,7 @@ import { conn,connectDB } from "@/libs/mongodb";
 import Users from "@/models/users";
 import { addUser } from "@/libs/createUserWithRelation";
 
-const authOptions = { 
+export const authOptions = { 
         providers: [
             CredentialsProvider({
                 name:"Credentials",

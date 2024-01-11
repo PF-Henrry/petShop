@@ -2,9 +2,19 @@ import { leerDesdeJSON } from "@/libs/handleJSON";
 import { connectDB,conn } from "@/libs/mongodb";
 import { addProduct } from "@/libs/createProductWithRelation";
 import { NextResponse } from "next/server";
-
+import { getServerSession } from "next-auth";
+import Users from "@/models/users";
 export async function GET(){
     try {
+
+        if(!conn.isConnected) await connectDB();
+        const session = await getServerSession();
+        if(!session) throw TypeError('Unauthorized access');
+
+         const findUser = await Users.findOne({email:session.user.email});
+
+        if(findUser.role !== 1) throw TypeError('Unauthorized access');
+
         const datos = leerDesdeJSON('Products.json');
         const newProduct = datos.map((producto) =>{
         
