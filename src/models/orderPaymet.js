@@ -21,7 +21,7 @@ const orderPaymetSchemma = new Schema({
     fecha:{
         type: String
     },
-    adress:{
+    address:{
         type: String
     },
     link:{
