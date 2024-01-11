@@ -69,7 +69,7 @@ const Sidebar = () => {
 
         {/* Enlaces en la parte inferior de la barra lateral */}
         <ul className="mt-auto">
-          <SidebarLink href="/" text="Inicio" isActive={false} icon={<House size={32} />} />
+          <SidebarLink href="/admin" text="Inicio" isActive={false} icon={<House size={32} />} />
           <SidebarLink href="/logout" text="Cerrar Sesión" isActive={false} icon={<SignOut size={32} />} />
         </ul>
       </nav>
