@@ -71,6 +71,16 @@ const Cart = () => {
 
   const userID = session?.user?.id;
 
+  const handleDeliveryMethodChange = (event) => {
+    const newDeliveryMethod = event.target.value;
+    const updatedCart = cartProducts.map((p) => ({
+      ...p,
+      deliveryMethod: newDeliveryMethod,
+    }));
+    useProductStore.setState({ cartProducts: updatedCart });
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+
   const handleCheckout = async () => {
     try {
       if (!userID) {
@@ -87,12 +97,15 @@ const Cart = () => {
         count: product.quantity,
       }));
 
+      const address =
+        cartProducts.length > 0 ? cartProducts[0].deliveryMethod : {};
+
       const response = await fetch("/api/mercadopago/create-order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userID, products, totalAmount }),
+        body: JSON.stringify({ userID, products, totalAmount, address }),
       });
 
       if (!response.ok) {
@@ -119,16 +132,6 @@ const Cart = () => {
   });
 
   const formatedTotal = priceFormatter.format(total);
-
-  const handleDeliveryMethodChange = (event) => {
-    const newDeliveryMethod = event.target.value;
-    const updatedCart = cartProducts.map((p) => ({
-      ...p,
-      deliveryMethod: newDeliveryMethod,
-    }));
-    useProductStore.setState({ cartProducts: updatedCart });
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
-  };
 
   return (
     <div className="cart-container">
