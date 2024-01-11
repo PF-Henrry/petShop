@@ -75,6 +75,7 @@ export const authOptions = {
                     const lastname = splitName[1];
                     const username = user.email.split("@")[0];
                     const img = user.image
+                    const role = (user.email === 'petshop.kimey@gmail.com') ? 2 : 1;
                    await addUser({
                         "name":name,
                         "lastname":lastname,
@@ -86,7 +87,7 @@ export const authOptions = {
                         codeP:0,
                         province:'Unknown',
                         adress:'Unknown',
-                        role:1,
+                        role: role,
                         auth3rd:true,
                         token:account.access_token,
                     });
@@ -140,13 +141,18 @@ export const authOptions = {
                 if(!conn.isConnected) connectDB()
 
                 const findUser = await Users.findOne({email:token.email});
-                if(findUser) session.user.id = findUser._id
-                session.accessToken = token.accessToken
-              
-                return session
-              }
-        },
 
+                if(findUser) {
+                session.user.id = findUser._id
+                session.user.role = findUser.role               
+                
+              }
+
+              session.accessToken = token.accessToken
+
+              return session
+        }
+    },
         pages: {
             signIn: '/login',
             signOut: '/auth/signout',

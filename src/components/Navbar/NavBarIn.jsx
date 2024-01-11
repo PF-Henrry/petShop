@@ -34,10 +34,10 @@ export default function NavbarIn() {
 
   const userSessionId = session?.user?.id;
  
-  const userEmail = session?.user?.email;
+  const userRole = session?.user?.role;
+  console.log(session)
 
-  const isAdmin = userEmail && ['nobileevelyn1@gmail.com', 'manudeev7@gmail.com', 'jimemenarodriguez91@gmail.com', 
-  'soyjuan0230@gmail.com', 'felys.aaa@gmail.com', 'adnmtz1987@gmail.com', 'lambdacreationz@gmail.com' ].includes(userEmail);
+  const isAdmin = userRole === 2
  
   const [isAdminSwitch, setIsAdminSwitch] = useState(false);
   const router = useRouter();
@@ -129,7 +129,27 @@ export default function NavbarIn() {
       </span>
 
       <ul>
+      {isAdmin && (
+            <li>
+              <Link href="/admin" className="user-navBar-link">
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={isAdminSwitch}
+                      //onChange={handleAdminSwitchChange}
+                      onClick={handleAdminSwitchChange}
+                      color="primary"
+                    />
+                  }
+                  label="Admin"
+                  labelPlacement="start"
+                  className="admin-switch"
+                />
+              </Link>
+            </li>
+          )}
         <div className="menu">
+        
           <li>
             <Link href="/" className="user-navBar-link">
               <House size={20} className="icon-list" />
@@ -158,6 +178,7 @@ export default function NavbarIn() {
           {/** USER NAVBAR **/}
           <li className="user-navBar-btn">
             <section className="details-user-navBar hidden">
+           
               <details>
                 <summary>
                   <Image
@@ -211,27 +232,9 @@ export default function NavbarIn() {
             </Link>
           </li>
         </div>
-      
-        {isAdmin && (
-            <li>
-              <Link href="/admin" className="user-navBar-link">
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={isAdminSwitch}
-                      //onChange={handleAdminSwitchChange}
-                      onClick={handleAdminSwitchChange}
-                      color="primary"
-                    />
-                  }
-                  label="Admin"
-                  labelPlacement="start"
-                  className="admin-switch"
-                />
-              </Link>
-            </li>
-          )}
+             
       </ul>
+     
     </nav>
   );
 }

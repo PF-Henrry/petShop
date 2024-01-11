@@ -78,43 +78,20 @@ userSchemma.methods.comparePassword  =  function(inputPassword){
     if(inputPassword) return  isEqual(this.password,inputPassword);
 }
 
-// userSchemma.pre('save', async function (next){
-//     const user = this;
-//     if(!user.isModified('password')) return next();
-
-//     try {
-//         const hashedPassword = await encrypt(user.password)
-//         user.password = hashedPassword;
-//         next();
-//     } catch (error) {
-//         return next(error);
-//     }
-// })
-
-userSchemma.pre('save', async function (next) {
+userSchemma.pre('save', async function (next){
     const user = this;
-    if (!user.isModified('password')) return next();
+    if(!user.isModified('password')) return next();
 
     try {
-        const hashedPassword = await encrypt(user.password);
+        const hashedPassword = await encrypt(user.password)
         user.password = hashedPassword;
-
-        const adminEmails = ['nobileevelyn1@gmail.com', 'manudeev7@gmail.com', 'jimemenarodriguez91@gmail.com', 
-        'soyjuan0230@gmail.com', 'felys.aaa@gmail.com', 'adnmtz1987@gmail.com' ];
-        
-        if (adminEmails.includes(user.email)) {
-           
-            user.role = 1;
-        } else {
-           
-            user.role = 2;
-        }
-
         next();
     } catch (error) {
         return next(error);
     }
-});
+})
+
+
 
 export default models.Users || model('Users',userSchemma) ;
 
