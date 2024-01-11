@@ -2,11 +2,19 @@ import { NextResponse } from "next/server";
 import { guardarEnJSON ,leerDesdeJSON} from "@/libs/handleJSON";
 import Products from "@/models/products";
 import { conn, connectDB } from "@/libs/mongodb";
+import { getServerSession } from "next-auth/next"
+import Users from "@/models/users";
 
 
-export async function GET(){
+export async function GET(){ 
     try {
         if(!conn.isConnected) await connectDB();
+        const session = await getServerSession();
+        if(!session) throw TypeError('Unauthorized access');
+
+         const findUser = await Users.findOne({email:session.user.email});
+
+        if(findUser.role !== 1) throw TypeError('Unauthorized access');
            const findAllProducts = await Products.find({ }).populate("category",{
             _id:0,
             name:1
