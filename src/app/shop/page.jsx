@@ -28,7 +28,6 @@ export default function UnificadoShop() {
     getArrayPage,
     getFilter,
     setFilter,
-    updateFavorites,
     getTotalPages,
     getCurrentPage,
     setCurrentPage,
@@ -42,10 +41,7 @@ export default function UnificadoShop() {
       try {
         const storeProducts = localStorage.getItem("storeProducts");
         const storedRatings = localStorage.getItem("ratings");
-        const userID = session?.user?.id
-        if(userID){
-          updateFavorites(userID);
-        }
+      
 
         if (storeProducts && storedRatings) {
           setRatings(JSON.parse(storedRatings));

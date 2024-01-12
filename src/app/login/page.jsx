@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Link from 'next/link';
 import * as Yup from 'yup';
@@ -10,7 +10,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { EMAIL_CHECKED, PASSWORD_CHECKED } from '@/utils/regex'
 import toastNotify from '@/libs/toast';
 import {  useRouter } from 'next/navigation';
-import {signIn} from "next-auth/react"
+import {signIn, useSession} from "next-auth/react"
 
 
 const validationSchema = Yup.object({
@@ -33,6 +33,7 @@ const validationSchema = Yup.object({
 const Login = ({ initialValues, onSubmit }) => {
   const {showNotify,ToastContainer} = toastNotify();
   const router = useRouter();
+  const {status} = useSession();
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -40,7 +41,10 @@ const Login = ({ initialValues, onSubmit }) => {
       setShowPassword(!showPassword);
     }
    
-
+  useEffect(()=>{
+    if(status==='authenticated' || status==='loading')
+    router.push('/logout')
+  },[status,router])
   
 const handleClick = async(e,provider) => {
   e.preventDefault();

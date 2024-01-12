@@ -4,7 +4,7 @@ import favicon from "../public/favicon.ico";
 import SessionAuthProvider from "@/context/SessionAuthProvider";
 import SessionNavBar from "@/components/Navbar/SessionNavBar";
 import "./globals.css";
-
+import FavoriteContext from "@/components/FavoriteContext/FavoriteContext";
 const inter = Inter({ subsets: ["latin"] });
 export const jomhuria = Jomhuria({
   subsets: ["latin"],
@@ -23,6 +23,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className={inter.className}>
         <SessionAuthProvider>
+          <FavoriteContext />
           <SessionNavBar />
           {children}
         </SessionAuthProvider>
