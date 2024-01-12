@@ -7,6 +7,7 @@ import {
   Cardholder,
   CaretDown,
   CheckCircle,
+  Storefront,
   WarningCircle,
 } from "@phosphor-icons/react/dist/ssr";
 import Tippy from "@tippyjs/react";
@@ -51,7 +52,21 @@ export default function Ordenes({ id }) {
   return (
     <section className="orden-container">
       {data?.length === 0 ? (
-        <p>No hay pedidos</p>
+        <div className="orden-empty-container">
+          <p className="empty-orden-text">
+            No se encontraron pedidos
+            <Tippy content="Haga algun pedido desde el carrito de compras.">
+              <WarningCircle size={32} className="empty-orden-icon" />
+            </Tippy>
+          </p>
+          <Link href="/shop" className="go-to-shop">
+            <p>Ir a la tienda</p>
+            <span>
+              <ArrowRight size={32} />
+              <Storefront size={32} />
+            </span>
+          </Link>
+        </div>
       ) : (
         data &&
         data.map((order, index) => (
