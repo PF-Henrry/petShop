@@ -93,7 +93,7 @@ const ProductsPage = () => {
     const fetchProductDetails = async () => {
       if (isEditing) {
         try {
-          const response = await fetch("/api/infoids"); // Ajusta la ruta según tu API
+          const response = await fetch("/api/infoids"); 
           if (!response.ok) {
             throw new Error("Error al obtener información de filtros");
           }
@@ -182,7 +182,7 @@ const ProductsPage = () => {
   const saveChanges = async () => {
     try {
       const response = await fetch(`/api/products/${editedProduct._id}`, {
-        method: 'PUT', // o 'PATCH' dependiendo de la lógica de actualización de tu API
+        method: 'PUT', 
         headers: {
           'Content-Type': 'application/json',
         },

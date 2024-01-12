@@ -15,6 +15,7 @@ export const useProductStore = create((set, get) => ({
   cartProducts: storedCart.map((product) => ({
     ...product,
     deliveryMethod: "Retiro en tienda", 
+   
   })),
 
   sizeGroup: 9,
@@ -110,30 +111,36 @@ export const useProductStore = create((set, get) => ({
       },
     })),
 
-  addToCart: (product) => {
-    set((state) => {
-      const existingProduct = state.cartProducts.find(
-        (p) => p.id === product.id
-      );
-
-      if (existingProduct) {
-        // Si el producto ya está en el carrito, actualiza la cantidad
-        const updatedCart = state.cartProducts.map((p) =>
-          p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
+    addToCart: (product) => {
+      
+      set((state) => {
+        const existingProduct = state.cartProducts.find(
+          (p) => p.id === product.id
         );
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
-        return { cartProducts: updatedCart };
-      } else {
-        // Si el producto no está en el carrito, agrégalo con cantidad 1
-        const updatedCart = [
-          ...state.cartProducts,
-          { ...product, quantity: 1 },
-        ];
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
-        return { cartProducts: updatedCart };
-      }
-    });
-  },
+    
+        if (existingProduct) {
+          // Si el producto ya está en el carrito, actualiza la cantidad
+          const updatedCart = state.cartProducts.map((p) =>
+            p.id === product.id
+              ? { ...p, quantity: p.quantity + 1, stock: product.stock, active: product.active }
+              : p
+          );
+        
+          localStorage.setItem("cart", JSON.stringify(updatedCart));
+          return { cartProducts: updatedCart };
+        } else {
+          // Si el producto no está en el carrito, agrégalo con cantidad 1
+          const updatedCart = [
+            ...state.cartProducts,
+            { ...product, quantity: 1, stock: product.stock, active: product.active }
+          ];
+          localStorage.setItem("cart", JSON.stringify(updatedCart));
+          return { cartProducts: updatedCart };
+        }
+      });
+    },
+
+    
 
   removeFromCart: (products) => {
     set((state) => {

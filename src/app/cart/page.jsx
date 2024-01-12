@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useProductStore } from "@/hooks/usePages";
+
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import "./CartShop.css";
@@ -24,6 +25,9 @@ const Cart = () => {
   const cartProducts = useProductStore((state) => state.cartProducts);
   const updateOrderState = useProductStore((state) => state.updateOrderState);
   const [total, setTotal] = useState(0);
+  const [showInsufficientStockMessage, setShowInsufficientStockMessage] =
+    useState(false);
+
   const router = useRouter();
 
   const { data: session, status } = useSession();
@@ -105,6 +109,19 @@ const Cart = () => {
         return;
       }
 
+      const insufficientStockProduct = cartProducts.find(
+        (product) => product.quantity > product.stock
+      );
+
+      if (insufficientStockProduct) {
+        setShowInsufficientStockMessage(true);
+        setShowInsufficientStockMessage(
+          `No hay suficiente stock para el producto: ${insufficientStockProduct.name}. Stock disponible: ${insufficientStockProduct.stock}`
+        );
+
+        return;
+      }
+
       const totalAmount = calculateTotal(cartProducts);
 
       const products = cartProducts.map((product) => ({
@@ -136,8 +153,8 @@ const Cart = () => {
         status: "pending",
       });
 
-      window.location.href = result.url;
       clearCart();
+      window.location.href = result.url;
     } catch (error) {
       console.error(error);
     }
@@ -148,10 +165,27 @@ const Cart = () => {
     currency: "ARS",
   });
 
+  const handleCloseInsufficientStockMessage = () => {
+    setShowInsufficientStockMessage(false);
+    setShowInsufficientStockMessage("");
+  };
+
   const formatedTotal = priceFormatter.format(total);
 
   return (
     <div className="cart-container">
+      {showInsufficientStockMessage && (
+        <div className="insufficient-stock-message bg-red-500 text-white p-4 mb-4 rounded flex items-center">
+          <p className="flex-grow">{showInsufficientStockMessage}</p>
+          <button
+            onClick={handleCloseInsufficientStockMessage}
+            className="close-message-button"
+          >
+            <X size={20} color="white" />
+          </button>
+        </div>
+      )}
+
       <div className="nav-breadcrumbs">
         <Breadcrumbs
           separator={<CaretRight size={15} />}
