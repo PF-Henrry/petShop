@@ -34,18 +34,26 @@
   }
 
   #check-menu {
-    @apply hidden absolute;
+    @apply absolute hidden;
   }
 
   #check-userMenu {
-    @apply hidden absolute;
+    @apply absolute hidden;
   }
 
   & ul {
-    @apply mr-5 flex gap-10 items-center;
+    @apply flex items-center gap-10 mr-5;
 
-    .menu {
+    .menu-navBar-in {
       @apply flex items-center gap-8;
+
+      .admin-switch-container {
+        .MuiFormControlLabel-root {
+          .MuiTypography-root {
+            @apply text-[#143146] font-semibold;
+          }
+        }
+      }
       & li {
         & a {
           @apply relative text-base font-semibold text-[#143146] duration-300 flex items-center gap-1 overflow-hidden;
@@ -63,157 +71,163 @@
             }
           }
         }
+      }
+      .user-navBar-btn {
+        .details-user-navBar {
+          & details {
+            & summary {
+              @apply translate-x-[-500%] transition-transform duration-[.5s] opacity-0 overflow-visible text-[#DABEB6] uppercase gap-5 w-full flex items-center cursor-pointer;
 
-        &:nth-child(5) {
-          .details-user-navBar {
-            & details {
-              & summary {
-                @apply translate-x-[-500%] transition-transform duration-[.5s] opacity-0 overflow-visible text-[#DABEB6] uppercase gap-5 w-full flex items-center cursor-pointer;
-
-                .caret-user-details {
-                  @apply duration-300;
-                }
-                & p {
-                  @apply text-xl font-semibold flex items-center gap-2;
-                }
-
-                &:hover {
-                  @apply text-[#f1e5e3];
-                }
+              .caret-user-details {
+                @apply duration-300;
               }
-
-              & ol {
-                @apply bg-[#1b415c] mt-5 rounded-lg uppercase;
-
-                .caret-up-user {
-                  @apply hidden;
-                }
-
-                & li a {
-                  @apply p-3 left-0 opacity-100 translate-x-0 text-[#f1e5e3] duration-200 w-full text-sm font-normal delay-0;
-
-                  &::after {
-                    @apply hidden;
-                  }
-                  &:hover {
-                    @apply text-[#93d0ff];
-                  }
-                }
-
-                & li:last-child {
-                  @apply hidden;
-                }
-              }
-
-              &[open] {
-                & summary {
-                  @apply text-[#f1e5e3];
-                }
-
-                .caret-user-details {
-                  @apply rotate-180;
-                }
-              }
-            }
-          }
-
-          .list-user-navBar {
-            & input {
-              @apply absolute hidden;
-            }
-
-            .user-navBar {
-              @apply relative flex items-center gap-2 bg-[#E3D4D0] px-3 py-2 rounded-[15px] shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] text-lg font-semibold text-[#143146] cursor-pointer duration-200;
-
-              .caret-user {
-                @apply absolute bottom-[-0.5rem] right-0 bg-[#143146] rounded-full p-1 w-5 h-5 duration-200;
+              & p {
+                @apply flex items-center gap-2 text-xl font-semibold;
               }
 
               &:hover {
-                @apply brightness-105;
-              }
-
-              &:active {
-                @apply brightness-95;
+                @apply text-[#f1e5e3];
               }
             }
 
             & ol {
-              @apply absolute bg-[#fff0ec] mt-4 rounded-lg right-10 h-0 overflow-hidden shadow-[0_4px_4px_0_rgba(0,0,0,0.25)];
-
-              & li {
-                @apply py-1 border-b border-b-[#DABEB6] overflow-hidden;
-
-                & a {
-                  @apply text-base font-normal text-[#143146] delay-0 py-2 flex gap-[5px];
-
-                  & p {
-                    @apply opacity-0 translate-x-[150%] duration-300;
-                  }
-
-                  &:hover {
-                    @apply text-[#2d638b];
-                  }
-
-                  &::after {
-                    @apply hidden;
-                  }
-                }
-
-                &:last-child {
-                  @apply border-b-0 block;
-                  & a {
-                    @apply font-semibold;
-                  }
-                }
-              }
+              @apply bg-[#1b415c] mt-5 rounded-lg uppercase;
 
               .caret-up-user {
-                @apply absolute top-[-1rem] right-[4rem];
+                @apply hidden;
+              }
+
+              & li a {
+                @apply p-3 left-0 opacity-100 translate-x-0 text-[#f1e5e3] duration-200 w-full text-sm font-normal delay-0;
+
+                &::after {
+                  @apply hidden;
+                }
+                &:hover {
+                  @apply text-[#93d0ff];
+                }
+              }
+
+              & li:last-child {
+                @apply hidden;
               }
             }
-          }
 
-          #check-user:checked ~ ol {
-            @apply flex flex-col gap-3 h-auto overflow-visible p-5;
+            &[open] {
+              & summary {
+                @apply text-[#f1e5e3];
+              }
 
-            & li a p {
-              @apply translate-x-0 opacity-100;
+              .caret-user-details {
+                @apply rotate-180;
+              }
             }
-          }
-
-          #check-user:checked ~ label .caret-user {
-            @apply rotate-180;
           }
         }
 
-        &:last-child {
+        .list-user-navBar {
+          & input {
+            @apply absolute hidden;
+          }
+
+          .user-navBar {
+            @apply relative flex items-center gap-2 bg-[#E3D4D0] px-3 py-2 rounded-[15px] shadow-[0_4px_4px_0_rgba(0,0,0,0.25)] text-lg font-semibold text-[#143146] cursor-pointer duration-200;
+
+            .caret-user {
+              @apply absolute bottom-[-0.5rem] right-0 bg-[#143146] rounded-full p-1 w-5 h-5 duration-200;
+            }
+
+            &:hover {
+              @apply brightness-105;
+            }
+
+            &:active {
+              @apply brightness-95;
+            }
+          }
+
+          & ol {
+            @apply absolute bg-[#fff0ec] mt-4 rounded-lg right-10 h-0 overflow-hidden shadow-[0_4px_4px_0_rgba(0,0,0,0.25)];
+
+            & li {
+              @apply py-1 border-b border-b-[#DABEB6] overflow-hidden;
+
+              & a {
+                @apply text-base font-normal text-[#143146] delay-0 py-2 flex gap-[5px];
+
+                & p {
+                  @apply opacity-0 translate-x-[150%] duration-300;
+                }
+
+                &:hover {
+                  @apply text-[#2d638b];
+                }
+
+                &::after {
+                  @apply hidden;
+                }
+              }
+
+              &:last-child {
+                @apply block border-b-0;
+                & a {
+                  @apply font-semibold;
+                }
+              }
+            }
+
+            .caret-up-user {
+              @apply absolute top-[-1rem] right-[4rem];
+            }
+          }
+        }
+
+        #check-user:checked ~ ol {
+          @apply flex flex-col h-auto gap-3 p-5 overflow-visible;
+
+          & li a p {
+            @apply translate-x-0 opacity-100;
+          }
+        }
+
+        #check-user:checked ~ label .caret-user {
+          @apply rotate-180;
+        }
+      }
+
+      .user-navBar-logout {
+        @apply hidden;
+      }
+    }
+  }
+
+  @media (max-width: 1100px) {
+    & ul .menu-navBar-in .user-navBar-btn .list-user-navBar ol {
+      @apply right-2;
+    }
+    & ul .menu-navBar-in .user-navBar-btn .list-user-navBar label p {
+      @apply hidden;
+    }
+
+    & ul {
+      @apply gap-14;
+      & li a {
+        .icon-list {
+          @apply scale-125;
+        }
+        .links-navBar-text {
           @apply hidden;
         }
       }
     }
   }
 
-  @media (max-width: 1100px) {
-    @apply px-14;
-
-    & ul .menu li:nth-child(5) .list-user-navBar ol {
-      @apply right-14;
-    }
-  }
-
   @media (max-width: 1020px) {
-    @apply px-12;
-
-    & ul .menu li:nth-child(5) .list-user-navBar ol {
-      @apply right-12;
-
-      & li a {
-        @apply text-sm;
-      }
+    & ul .menu-navBar-in .user-navBar-btn .list-user-navBar ol {
+      @apply right-1;
     }
 
-    & ul .menu li {
+    & ul .menu-navBar-in li {
       & a {
         @apply text-sm;
       }
@@ -241,13 +255,31 @@
       @apply fixed justify-center w-full h-[100vh] top-24 left-[-100%] bg-[rgba(20,49,70,.95)] z-10;
       transition: all 0.5s;
 
-      .menu {
-        @apply flex flex-col items-start h-[100vh] justify-evenly relative pb-48 gap-0;
+      .menu-navBar-in {
+        @apply relative flex flex-col items-start h-full gap-0 pb-52 justify-evenly;
+
+        .admin-switch-container {
+          & label {
+            @apply m-0;
+          }
+          .MuiFormControlLabel-root {
+            .MuiTypography-root {
+              @apply text-[#DABEB6] font-semibold uppercase text-lg;
+            }
+          }
+        }
+
         & li {
           @apply flex items-center;
 
+          & a {
+            .links-navBar-text {
+              @apply flex;
+            }
+          }
+
           .user-navBar-link {
-            @apply text-xl font-semibold text-[#DABEB6] uppercase gap-5 w-full flex translate-x-[-500%] transition-transform duration-[.5s] opacity-0 overflow-visible;
+            @apply text-lg font-semibold text-[#DABEB6] uppercase gap-5 w-full flex translate-x-[-500%] transition-transform duration-[.5s] opacity-0 overflow-visible;
 
             &::after {
               @apply hidden;
@@ -262,27 +294,27 @@
             }
           }
 
-          &:nth-child(1) a {
+          &:nth-child(2) a {
             @apply delay-[.1s];
           }
 
-          &:nth-child(2) a {
+          &:nth-child(3) a {
             @apply delay-[.125s];
           }
 
-          &:nth-child(3) a {
+          &:nth-child(4) a {
             @apply delay-[.15s];
           }
 
-          &:nth-child(4) a {
+          &:nth-child(5) a {
             @apply delay-[.175s];
           }
 
-          &:nth-child(5) summary {
+          &:nth-child(6) summary {
             @apply delay-[.2s];
           }
 
-          &:nth-child(6) a {
+          &:nth-child(7) a {
             @apply delay-[.225s];
           }
 
@@ -311,7 +343,7 @@
     #check-menu:checked ~ ul {
       @apply left-0;
 
-      .menu li a,
+      .menu-navBar-in li a,
       summary {
         @apply translate-x-0 opacity-100;
       }
