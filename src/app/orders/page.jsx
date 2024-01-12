@@ -11,17 +11,12 @@ import { CaretRight } from "@phosphor-icons/react/dist/ssr";
 import { Breadcrumbs, Typography } from "@mui/material";
 
 function Orders() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const id = session?.user?.id;
   const name = session?.user?.name;
   const image = session?.user?.image;
-  const router = useRouter();
 
-  useEffect(() => {
-    if (status !== "authenticated") {
-      router.push("/login");
-    }
-  }, [status, router]);
+  
 
   return (
     <div className="orders-container">

@@ -43,7 +43,6 @@ const Signup = ({ initialValues, onSubmit }) => {
   
 
   const handleOnSubmit = async (values) => {
-    console.log(values);
     try {
       const response = await fetch('/api/users', {
         method: 'POST',
