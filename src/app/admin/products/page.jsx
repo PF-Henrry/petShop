@@ -1,27 +1,79 @@
 // Importaciones necesarias
-'use client'
-import React, { useState, useEffect } from 'react';
-import LayoutAdmin from '@/components/LayoutAdmin/LayoutAdmin';
-import Image from 'next/image';
-import Modal from 'react-modal';
-import { Pencil, XCircle, FloppyDisk, Prohibit } from '@phosphor-icons/react/dist/ssr';
+"use client";
+import React, { useState, useEffect } from "react";
+import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
+import Image from "next/image";
+import Modal from "react-modal";
+import {
+  Pencil,
+  XCircle,
+  FloppyDisk,
+  Prohibit,
+  Trash,
+} from "@phosphor-icons/react/dist/ssr";
+
+const CategorySelect = ({ categories, selectedCategory, onSelectCategory }) => (
+  <select
+    value={selectedCategory}
+    onChange={(e) => onSelectCategory(e.target.value)}
+  >
+    <option value="">Selecciona una categoría</option>
+    {categories.map((category) => (
+      <option key={category._id} value={category._id}>
+        {category.name}
+      </option>
+    ))}
+  </select>
+);
+
+const SpeciesSelect = ({ species, selectedSpecies, onSelectSpecies }) => (
+  <select
+    value={selectedSpecies}
+    onChange={(e) => onSelectSpecies(e.target.value)}
+  >
+    <option value="">Selecciona una especie</option>
+    {species && species.map((specie) => (
+      <option key={specie._id} value={specie?._id}>
+        {specie?.name}
+      </option>
+    ))}
+  </select>
+);
+
+// Nuevo componente para la selección de marcas
+const BrandSelect = ({ brands, selectedBrand, onSelectBrand }) => (
+  <select
+    value={selectedBrand}
+    onChange={(e) => onSelectBrand(e.target.value)}
+  >
+    <option value="">Selecciona una marca</option>
+    {brands.map((brand) => (
+      <option key={brand._id} value={brand._id}>
+        {brand.name}
+      </option>
+    ))}
+  </select>
+);
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editedProduct, setEditedProduct] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [species, setSpecies] = useState([]);
+  const [brands, setBrands] = useState([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('/api/products');
+        const response = await fetch("/api/products");
         if (!response.ok) {
-          throw new Error('Error al obtener la lista de productos');
+          throw new Error("Error al obtener la lista de productos");
         }
 
         const data = await response.json();
@@ -29,7 +81,7 @@ const ProductsPage = () => {
         setError(null);
       } catch (error) {
         console.error(error.message);
-        setError(`No se encontraron coincidencias con ${searchTerm}`);
+        setError(`No se encontraron coincidencias con "${searchTerm}"`);
       } finally {
         setIsLoading(false);
       }
@@ -38,10 +90,34 @@ const ProductsPage = () => {
     fetchProducts();
   }, [searchTerm]);
 
+  useEffect(() => {
+    const fetchProductDetails = async () => {
+      if (isEditing) {
+        try {
+          const response = await fetch("/api/infoids"); // Ajusta la ruta según tu API
+          if (!response.ok) {
+            throw new Error("Error al obtener información de filtros");
+          }
+          const data = await response.json();
+          setCategories(data.category);
+          setSpecies(data.specie);
+          setBrands(data.brand);
+          setError(null);
+        
+        } catch (error) {
+          console.error(error.message);
+          setError("Error al obtener información de filtros");
+        }
+      }
+    };
+
+    fetchProductDetails();
+  }, [isEditing]);
+
   const filteredProducts = products.filter((product) => {
     const productName = product.name.toLowerCase();
     const searchTermLower = searchTerm.toLowerCase();
-    const searchWords = searchTermLower.split(' ');
+    const searchWords = searchTermLower.split(" ");
     return searchWords.every((word) => productName.includes(word));
   });
 
@@ -81,13 +157,54 @@ const ProductsPage = () => {
         reader.readAsDataURL(file);
       }
     } catch (error) {
-      console.error('Error al cargar la imagen:', error);
+      console.error("Error al cargar la imagen:", error);
+    }
+  };
+  const deleteProduct = async (productId) => {
+    try {
+      const response = await fetch(`/api/products/${productId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al eliminar el producto');
+      }
+
+      // Actualiza la lista de productos después de eliminar
+      const updatedProducts = products.filter(product => product._id !== productId);
+      setProducts(updatedProducts);
+
+      closeModal(); // Cierra el modal después de eliminar
+    } catch (error) {
+      console.error('Error al eliminar el producto:', error.message);
     }
   };
 
-  const saveChanges = () => {
-    console.log('Guardando cambios:', editedProduct);
-    setIsEditing(false);
+
+  const saveChanges = async () => {
+    try {
+      const response = await fetch(`/api/products/${editedProduct._id}`, {
+        method: 'PUT', // o 'PATCH' dependiendo de la lógica de actualización de tu API
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editedProduct),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al guardar los cambios');
+      }
+
+      // Actualiza la lista de productos después de guardar los cambios
+      const updatedProducts = products.map(product =>
+        product._id === editedProduct._id ? editedProduct : product
+      );
+      setProducts(updatedProducts);
+
+      setIsEditing(false); // Sale del modo de edición
+    } catch (error) {
+      console.error('Error al guardar los cambios:', error.message);
+    }
   };
 
   return (
@@ -109,15 +226,11 @@ const ProductsPage = () => {
           </div>
         )}
 
-        {error && (
-          <div className="mb-4 text-red-500">
-            {error}
-          </div>
-        )}
+        {error && <div className="mb-4 text-red-500">{error}</div>}
 
         {!isLoading && filteredProducts.length === 0 && !error && (
           <div className="mb-4">
-            <p>No se encontraron coincidencias con {searchTerm}.</p>
+            <p>No se encontraron coincidencias con "{searchTerm}".</p>
           </div>
         )}
 
@@ -130,10 +243,6 @@ const ProductsPage = () => {
                 onClick={() => openModal(product)}
               >
                 <span className="hover:font-bold">{product.name}</span>
-                <span className="ml-2 text-gray-500">Stock: {product.stock}</span>
-                <span className={`ml-2 ${product.active ? 'text-green-500' : 'text-red-500'}`}>
-                  Estado: {product.active ? 'Activo' : 'Inactivo'}
-                </span>
               </li>
             ))}
           </ul>
@@ -145,17 +254,19 @@ const ProductsPage = () => {
           contentLabel="Editar Producto"
           style={{
             overlay: {
-              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
             },
             content: {
-              width: '500px',
-              margin: 'auto',
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-              background: isEditing ? 'rgba(255, 182, 193, 0.8)' : 'rgba(255, 255, 255, 0.95)',
-              marginTop: '50px',
-              border: '2px solid #FFB6C1',
+              width: "500px",
+              margin: "auto",
+              padding: "20px",
+              borderRadius: "8px",
+              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+              background: isEditing
+                ? "rgba(255, 182, 193, 0.8)"
+                : "rgba(255, 255, 255, 0.95)",
+              marginTop: "50px",
+              border: "2px solid #FFB6C1",
             },
           }}
         >
@@ -167,13 +278,13 @@ const ProductsPage = () => {
                   {isEditing ? (
                     <>
                       <button
-                        className="px-2 py-1 rounded mr-2"
+                        className="bg-green-500 text-white px-2 py-1 rounded mr-2"
                         onClick={saveChanges}
                       >
                         <FloppyDisk size={24} />
                       </button>
                       <button
-                        className="px-2 py-1 rounded"
+                        className="bg-gray-500 text-white px-2 py-1 rounded"
                         onClick={() => setIsEditing(false)}
                       >
                         <Prohibit size={24} />
@@ -181,12 +292,18 @@ const ProductsPage = () => {
                     </>
                   ) : (
                     <>
-                      <button onClick={startEditing} className="text-blue-500">
+                      <button onClick={startEditing}>
                         <Pencil size={24} />
                       </button>
-                      <button onClick={closeModal} className="text-red-500">
+                      <button onClick={closeModal}>
                         <XCircle size={24} />
                       </button>
+                      <button
+                        className="bg-red-500 text-white px-2 py-1 rounded ml-2"
+                        onClick={() => deleteProduct(selectedProduct._id)}
+                      >
+                        <Trash size={32} />
+                                              </button>
                     </>
                   )}
                 </div>
@@ -216,7 +333,7 @@ const ProductsPage = () => {
                   <input
                     type="text"
                     value={editedProduct.price}
-                    onChange={(e) => handleInputChange('price', e.target.value)}
+                    onChange={(e) => handleInputChange("price", e.target.value)}
                     className="border border-rosybrown rounded p-1 mb-2"
                   />
 
@@ -224,54 +341,90 @@ const ProductsPage = () => {
                   <input
                     type="text"
                     value={editedProduct.detail}
-                    onChange={(e) => handleInputChange('detail', e.target.value)}
-                    className="border border-rosybrown rounded p-1 mb-2"
-                  />
-
-                  <label className="font-bold block mb-2">Marca:</label>
-                  <input
-                    type="text"
-                    value={editedProduct.brand}
-                    onChange={(e) => handleInputChange('brand', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange("detail", e.target.value)
+                    }
                     className="border border-rosybrown rounded p-1 mb-2"
                   />
 
                   <label className="font-bold block mb-2">Categorías:</label>
-                  {/* Renderiza un componente de selección de categorías aquí */}
-                  {/* Puedes usar un componente de selección múltiple o cualquier otro método según tus necesidades */}
-
-                  <label className="font-bold block mb-2">Especies:</label>
-                  {/* Renderiza un componente de selección de especies aquí */}
-                  {/* Puedes usar un componente de selección múltiple o cualquier otro método según tus necesidades */}
-
-                  <label className="font-bold block mb-2">Stock:</label>
-                  <input
-                    type="number"
-                    value={editedProduct.stock}
-                    onChange={(e) => handleInputChange('stock', e.target.value)}
-                    className="border border-rosybrown rounded p-1 mb-2"
+                  <CategorySelect
+                    categories={categories}
+                    selectedCategory={
+                      editedProduct
+                        ? editedProduct.category
+                        : selectedProduct.category
+                    }
+                    onSelectCategory={(value) =>
+                      handleInputChange("category", value)
+                    }
                   />
 
-                  <label className="font-bold block mb-2">Estado:</label>
-                  <select
-                    value={editedProduct.active}
-                    onChange={(e) => handleInputChange('active', e.target.value === 'true')}
-                    className="border border-rosybrown rounded p-1 mb-2"
-                  >
-                    <option value={true}>Activo</option>
-                    <option value={false}>Inactivo</option>
-                  </select>
+                  <label className="font-bold block mb-2">Especies:</label>
+                  <SpeciesSelect
+                    species={species}
+                    selectedSpecies={
+                      editedProduct
+                        ? editedProduct.species
+                        : selectedProduct.species
+                    }
+                    onSelectSpecies={(value) =>
+                      handleInputChange("species", value)
+                    }
+                  />
+
+                  {/* Nuevo selector de marcas */}
+                  <label className="font-bold block mb-2">Marcas:</label>
+                  <BrandSelect
+                    brands={brands}
+                    selectedBrand={
+                      editedProduct
+                        ? editedProduct.brand
+                        : selectedProduct.brand
+                    }
+                    onSelectBrand={(value) =>
+                      handleInputChange("brand", value)
+                    }
+                  />
                 </>
               ) : (
                 <>
-                  <p><span className="font-bold">Precio:</span> {selectedProduct.price}</p>
-                  <p><span className="font-bold">Detalle:</span> {selectedProduct.detail}</p>
-                  <p><span className="font-bold">Imagen:</span> {selectedProduct.image && <Image src={selectedProduct.image} alt={selectedProduct.name} width={300} height={300} className="rounded-lg" />}</p>
-                  <p><span className="font-bold">Marca:</span> {selectedProduct.brand.name}</p>
-                  <p><span className="font-bold">Especies:</span> {selectedProduct.species.map(species => species.name).join(', ')}</p>
-                  <p><span className="font-bold">Categorías:</span> {selectedProduct.category.map(category => category.name).join(', ')}</p>
-                  <p><span className="font-bold">Stock:</span> {selectedProduct.stock}</p>
-                  <p><span className="font-bold">Estado:</span> {selectedProduct.active ? 'Activo' : 'Inactivo'}</p>
+                  <p>
+                    <span className="font-bold">Precio:</span>{" "}
+                    {selectedProduct.price}
+                  </p>
+                  <p>
+                    <span className="font-bold">Detalle:</span>{" "}
+                    {selectedProduct.detail}
+                  </p>
+                  <p>
+                    <span className="font-bold">Imagen:</span>{" "}
+                    {selectedProduct.image && (
+                      <Image
+                        src={selectedProduct.image}
+                        alt={selectedProduct.name}
+                        width={300}
+                        height={300}
+                        className="rounded-lg"
+                      />
+                    )}
+                  </p>
+                  <p>
+                    <span className="font-bold">Marca:</span>{" "}
+                    {selectedProduct.brand.name}
+                  </p>
+                  <p>
+                    <span className="font-bold">Especies:</span>{" "}
+                    {selectedProduct.species
+                      .map((species) => species.name)
+                      .join(", ")}
+                  </p>
+                  <p>
+                    <span className="font-bold">Categorías:</span>{" "}
+                    {selectedProduct.category
+                      .map((category) => category.name)
+                      .join(", ")}
+                  </p>
                 </>
               )}
             </div>
