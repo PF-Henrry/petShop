@@ -35,21 +35,21 @@ export default function NavbarIn() {
   const userSessionId = session?.user?.id;
 
   const userRole = session?.user?.role;
-  console.log(session);
+  // console.log(session);
   const isAdmin = userRole === 2;
 
   const [isAdminSwitch, setIsAdminSwitch] = useState(false);
   const router = useRouter();
 
   const handleAdminSwitchChange = () => {
-    console.log("Cambiando isAdminSwitch a:", !isAdminSwitch);
+    // console.log("Cambiando isAdminSwitch a:", !isAdminSwitch);
     setIsAdminSwitch(!isAdminSwitch);
 
     if (!isAdminSwitch) {
-      console.log("Redirigiendo a /");
+      // console.log("Redirigiendo a /");
       router.push("/");
     } else {
-      console.log("Redirigiendo a /admin");
+      // console.log("Redirigiendo a /admin");
       router.push("/admin");
     }
   };
@@ -84,7 +84,7 @@ export default function NavbarIn() {
 
           if (response.ok) {
             const userData = await response.json();
-            console.log("Datos del usuario obtenidos:", userData.img);
+            // console.log("Datos del usuario obtenidos:", userData.img);
             setUserData(userData);
           } else {
             console.error("Error al obtener los datos del usuario");

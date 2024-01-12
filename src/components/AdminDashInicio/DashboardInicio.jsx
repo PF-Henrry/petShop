@@ -12,6 +12,29 @@ const ventasMensualesHardcodeadas = [
 const DashboardInicio = () => {
   const [numUsersReg, setNumUsersReg] = useState(null);
   const [numProductos, setNumProductos] = useState(null);
+  const [totalVentas, setTotalVentas] = useState(0);
+
+  useEffect(() => {
+    const getCarts = async () => {
+      try {
+        const response = await fetch("api/users/carts");
+        const newCarts = await response.json();
+        // console.log(newCarts);
+        setTotalVentas(newCarts);
+      } catch (error) {
+        console.error("Error al obtener usuarios: ", error);
+      }
+    };
+
+    getCarts();
+  }, []);
+
+  // console.log(
+  //   totalVentas &&
+  //     totalVentas
+  //       .filter((item) => item.status === true)
+  //       .map((item) => item.items.length)
+  // );
 
   useEffect(() => {
     const fetchUsersAndProducts = async () => {
@@ -52,7 +75,14 @@ const DashboardInicio = () => {
                 <Typography variant="h6" gutterBottom>
                   Ventas totales
                 </Typography>
-                <Typography variant="h4"> 1000</Typography>
+                <Typography variant="h4">
+                  {totalVentas === 0
+                    ? "Cargando..."
+                    : totalVentas
+                        .filter((item) => item.status === true)
+                        .map((item) => item.items.length)
+                        .reduce((a, b) => a + b)}
+                </Typography>
               </Paper>
             </Grid>
 
