@@ -20,6 +20,26 @@ export default function Home() {
     }
   }, [showNotify]);
 
+  const handleSendMailClick = async () => {
+    try {
+      const response = await fetch('/api/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+      });
+      if (response.ok) {
+        const result = await response.json();
+        showNotify('success', 'Correo enviado correctamente');
+        console.log('Correo enviado exitosamente desde la página');
+      } else {
+        console.error('Error al enviar el correo desde la página', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error al enviar el correo desde la página', error);
+    }
+  };
+
   return (
     <main className="main-container flex min-h-screen flex-col items-center justify-between px-28 py-0 gap-10">
       <ToastContainer />
@@ -27,7 +47,9 @@ export default function Home() {
       <CategoryCards />
       <InfoCards />
       <UserRate />
-     
+      <button onClick={handleSendMailClick}>
+        Send Email
+      </button>
     </main>
   );
 }
