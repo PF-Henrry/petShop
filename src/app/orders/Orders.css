@@ -224,6 +224,35 @@
         }
       }
     }
+    .orden-empty-container {
+      @apply flex flex-col items-center justify-center gap-4 w-full bg-[#143146] h-96 rounded-lg;
+      .empty-orden-text {
+        @apply text-3xl text-[#eee0dd] font-bold flex items-center gap-2;
+      }
+      .go-to-shop {
+        @apply bg-[#143146] px-10 py-4 rounded-lg flex items-center justify-center relative overflow-hidden duration-300;
+
+        & p {
+          @apply text-lg text-[#eee0dd] font-normal opacity-100 duration-300 underline;
+        }
+
+        & span {
+          @apply text-3xl text-[#eee0dd] absolute flex flex-row gap-2 items-center justify-center translate-x-[-200%] opacity-0 duration-300;
+        }
+
+        &:hover {
+          @apply bg-[#2d638b];
+
+          & p {
+            @apply opacity-0 translate-x-[200%];
+          }
+
+          & span {
+            @apply translate-x-0 opacity-100;
+          }
+        }
+      }
+    }
   }
 
   @media (max-width: 1020px) {
@@ -295,32 +324,53 @@
           }
         }
       }
+
+      .orden-empty-container {
+        .empty-orden-text {
+          @apply text-xl uppercase;
+
+          .empty-orden-icon {
+            @apply w-5 h-5 cursor-help;
+          }
+        }
+      }
     }
   }
   @media (max-width: 768px) {
     @apply p-0 pb-6 mx-0;
 
-    .orden-container .orden-card {
-      .orden-info-container {
-        .orden-pago {
-          @apply hidden;
-        }
-
-        .orden-button-container {
-          & a {
-            @apply p-3;
-
-            & p {
-              @apply text-[.7rem];
-            }
-
-            & span .icon-pendiente {
-              @apply w-6 h-6;
-            }
+    .orden-container {
+      .orden-card {
+        .orden-info-container {
+          .orden-pago {
+            @apply hidden;
           }
 
-          .orden-completado-text {
-            @apply p-3 text-[.7rem];
+          .orden-button-container {
+            & a {
+              @apply p-3;
+
+              & p {
+                @apply text-[.7rem];
+              }
+
+              & span .icon-pendiente {
+                @apply w-6 h-6;
+              }
+            }
+
+            .orden-completado-text {
+              @apply p-3 text-[.7rem];
+            }
+          }
+        }
+      }
+      .orden-empty-container {
+        .empty-orden-text {
+          @apply text-lg font-medium uppercase;
+
+          .empty-orden-icon {
+            @apply w-5 h-5 cursor-help;
           }
         }
       }

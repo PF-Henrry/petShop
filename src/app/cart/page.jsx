@@ -7,6 +7,7 @@ import "./CartShop.css";
 import {
   ArrowRight,
   Cardholder,
+  CaretRight,
   Info,
   ShoppingCartSimple,
   Storefront,
@@ -16,11 +17,29 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import Tippy from "@tippyjs/react";
+import { useRouter } from "next/navigation";
+import { Breadcrumbs, Typography } from "@mui/material";
 
 const Cart = () => {
   const cartProducts = useProductStore((state) => state.cartProducts);
   const updateOrderState = useProductStore((state) => state.updateOrderState);
   const [total, setTotal] = useState(0);
+  const router = useRouter();
+
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (status !== "authenticated") {
+        // Si no se ha iniciado sesión, borra el ítem del localStorage
+        useProductStore.setState({ cartProducts: [] });
+        localStorage.removeItem("cart");
+        router.push("/login");
+      }
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [status, router]);
 
   const calculateTotal = (cartProducts) => {
     return cartProducts.reduce((total, product) => {
@@ -66,8 +85,6 @@ const Cart = () => {
     useProductStore.setState({ cartProducts: [] });
     localStorage.removeItem("cart");
   };
-
-  const { data: session } = useSession();
 
   const userID = session?.user?.id;
 
@@ -135,6 +152,20 @@ const Cart = () => {
 
   return (
     <div className="cart-container">
+      <div className="nav-breadcrumbs">
+        <Breadcrumbs
+          separator={<CaretRight size={15} />}
+          aria-label="breadcrumb"
+        >
+          <Link underline="hover" color="inherit" href="/">
+            Inicio
+          </Link>
+          <Link underline="hover" color="inherit" href="/shop">
+            Tienda
+          </Link>
+          <Typography color="text.primary">Favoritos</Typography>
+        </Breadcrumbs>
+      </div>
       <h2 className="cart-title">
         Carrito de Compras <ShoppingCartSimple size={40} />
       </h2>
@@ -195,7 +226,7 @@ const Cart = () => {
                 href="https://api.whatsapp.com/send?phone=TUNUMERO&text=Hola%2C%20quiero%20coordinar%20el%20envio%20de%20una%20compra%20fuera%20de%20CABA"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
+                className="flex text-blue-500 hover:underline"
               >
                 {" "}
                 contactarse con el vendedor{" "}
@@ -265,7 +296,8 @@ const CartItem = ({
           </p>
         </section>
       </span>
-      <label className="item-quantity">
+
+      <label className=" item-quantity">
         <p className="quantity-label">Cantidad:</p>
         <select value={product.quantity} onChange={handleQuantityChange}>
           {[...Array(10).keys()].map((num) => (
@@ -276,7 +308,7 @@ const CartItem = ({
         </select>
       </label>
 
-      <button onClick={handleRemove} className="remove-item-button">
+      <button onClick={handleRemove} className=" remove-item-button">
         <X size={30} weight="bold" className="remove-icon-x remove-icon" />
         <Trash
           size={30}
@@ -284,6 +316,29 @@ const CartItem = ({
           className="remove-icon-trash remove-icon"
         />
       </button>
+
+      {/*Div para responsive*/}
+      <div className="cart-item-responsive">
+        <label className="item-quantity">
+          <p className="quantity-label">Cantidad:</p>
+          <select value={product.quantity} onChange={handleQuantityChange}>
+            {[...Array(10).keys()].map((num) => (
+              <option key={num + 1} value={num + 1}>
+                {num + 1}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <button onClick={handleRemove} className="remove-item-button">
+          <X size={30} weight="bold" className="remove-icon-x remove-icon" />
+          <Trash
+            size={30}
+            weight="bold"
+            className="remove-icon-trash remove-icon"
+          />
+        </button>
+      </div>
     </div>
   );
 };

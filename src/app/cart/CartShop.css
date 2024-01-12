@@ -13,6 +13,25 @@
 .cart-container {
   @apply flex flex-col gap-10 p-4 my-10 overflow-hidden mx-28;
 
+  .nav-breadcrumbs {
+    @apply p-0;
+  }
+  .nav-breadcrumbs ol li,
+  > a {
+    @apply text-[#7A8D9B] duration-200;
+
+    & a:hover {
+      @apply text-[#7a8d9bb4] underline;
+    }
+    & p {
+      @apply text-[#143146];
+    }
+  }
+
+  .MuiBreadcrumbs-separator {
+    @apply m-1;
+  }
+
   .cart-title {
     @apply text-3xl text-[#143146] font-bold border-b pb-4 border-[#DABEB6] flex items-center gap-2;
   }
@@ -108,7 +127,7 @@
         }
 
         .remove-icon-trash {
-          @apply opacity-0 absolute;
+          @apply absolute opacity-0;
         }
 
         &:hover {
@@ -126,6 +145,9 @@
             animation: wobble-ver-right 0.8s both;
           }
         }
+      }
+      .cart-item-responsive {
+        @apply hidden;
       }
     }
     .item-delivery-method {
@@ -209,6 +231,126 @@
 
         & span {
           @apply translate-x-0 opacity-100;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1020px) {
+    @apply mx-16;
+  }
+  @media (max-width: 952px) {
+    @apply mx-8;
+  }
+  @media (max-width: 858px) {
+    @apply gap-6 p-0 mx-4;
+    .cart-title {
+      @apply text-2xl text-[#143146] font-bold border-b pb-4 border-[#DABEB6] flex items-center gap-2;
+    }
+  }
+  @media (max-width: 768px) {
+    @apply mx-2;
+    .cart-items .cart-item {
+      @apply flex-col justify-around gap-4 p-2;
+
+      .item-info-container {
+        @apply w-auto gap-0;
+
+        & figure {
+          @apply w-24;
+
+          & img {
+            @apply object-contain w-full h-full duration-200;
+          }
+        }
+
+        .item-info {
+          @apply flex flex-col gap-0;
+
+          .item-category {
+            @apply text-xs;
+          }
+
+          .item-name {
+            @apply text-base font-semibold;
+          }
+
+          .item-brand {
+            @apply text-sm;
+          }
+
+          .item-price {
+            @apply mt-2 text-lg font-semibold;
+          }
+        }
+      }
+      .item-quantity {
+        @apply hidden;
+      }
+      .remove-item-button {
+        @apply hidden;
+      }
+
+      .cart-item-responsive {
+        @apply flex flex-row items-center gap-4 p-2;
+        .item-quantity {
+          @apply flex;
+        }
+        .remove-item-button {
+          @apply flex;
+        }
+      }
+    }
+    .cart-items .item-delivery-method {
+      @apply flex flex-col items-start gap-1;
+
+      .item-delivery-method-title {
+        @apply text-lg font-medium;
+      }
+
+      .item-delivery-method-text {
+        @apply pt-1 text-sm font-normal;
+      }
+
+      .item-delivery-method-select {
+        @apply p-1 text-sm font-medium;
+
+        &:focus {
+          @apply outline-0;
+        }
+      }
+      .item-delivery-method-info {
+        @apply text-[#7A8D9B] text-xs flex flex-wrap gap-1 items-center;
+      }
+    }
+
+    .total-price {
+      @apply flex flex-col items-start gap-4;
+      & p {
+        @apply text-xl text-[#143146] font-bold underline;
+      }
+
+      .finish-button {
+        @apply bg-[#143146] w-full px-10 py-4 rounded-lg flex items-center justify-center relative overflow-hidden duration-300;
+
+        & p {
+          @apply text-lg text-[#eee0dd] font-normal opacity-100 duration-300;
+        }
+
+        & span {
+          @apply text-3xl text-[#eee0dd] absolute flex flex-row gap-2 items-center translate-x-[-200%] opacity-0 duration-300;
+        }
+
+        &:hover {
+          @apply bg-[#2d638b];
+
+          & p {
+            @apply opacity-0 translate-x-[200%];
+          }
+
+          & span {
+            @apply translate-x-0 opacity-100;
+          }
         }
       }
     }
