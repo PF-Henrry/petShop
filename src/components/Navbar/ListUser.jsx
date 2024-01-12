@@ -1,6 +1,5 @@
 import {
   CaretUp,
-  UserCircle,
   ShoppingBag,
   ShoppingCartSimple,
   Heart,
@@ -12,7 +11,7 @@ import { useSession } from "next-auth/react";
 const defaultImage =
   "http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png";
 
-export default function ListUser() {
+export default function ListUser({ handleCloseMenu }) {
   const { data: session } = useSession();
 
   const userImg = session?.user?.image;
@@ -26,8 +25,9 @@ export default function ListUser() {
           color="#fff0ec"
           weight="fill"
         />
+
         <li>
-          <Link href="/profile">
+          <Link href="/profile" onClick={handleCloseMenu}>
             <Image
               src={userImg || defaultImage}
               alt="user"
@@ -39,25 +39,25 @@ export default function ListUser() {
           </Link>
         </li>
         <li>
-          <Link href="/orders">
+          <Link href="/orders" onClick={handleCloseMenu}>
             <ShoppingBag size={20} weight="fill" />
             <p>Mis pedidos</p>
           </Link>
         </li>
         <li>
-          <Link href="/cart">
+          <Link href="/cart" onClick={handleCloseMenu}>
             <ShoppingCartSimple size={20} weight="fill" />
             <p>Mi carrito</p>
           </Link>
         </li>
         <li>
-          <Link href="/favorites">
+          <Link href="/favorites" onClick={handleCloseMenu}>
             <Heart size={20} weight="fill" />
             <p>Lista de favoritos</p>
           </Link>
         </li>
         <li>
-          <Link href="/logout">
+          <Link href="/logout" onClick={handleCloseMenu}>
             <SignOut size={20} weight="bold" />
             <p>Cerrar sesion</p>
           </Link>
