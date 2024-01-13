@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
+import Loader from "@/components/Loader/Loader"
 import Image from "next/image";
 import Modal from "react-modal";
 import {
@@ -207,9 +208,10 @@ const ProductsPage = () => {
 
   return (
     <LayoutAdmin>
+       {isLoading && <Loader/>}
       <div className="p-4">
         <h1 className="text-2xl font-semibold mb-4">Lista de Productos</h1>
-
+       
         <input
           type="text"
           placeholder="Buscar por nombre"
@@ -217,12 +219,7 @@ const ProductsPage = () => {
           onChange={(e) => setSearchTerm(e.target.value)}
           className="p-2 border border-gray-300 rounded mb-4"
         />
-
-        {isLoading && (
-          <div className="flex items-center mb-4">
-            <p className="mr-2 font-bold">Cargando...</p>
-          </div>
-        )}
+ 
 
         {error && <div className="mb-4 text-red-500">{error}</div>}
 

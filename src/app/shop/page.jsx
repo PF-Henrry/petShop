@@ -1,4 +1,4 @@
-// UnificadoShop.jsx
+
 "use client";
 import React, { useEffect, useState } from "react";
 import CardProduct from "@/components/CardsProducts/CardProduct";
@@ -7,6 +7,8 @@ import CatalogCarousel from "@/components/CatalogCarousel/CatalogCarousel";
 import Filter from "@/components/Filter/Filter";
 import NavPages from "@/components/NavPages/NavPages";
 import InfoSection from "@/components/InfoSection/InfoSection";
+import Loader from "@/components/Loader/Loader"
+
 import {
   useProductStore,
   useCurrentPage,
@@ -22,6 +24,8 @@ export default function UnificadoShop() {
 
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [ratings, setRatings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const {
     getProducts,
     setProducts: setProductsStore,
@@ -39,9 +43,9 @@ export default function UnificadoShop() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const storeProducts = localStorage.getItem("storeProducts");
         const storedRatings = localStorage.getItem("ratings");
-      
 
         if (storeProducts && storedRatings) {
           setRatings(JSON.parse(storedRatings));
@@ -63,10 +67,13 @@ export default function UnificadoShop() {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setProductsStore]);
 
   useEffect(() => {
@@ -129,32 +136,39 @@ export default function UnificadoShop() {
       <InfoSection />
       <SearchBar onSearch={handleSearch} onClear={handleClear} />
       <NavPages />
-      <div className="products-container w-full">
-        <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
-        <div className="flex flex-wrap gap-10 justify-around items-center">
-          {filteredProducts.length ? (
-            filteredProducts.map((product, index) => (
-              <CardProduct
-                key={product?._id}
-                id={product?._id}
-                name={product?.name}
-                price={product?.price}
-                detail={product?.detail}
-                image={product?.image}
-                brand={product?.brand?.name}
-                specie={product?.species[0]?.name}
-                category={product?.category[0]?.name}
-                rating={ratings[index]}
-                stock={product?.stock} 
-                active={product?.active}
-              />
-            ))
-          ) : (
-            <p>No products found</p>
-          )}
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="products-container w-full">
+          <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
+  
+          <div className="products-container w-full">
+            <div className="flex flex-wrap gap-10 justify-around items-center">
+              {filteredProducts.length ? (
+                filteredProducts.map((product, index) => (
+                  <CardProduct
+                    key={product?._id}
+                    id={product?._id}
+                    name={product?.name}
+                    price={product?.price}
+                    detail={product?.detail}
+                    image={product?.image}
+                    brand={product?.brand?.name}
+                    specie={product?.species[0]?.name}
+                    category={product?.category[0]?.name}
+                    rating={ratings[index]}
+                    stock={product?.stock}
+                    active={product?.active}
+                  />
+                ))
+              ) : (
+                <p>No products found</p>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
       <NavPages />
     </div>
   );
-}
+ }

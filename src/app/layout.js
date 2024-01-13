@@ -25,6 +25,7 @@ export default function RootLayout({ children }) {
         <SessionAuthProvider>
           <FavoriteContext />
           <SessionNavBar />
+         
           {children}
         </SessionAuthProvider>
         <Footer />

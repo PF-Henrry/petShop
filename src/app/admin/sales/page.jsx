@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
+import Loader from "@/components/Loader/Loader";
 
 const SalesPage = () => {
   const [totalVentas, setTotalVentas] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getCarts = async () => {
@@ -15,11 +17,14 @@ const SalesPage = () => {
         setTotalVentas(newCarts);
       } catch (error) {
         console.error("Error al obtener usuarios: ", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     getCarts();
   }, []);
+
   return (
     <LayoutAdmin>
       <div>
@@ -27,7 +32,7 @@ const SalesPage = () => {
         <p>
           Total de ventas:{" "}
           {totalVentas === 0
-            ? "Cargando..."
+            ? <Loader/>
             : totalVentas
                 .filter((item) => item.status === true)
                 .map((item) => item.items.length)
@@ -35,7 +40,11 @@ const SalesPage = () => {
         </p>
 
         <section className="flex flex-col gap-5">
-          {totalVentas &&
+          {isLoading ? (
+       
+            <Loader />
+          ) : (
+            totalVentas &&
             totalVentas
               .filter((item) => item?.status === true)
               .map((item) => (
@@ -54,7 +63,8 @@ const SalesPage = () => {
                   <p>Items count: {item.items.length}</p>
                   <p>Amount: {item.amount}</p>
                 </div>
-              ))}
+              ))
+          )}
         </section>
       </div>
     </LayoutAdmin>

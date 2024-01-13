@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import CardProduct from "@/components/CardsProducts/CardProduct";
 import { useProductStore } from "@/hooks/usePages";
+import Loader from "@/components/Loader/Loader";
 import "./Favorites.css";
 import {
   ArrowRight,
@@ -22,7 +23,8 @@ const FavoriteProducts = () => {
   
 
   const [favoriteProducts, setFavoriteProducts] = useState([]);
-
+  const [loading, setLoading] = useState(true);
+  
   const fetchProductDetails = async (productId) => {
     try {
       const response = await fetch(`/api/products/${productId}`);
@@ -41,11 +43,15 @@ const FavoriteProducts = () => {
 
   useEffect(() => {
     const fetchFavoriteProducts = async () => {
-      const detailsPromises = favorites.map((productId) =>
-        fetchProductDetails(productId)
-      );
-      const details = await Promise.all(detailsPromises);
-      setFavoriteProducts(details.filter((product) => product !== null));
+      try {
+        const detailsPromises = favorites.map((productId) =>
+          fetchProductDetails(productId)
+        );
+        const details = await Promise.all(detailsPromises);
+        setFavoriteProducts(details.filter((product) => product !== null));
+      } finally {
+        setLoading(false); 
+      }
     };
 
     fetchFavoriteProducts();
@@ -53,6 +59,7 @@ const FavoriteProducts = () => {
 
   return (
     <div className="favorites-container">
+      {loading && <Loader />}
       <div className="nav-breadcrumbs">
         <Breadcrumbs
           separator={<CaretRight size={15} />}

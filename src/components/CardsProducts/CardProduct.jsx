@@ -74,7 +74,6 @@ export default function CardProduct({
         stock,
         active
       };
-console.log('product', product)
       addToCart(product);
       setShowSuccessMessage(true);
     } else {
