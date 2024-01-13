@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
+import Loader from "@/components/Loader/Loader"
 import Image from "next/image";
 import Modal from "react-modal";
 import {
@@ -166,6 +167,7 @@ const UsersPage = () => {
 
   return (
     <LayoutAdmin>
+      {isLoading && <Loader/>} 
       <div className="p-4">
         <h1 className="text-2xl font-semibold mb-4">Lista de Usuarios</h1>
 
@@ -177,11 +179,7 @@ const UsersPage = () => {
           className="p-2 border border-gray-300 rounded mb-4"
         />
 
-        {isLoading && (
-          <div className="flex items-center mb-4">
-            <p className="mr-2 font-bold">Cargando...</p>
-          </div>
-        )}
+        
 
         {error && <div className="mb-4 text-red-500">{error}</div>}
 
@@ -359,14 +357,22 @@ const UsersPage = () => {
                   />
 
                   <label className="font-bold block mb-2">Rol:</label>
-                  <input
-                    type="text"
-                    value={editedUser.role}
-                    onChange={(e) => handleInputChange("role", e.target.value)}
-                    className={`border border-rosybrown rounded p-1 mb-2 ${
-                      isEditing ? "bg-rosybrown-light" : ""
-                    }`}
-                  />
+                  {isEditing ? (
+                    <select
+                      value={editedUser.role}
+                      onChange={(e) =>
+                        handleInputChange("role", e.target.value)
+                      }
+                      className={`border border-rosybrown rounded p-1 mb-2 ${
+                        isEditing ? "bg-rosybrown-light" : ""
+                      }`}
+                    >
+                      <option value="1"> 1</option>
+                      <option value="2"> 2</option>
+                    </select>
+                  ) : (
+                    <p>{selectedUser.role === "1" ? "Opción 1" : "Opción 2"}</p>
+                  )}
 
                   <label className="font-bold block mb-2">Email:</label>
                   <input
