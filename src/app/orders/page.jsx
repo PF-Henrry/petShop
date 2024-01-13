@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Ordenes from "@/components/Ordenes/Ordenes";
-import Loader from "@/components/Loader/Loader"; 
+import Loader from "@/components/Loader/Loader";
 import Image from "next/image";
 import Link from "next/link";
 import "./Orders.css";
@@ -16,12 +16,9 @@ function Orders() {
   const id = session?.user?.id;
   const name = session?.user?.name;
   const image = session?.user?.image;
-  const [loading, setLoading] = useState(true);
-  
 
   return (
     <div className="orders-container">
-       {loading && <Loader />}
       <div className="nav-breadcrumbs">
         <Breadcrumbs
           separator={<CaretRight size={15} />}

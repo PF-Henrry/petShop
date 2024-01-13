@@ -1,14 +1,12 @@
-
+// UnificadoShop.jsx
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import CardProduct from "@/components/CardsProducts/CardProduct";
 import SearchBar from "@/components/SearchBar/SearchBarCatalogo";
 import CatalogCarousel from "@/components/CatalogCarousel/CatalogCarousel";
 import Filter from "@/components/Filter/Filter";
 import NavPages from "@/components/NavPages/NavPages";
 import InfoSection from "@/components/InfoSection/InfoSection";
-import Loader from "@/components/Loader/Loader"
-
 import {
   useProductStore,
   useCurrentPage,
@@ -18,20 +16,20 @@ import {
 import { useSession } from "next-auth/react";
 
 import "./ShopStyles.css";
+import Loading from "../loading";
 
 export default function UnificadoShop() {
   const { data: session, status: sessionStatus } = useSession();
 
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [ratings, setRatings] = useState([]);
-  const [loading, setLoading] = useState(true);
-
   const {
     getProducts,
     setProducts: setProductsStore,
     getArrayPage,
     getFilter,
     setFilter,
+    updateFavorites,
     getTotalPages,
     getCurrentPage,
     setCurrentPage,
@@ -43,9 +41,12 @@ export default function UnificadoShop() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
         const storeProducts = localStorage.getItem("storeProducts");
         const storedRatings = localStorage.getItem("ratings");
+        const userID = session?.user?.id;
+        if (userID) {
+          updateFavorites(userID);
+        }
 
         if (storeProducts && storedRatings) {
           setRatings(JSON.parse(storedRatings));
@@ -67,13 +68,10 @@ export default function UnificadoShop() {
         }
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setProductsStore]);
 
   useEffect(() => {
@@ -131,44 +129,35 @@ export default function UnificadoShop() {
   const generateRandomRating = () => Math.floor(Math.random() * 5) + 1;
 
   return (
-    <div className="container-shop relative">
+    <div className="relative container-shop">
       <CatalogCarousel />
       <InfoSection />
       <SearchBar onSearch={handleSearch} onClear={handleClear} />
       <NavPages />
-      {loading ? (
-        <Loader />
-      ) : (
-        <div className="products-container w-full">
-          <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
-  
-          <div className="products-container w-full">
-            <div className="flex flex-wrap gap-10 justify-around items-center">
-              {filteredProducts.length ? (
-                filteredProducts.map((product, index) => (
-                  <CardProduct
-                    key={product?._id}
-                    id={product?._id}
-                    name={product?.name}
-                    price={product?.price}
-                    detail={product?.detail}
-                    image={product?.image}
-                    brand={product?.brand?.name}
-                    specie={product?.species[0]?.name}
-                    category={product?.category[0]?.name}
-                    rating={ratings[index]}
-                    stock={product?.stock}
-                    active={product?.active}
-                  />
-                ))
-              ) : (
-                <p>No products found</p>
-              )}
-            </div>
-          </div>
+      <div className="w-full products-container">
+        <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
+        <div className="flex flex-wrap items-center justify-around gap-10">
+          {filteredProducts.length ? (
+            filteredProducts.map((product, index) => (
+              <CardProduct
+                key={product?._id}
+                id={product?._id}
+                name={product?.name}
+                price={product?.price}
+                detail={product?.detail}
+                image={product?.image}
+                brand={product?.brand?.name}
+                specie={product?.species[0]?.name}
+                category={product?.category[0]?.name}
+                rating={ratings[index]}
+              />
+            ))
+          ) : (
+            <p>No products found</p>
+          )}
         </div>
-      )}
+      </div>
       <NavPages />
     </div>
   );
- }
+}

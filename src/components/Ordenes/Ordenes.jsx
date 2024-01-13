@@ -51,7 +51,7 @@ export default function Ordenes({ id }) {
   // console.log(data);
   return (
     <section className="orden-container">
-      {data?.length === 0 ? (
+      {data?.length === 0 || data === null ? (
         <div className="orden-empty-container">
           <p className="empty-orden-text">
             No se encontraron pedidos
