@@ -16,15 +16,11 @@ import { Breadcrumbs, Typography } from "@mui/material";
 import Link from "next/link";
 import Tippy from "@tippyjs/react";
 
-
 const FavoriteProducts = () => {
-
   const favorites = useProductStore((state) => state.getFavorites());
-  
 
   const [favoriteProducts, setFavoriteProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  
+
   const fetchProductDetails = async (productId) => {
     try {
       const response = await fetch(`/api/products/${productId}`);
@@ -39,8 +35,6 @@ const FavoriteProducts = () => {
     }
   };
 
-  
-
   useEffect(() => {
     const fetchFavoriteProducts = async () => {
       try {
@@ -49,8 +43,8 @@ const FavoriteProducts = () => {
         );
         const details = await Promise.all(detailsPromises);
         setFavoriteProducts(details.filter((product) => product !== null));
-      } finally {
-        setLoading(false); 
+      } catch (error) {
+        console.error(error);
       }
     };
 
@@ -59,7 +53,6 @@ const FavoriteProducts = () => {
 
   return (
     <div className="favorites-container">
-      {loading && <Loader />}
       <div className="nav-breadcrumbs">
         <Breadcrumbs
           separator={<CaretRight size={15} />}

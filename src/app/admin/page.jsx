@@ -1,14 +1,15 @@
-import React from "react";
+import React, { Suspense } from "react";
 import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
 import DashboardInicio from "@/components/AdminDashInicio/DashboardInicio";
+import Loading from "./loading";
 
 const adminPage = () => {
   return (
     <LayoutAdmin>
       <div>
-      
-        <DashboardInicio />
-       
+        <Suspense fallback={<Loading />}>
+          <DashboardInicio />
+        </Suspense>
       </div>
     </LayoutAdmin>
   );

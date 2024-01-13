@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+.login-container {
+  @apply flex justify-center p-4 my-10;
+
+  .login-form-container {
+    @apply flex flex-col gap-10 p-10 px-20 bg-white rounded-lg shadow-lg w-[35%] h-[60%];
+  }
+
+  .login-form-title {
+    @apply text-3xl text-[#143146] font-semibold flex gap-2  justify-center items-center;
+  }
+
+  .login-form {
+    @apply flex flex-col gap-4;
+
+    .login-form-inputs {
+      @apply flex flex-col gap-12;
+
+      .form-error {
+        @apply text-[#ee2130] text-sm ml-2;
+      }
+    }
+
+    .login-button {
+      @apply bg-[#2d638b] text-white w-full p-3 rounded-xl font-semibold mt-8 duration-200 border-none;
+
+      &:hover {
+        @apply bg-[#265274];
+      }
+      &:disabled {
+        @apply bg-[#7a8d9b];
+      }
+    }
+
+    .separator-form-container {
+      @apply flex flex-row items-center gap-4 mt-8;
+
+      .separator-form {
+        @apply w-full h-px bg-[#DABEB6];
+      }
+
+      & p {
+        @apply text-[#143146];
+      }
+    }
+
+    .login-google-button {
+      @apply relative flex gap-2 items-center justify-center p-3 bg-[#eee0dd] rounded-xl text-[#143146] font-medium w-full duration-200 h-12 overflow-auto;
+
+      .google-text-container {
+        @apply flex items-center gap-2;
+      }
+
+      .google-text-container-hover {
+        @apply bg-[#f3e9e7] absolute w-full h-full flex justify-center items-center translate-y-[-100%] duration-200;
+
+        .logo-form-signup {
+          @apply duration-200 delay-150;
+        }
+      }
+
+      &:hover {
+        @apply bg-[#f3e9e7];
+
+        .google-text-container-hover {
+          @apply translate-y-0;
+
+          .logo-form-signup {
+            @apply scale-150;
+          }
+        }
+      }
+    }
+
+    .login-facebook-button {
+      @apply relative flex gap-2 items-center justify-center p-3 bg-[#eee0dd] rounded-xl text-[#143146] font-medium w-full duration-200 h-12 overflow-hidden;
+
+      .facebook-text-container {
+        @apply flex items-center gap-2;
+      }
+
+      .facebook-text-container-hover {
+        @apply bg-[#f3e9e7] absolute w-full h-full flex justify-center items-center translate-y-[-100%] duration-200;
+
+        .logo-form-signup {
+          @apply duration-200 delay-150;
+        }
+      }
+
+      &:hover {
+        @apply bg-[#f3e9e7];
+
+        .facebook-text-container-hover {
+          @apply translate-y-0;
+
+          .logo-form-signup {
+            @apply scale-150;
+          }
+        }
+      }
+    }
+
+    .login-signup-container {
+      @apply flex flex-row items-center justify-center gap-2 mt-10;
+
+      & p {
+        @apply text-[#7a8d9b];
+      }
+
+      & a {
+        @apply text-[#2d638b] duration-200;
+
+        &:hover {
+          @apply text-[#7a8d9b];
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1400px) {
+    .login-form-container {
+      @apply w-[70%];
+    }
+  }
+
+  @media (max-width: 858px) {
+    .login-form-container {
+      @apply w-[90%];
+    }
+  }
+
+  @media (max-width: 768px) {
+    @apply p-2;
+
+    .login-form-container {
+      @apply w-[100%];
+    }
+  }
+
+  @media (max-width: 480px) {
+    .login-form-container {
+      @apply w-[100%] px-4;
+    }
+  }
+}
+
+.MuiInputBase-root {
+  @apply rounded-xl text-[#143146] font-medium;
+}

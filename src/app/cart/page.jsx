@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useProductStore } from "@/hooks/usePages";
-import Loader from "@/components/Loader/Loader"; 
+import Loader from "@/components/Loader/Loader";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import "./CartShop.css";
@@ -27,7 +27,6 @@ const Cart = () => {
   const [total, setTotal] = useState(0);
   const [showInsufficientStockMessage, setShowInsufficientStockMessage] =
     useState(false);
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const { data: session, status } = useSession();
@@ -40,7 +39,6 @@ const Cart = () => {
         localStorage.removeItem("cart");
         router.push("/login");
       }
-      setLoading(false);
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -158,8 +156,6 @@ const Cart = () => {
       window.location.href = result.url;
     } catch (error) {
       console.error(error);
-    } finally {
-      setLoading(false); 
     }
   };
 
@@ -177,9 +173,8 @@ const Cart = () => {
 
   return (
     <div className="cart-container">
-      {loading && <Loader />}
       {showInsufficientStockMessage && (
-        <div className="insufficient-stock-message bg-red-500 text-white p-4 mb-4 rounded flex items-center">
+        <div className="flex items-center p-4 mb-4 text-white bg-red-500 rounded insufficient-stock-message">
           <p className="flex-grow">{showInsufficientStockMessage}</p>
           <button
             onClick={handleCloseInsufficientStockMessage}
