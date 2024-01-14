@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import CardProduct from "@/components/CardsProducts/CardProduct";
 import { useProductStore } from "@/hooks/usePages";
+import Loader from "@/components/Loader/Loader";
 import "./Favorites.css";
 import {
   ArrowRight,
@@ -15,11 +16,8 @@ import { Breadcrumbs, Typography } from "@mui/material";
 import Link from "next/link";
 import Tippy from "@tippyjs/react";
 
-
 const FavoriteProducts = () => {
-
   const favorites = useProductStore((state) => state.getFavorites());
-  
 
   const [favoriteProducts, setFavoriteProducts] = useState([]);
 
@@ -37,15 +35,17 @@ const FavoriteProducts = () => {
     }
   };
 
-  
-
   useEffect(() => {
     const fetchFavoriteProducts = async () => {
-      const detailsPromises = favorites.map((productId) =>
-        fetchProductDetails(productId)
-      );
-      const details = await Promise.all(detailsPromises);
-      setFavoriteProducts(details.filter((product) => product !== null));
+      try {
+        const detailsPromises = favorites.map((productId) =>
+          fetchProductDetails(productId)
+        );
+        const details = await Promise.all(detailsPromises);
+        setFavoriteProducts(details.filter((product) => product !== null));
+      } catch (error) {
+        console.error(error);
+      }
     };
 
     fetchFavoriteProducts();

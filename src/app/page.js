@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import toastNotify from "@/libs/toast";
 import Carousel from "@/components/Carousel/Carousel";
 import CategoryCards from "@/components/CategoryCards/CategoryCards";
 import InfoCards from "@/components/InfoCards/InfoCards";
 import UserRate from "@/components/UserRate/UserRate";
+import Loading from "./loading";
 
 export default function Home() {
   const { showNotify, ToastContainer } = toastNotify();
@@ -41,15 +42,14 @@ export default function Home() {
   };
 
   return (
-    <main className="main-container flex min-h-screen flex-col items-center justify-between px-28 py-0 gap-10">
+    <main className="flex flex-col items-center justify-between min-h-screen gap-10 py-0 main-container px-28">
       <ToastContainer />
-      <Carousel />
-      <CategoryCards />
-      <InfoCards />
-      <UserRate />
-      <button onClick={handleSendMailClick}>
-        Send Email
-      </button>
+      <Suspense fallback={<Loading />}>
+        <Carousel />
+        <CategoryCards />
+        <InfoCards />
+        <UserRate />
+      </Suspense>
     </main>
   );
 }

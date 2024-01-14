@@ -23,6 +23,8 @@ export default function CardProduct({
   brand,
   category,
   species,
+  stock,
+  active
 }) {
   const imageUrl = image ? image : "https://via.placeholder.com/150";
 
@@ -69,8 +71,9 @@ export default function CardProduct({
         brand,
         category,
         species,
+        stock,
+        active
       };
-
       addToCart(product);
       setShowSuccessMessage(true);
     } else {

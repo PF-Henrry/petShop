@@ -1,6 +1,6 @@
 // UnificadoShop.jsx
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import CardProduct from "@/components/CardsProducts/CardProduct";
 import SearchBar from "@/components/SearchBar/SearchBarCatalogo";
 import CatalogCarousel from "@/components/CatalogCarousel/CatalogCarousel";
@@ -16,6 +16,7 @@ import {
 import { useSession } from "next-auth/react";
 
 import "./ShopStyles.css";
+import Loading from "../loading";
 
 export default function UnificadoShop() {
   const { data: session, status: sessionStatus } = useSession();
@@ -28,6 +29,7 @@ export default function UnificadoShop() {
     getArrayPage,
     getFilter,
     setFilter,
+    updateFavorites,
     getTotalPages,
     getCurrentPage,
     setCurrentPage,
@@ -41,7 +43,10 @@ export default function UnificadoShop() {
       try {
         const storeProducts = localStorage.getItem("storeProducts");
         const storedRatings = localStorage.getItem("ratings");
-      
+        const userID = session?.user?.id;
+        if (userID) {
+          updateFavorites(userID);
+        }
 
         if (storeProducts && storedRatings) {
           setRatings(JSON.parse(storedRatings));
@@ -124,14 +129,14 @@ export default function UnificadoShop() {
   const generateRandomRating = () => Math.floor(Math.random() * 5) + 1;
 
   return (
-    <div className="container-shop relative">
+    <div className="relative container-shop">
       <CatalogCarousel />
       <InfoSection />
       <SearchBar onSearch={handleSearch} onClear={handleClear} />
       <NavPages />
-      <div className="products-container w-full">
+      <div className="w-full products-container">
         <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
-        <div className="flex flex-wrap gap-10 justify-around items-center">
+        <div className="flex flex-wrap items-center justify-around gap-10">
           {filteredProducts.length ? (
             filteredProducts.map((product, index) => (
               <CardProduct
