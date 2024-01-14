@@ -1,4 +1,3 @@
-// UnificadoShop.jsx
 "use client";
 import React, { Suspense, useEffect, useState } from "react";
 import CardProduct from "@/components/CardsProducts/CardProduct";
@@ -37,6 +36,7 @@ export default function UnificadoShop() {
   } = useProductStore();
   const currentPage = useCurrentPage();
   const originalProducts = useOriginalProducts();
+  const [originalProductsCopy, setOriginalProductsCopy] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,6 +52,7 @@ export default function UnificadoShop() {
           setRatings(JSON.parse(storedRatings));
           setProductsStore(JSON.parse(storeProducts));
           setFilteredProducts(getArrayPage());
+          setOriginalProductsCopy(JSON.parse(storeProducts));
         } else {
           const response = await fetch("api/products");
           const data = await response.json();
@@ -65,6 +66,7 @@ export default function UnificadoShop() {
           }
 
           setFilteredProducts(getArrayPage());
+          setOriginalProductsCopy(data);
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -78,6 +80,24 @@ export default function UnificadoShop() {
     setFilteredProducts(getArrayPage());
   }, [currentPage, getArrayPage, sortOrder]);
 
+  const applyFilter = (data, filterQuery) => {
+    if (!filterQuery) {
+      return data;
+    }
+
+    return data.filter(
+      (product) =>
+        product.name.toLowerCase().includes(filterQuery.toLowerCase()) ||
+        product.category[0]?.name
+          .toLowerCase()
+          .includes(filterQuery.toLowerCase()) ||
+        product.brand?.name.toLowerCase().includes(filterQuery.toLowerCase()) ||
+        product.species[0]?.name
+          .toLowerCase()
+          .includes(filterQuery.toLowerCase())
+    );
+  };
+
   const handleSearch = (query) => {
     const filtered = applyFilter(getProducts(), query);
     setProductsStore(filtered);
@@ -87,9 +107,24 @@ export default function UnificadoShop() {
 
   const handleClear = () => {
     setFilter({ name: "name", value: "" });
-    setProductsStore(originalProducts);
+    setProductsStore(originalProductsCopy);
     setFilteredProducts(getArrayPage());
+    localStorage.removeItem("filteredProducts");
   };
+  
+  useEffect(() => {
+    const handleKeyPress = (event) => {
+      if (event.key === "Backspace") {
+        handleClear();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleClear]);
 
   const handleOnChange = (e) => {
     const { value, name } = e.target;
