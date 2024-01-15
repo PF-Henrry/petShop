@@ -9,6 +9,9 @@ const orderPaymetSchemma = new Schema({
     status:{
        type: Boolean 
     },
+    sendStatus:{
+        type: String
+    },
     amount:{
         type: Number
     },
@@ -18,10 +21,19 @@ const orderPaymetSchemma = new Schema({
     fecha:{
         type: String
     },
+    address:{
+        type: String
+    },
     link:{
         type: String
     },
-    items:[{type: Types.ObjectId, ref:"Products"}]
+    items:[{ 
+      product:{
+        type: Types.ObjectId,
+        ref:"Products"
+        },
+      count:{type: Number, default:1}
+    }]
 });
 
 
@@ -34,6 +46,17 @@ orderPaymetSchemma.methods.addTotalAmount = function(num){
      this.amount = num
      return this.save();
 }
+
+orderPaymetSchemma.methods.updateStatus = function(state) {
+    this.sendStatus = state;
+    return this.save();
+}
+
+orderPaymetSchemma.methods.renewLink = function (url){
+    this.link = url;
+    return this.save();
+}
+
 
 export default models.OrderPatmets || model('OrderPatmets',orderPaymetSchemma);
 

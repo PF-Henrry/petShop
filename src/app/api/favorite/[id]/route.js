@@ -10,7 +10,6 @@ export async function DELETE(request,{params}){
         const requestQuery = await request.json();
         const {productId} = requestQuery;
         const formatID = new Types.ObjectId(productId);
-
         const findFavoriteUser = await favorite.findOne({userID:id});
         if(!findFavoriteUser) throw TypeError('user favorite not found');
         
@@ -31,6 +30,7 @@ export async function DELETE(request,{params}){
 
         if(favorite) return NextResponse.json(result,{status:200})
 
+        throw TypeError('Error inesperado.')
 
     } catch (error) {
         return NextResponse.json(error.message,{status:400})
@@ -47,6 +47,7 @@ export async function POST(request,{params}){
      const id =  params.id
      const requestQuery = await request.json();
      const {productId} = requestQuery;
+   
 
      const formatID = new Types.ObjectId(productId);
 
@@ -59,24 +60,30 @@ export async function POST(request,{params}){
             newFavorite.save();
         }
 
+    const idUser = new Types.ObjectId(id)
 
-    const updateFavorite = await favorite.findByIdAndUpdate(
-         id,
+
+    const existingFavorite = await favorite.findOne({ userID: idUser, products: formatID });
+
+   if(existingFavorite) throw TypeError('product id is repeat')
+
+    const updateFavorite = await favorite.findOneAndUpdate(
+         {userID: idUser},
         { $push: { products: formatID } },
         { new: true });
 
 
-
-        const result = await favorite.findOne({userID:id})
+        const result = await favorite.findOne({userID:idUser})
         .populate('products',{
             name:1,
             _id:1})
         .populate('userID',{
+            _id:1,
             name:1
         });
 
 
-     if(favorite) return NextResponse.json({ok:true,result},{status:200})
+     if(result) return NextResponse.json(result,{status:200})
 
      throw TypeError('Error inesperado.')
 
@@ -100,17 +107,24 @@ try {
 
     if(!id) throw TypeError('Id no proporcionada');
     
-    const findUserFavorite = await favorite.findOne({userID:id}).populate('products',{
+    const idUser = new Types.ObjectId(id);
+    const findUserFavorite = await favorite.findOne({userID:idUser}).populate('products',{
         name: 1,
         _id:1,
         price:1,
         detail:1,
-        image:1
+        image:1,
+        brand:1,
+        species:1,
+        category:1
     }).populate('userID',{
+        _id:1,
         name:1
     });
 
     if(findUserFavorite) return NextResponse.json(findUserFavorite,{status:200})
+
+    throw TypeError('User favorite not found');
 
 } catch (error) {
     return NextResponse.json(

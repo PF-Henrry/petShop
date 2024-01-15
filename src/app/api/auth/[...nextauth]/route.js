@@ -6,7 +6,7 @@ import { conn,connectDB } from "@/libs/mongodb";
 import Users from "@/models/users";
 import { addUser } from "@/libs/createUserWithRelation";
 
-const authOptions = { 
+export const authOptions = { 
         providers: [
             CredentialsProvider({
                 name:"Credentials",
@@ -18,18 +18,20 @@ const authOptions = {
                     if(!conn.isConnected) connectDB();
 
                     const findUser = await Users.findOne({email:credentials.email});
-
+                   
                     console.log(findUser?.img)
                     if(!findUser) throw new Error("Credenciales incorrectas")
                     if(findUser?.auth3rd) throw new Error('Account requires access through 3rd party');
-
+                    
                     const matchPassword = await findUser.comparePassword(credentials.password);
                     if(!matchPassword)  throw new Error("Credenciales incorrectas")
                     return {
+                
                         id: findUser._id,
                         name: findUser.username,
                         email: findUser.email,
-                        image: findUser.img,
+                        image: findUser.img, 
+                        
                     }
                 }
             }),
@@ -53,6 +55,7 @@ const authOptions = {
                 // Realizas tu lógica de redirección aquí
                 if(findUser){
                     findUser.token = account.access_token
+                    
                     await findUser.save();
                 }
 
@@ -63,6 +66,7 @@ const authOptions = {
                
                 if(findUser){
                     findUser.token =  account.access_token
+                   
                     await findUser.save();
                     return true
                 } else {
@@ -71,6 +75,7 @@ const authOptions = {
                     const lastname = splitName[1];
                     const username = user.email.split("@")[0];
                     const img = user.image
+                    const role = (user.email === 'petshop.kimey@gmail.com') ? 2 : 1;
                    await addUser({
                         "name":name,
                         "lastname":lastname,
@@ -82,7 +87,7 @@ const authOptions = {
                         codeP:0,
                         province:'Unknown',
                         adress:'Unknown',
-                        role:1,
+                        role: role,
                         auth3rd:true,
                         token:account.access_token,
                     });
@@ -124,21 +129,30 @@ const authOptions = {
 
             },
             async jwt({ token, account }) {
-                if (account) {                    
-                  token.accessToken = account.access_token
+                if (account) {
+                    
+                    token.accessToken = account.access_token;
+                 
                 }
                 return token
               },
               async session({ session, user, token }) {
+                //console.log('session:', token);
                 if(!conn.isConnected) connectDB()
 
                 const findUser = await Users.findOne({email:token.email});
-                if(findUser) session.user.id = findUser._id
-                session.accessToken = token.accessToken
-                return session
-              }
-        },
 
+                if(findUser) {
+                session.user.id = findUser._id
+                session.user.role = findUser.role               
+                
+              }
+
+              session.accessToken = token.accessToken
+
+              return session
+        }
+    },
         pages: {
             signIn: '/login',
             signOut: '/auth/signout',

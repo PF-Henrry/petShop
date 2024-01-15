@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Ordenes from "@/components/Ordenes/Ordenes";
+import Loader from "@/components/Loader/Loader";
 import Image from "next/image";
 import Link from "next/link";
 import "./Orders.css";
@@ -11,17 +12,10 @@ import { CaretRight } from "@phosphor-icons/react/dist/ssr";
 import { Breadcrumbs, Typography } from "@mui/material";
 
 function Orders() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const id = session?.user?.id;
   const name = session?.user?.name;
   const image = session?.user?.image;
-  const router = useRouter();
-
-  useEffect(() => {
-    if (status !== "authenticated") {
-      router.push("/login");
-    }
-  }, [status, router]);
 
   return (
     <div className="orders-container">

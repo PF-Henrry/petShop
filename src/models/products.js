@@ -55,5 +55,15 @@ const productSchema = new Schema({
     }
 })
 
+productSchema.methods.addStock = function (num){
+    this.stock = parseInt(this.stock + num) 
+    return this.save()
+}
+
+productSchema.methods.remStock = function(num){
+    this.stock = parseInt(this.stock - num) 
+    return this.save()
+}
 
 export default models.Products || model('Products', productSchema);
+

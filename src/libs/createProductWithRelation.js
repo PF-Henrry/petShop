@@ -10,8 +10,8 @@ export const addProduct = async (dataProduct) => {
     try { 
         if(!conn.isConnected) connectDB();
 
-        const {brand,category,name,price,specie} = dataProduct;
-        console.log('este es el valor de species',specie);
+        const {brand,category,name,price,species} = dataProduct;
+        console.log('este es el valor de species',species);
         if(!name || !price) throw TypeError('Name and Price is required');
 
 
@@ -24,9 +24,9 @@ export const addProduct = async (dataProduct) => {
         }
     
             let pushSpecies = [];
-            if(!Array.isArray(specie)) throw TypeError('Error format Specie');
-            for (const specieObject of specie) {            
-                const findOrCreateSpecie = await findOrCreateModel(speciesDB,specieObject);
+            if(!Array.isArray(species)) throw TypeError('Error format Specie');
+            for (const specieObject of species) {            
+                const findOrCreateSpecie = await findOrCreateModel(speciesDB,{name:specieObject});
                 pushSpecies.push(findOrCreateSpecie);
             }
         

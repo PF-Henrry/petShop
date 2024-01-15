@@ -9,11 +9,9 @@ import { Rating } from "@mui/material";
 import Link from "next/link";
 import "./CardProduct.css";
 import { useProductStore } from "@/hooks/usePages";
-import { ToastContainer, toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
-import "react-toastify/dist/ReactToastify.css";
 
 export default function CardProduct({
   id,
@@ -25,6 +23,8 @@ export default function CardProduct({
   brand,
   category,
   species,
+  stock,
+  active
 }) {
   const imageUrl = image ? image : "https://via.placeholder.com/150";
 
@@ -49,6 +49,16 @@ export default function CardProduct({
 
   const router = useRouter();
 
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  useEffect(() => {
+    if (showSuccessMessage) {
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+      }, 2000); 
+    }
+  }, [showSuccessMessage]);
+
   const handleAddToCart = () => {
     if (session && sessionStatus === "authenticated") {
       const product = {
@@ -61,10 +71,11 @@ export default function CardProduct({
         brand,
         category,
         species,
+        stock,
+        active
       };
-
       addToCart(product);
-      toast.success("Producto agregado al carrito con éxito");
+      setShowSuccessMessage(true);
     } else {
       router.push("/login");
     }
@@ -74,20 +85,24 @@ export default function CardProduct({
     (state) => state.removeFromFavorites
   );
   const getFavorites = useProductStore((state) => state.getFavorites);
-
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
-    const favorites = getFavorites();
+    if (session && sessionStatus === "authenticated") {
+      
+     const favorites = getFavorites();
     setIsFavorite(favorites.includes(id));
-  }, [getFavorites, id]);
+    }
+  }, [getFavorites, id,session,sessionStatus]);
 
   const handleToggleFavorite = async () => {
     if (session && sessionStatus === "authenticated") {
+      const idUser = session?.user?.id
+
       if (isFavorite) {
-        await removeFromFavorites(id);
+        await removeFromFavorites(id,idUser);
       } else {
-        await addToFavorites(id);
+        await addToFavorites(id,idUser);
       }
 
       const updatedFavorites = getFavorites();
@@ -99,6 +114,11 @@ export default function CardProduct({
 
   return (
     <div className="card-product">
+       {showSuccessMessage && (
+        <div className="success-message bg-green-500 text-white p-4 rounded-md absolute top-0 right-0 m-4 shadow-md mt-8">
+        <span className="mr-2">✔</span> Producto agregado al carrito con éxito
+      </div>
+      )}
       <button className="card-product-favorite" onClick={handleToggleFavorite}>
         {isFavorite ? (
           <HeartStraight size={20} weight="fill" color="#ee2130" />
@@ -131,7 +151,7 @@ export default function CardProduct({
         <ShoppingCartSimple size={32} className="card-product-cart-icon" />
         Añadir al carrito
       </button>
-      <ToastContainer position="top-center" />
+     
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { URL_CHECKED,EMAIL_CHEKED,PASSWORD_CHECKED } from "@/utils/regex";
 export async function POST(request) {
   const dataUser = await request.json();
 
-   const {email,password,img} = dataUser;
+   const {email,password,img, } = dataUser;
    let errors = {};
  
   try {

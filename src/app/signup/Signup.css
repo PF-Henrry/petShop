@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+.signup-container {
+  @apply flex justify-center p-4 my-10;
+
+  .signup-form-container {
+    @apply flex flex-col gap-10 p-10 px-20 bg-white rounded-lg shadow-lg w-[35%] h-[60%];
+  }
+
+  .signup-title {
+    @apply text-3xl text-[#143146] font-semibold flex gap-2 justify-center items-center border-b pb-4 border-[#DABEB6];
+  }
+
+  .signup-form {
+    @apply flex flex-col gap-4;
+
+    .signup-fields {
+      @apply flex flex-col gap-12;
+
+      .form-error {
+        @apply text-[#ee2130] text-sm ml-2;
+      }
+    }
+
+    .signup-button {
+      @apply bg-[#2d638b] text-white w-full p-3 rounded-xl font-semibold mt-8 duration-200 border-none;
+
+      &:hover {
+        @apply bg-[#265274];
+      }
+      &:disabled {
+        @apply bg-[#7a8d9b];
+      }
+    }
+    .login-link-container {
+      @apply flex flex-row items-center justify-center gap-2 mt-10;
+
+      & p {
+        @apply text-[#7a8d9b];
+      }
+
+      & a {
+        @apply text-[#2d638b] duration-200;
+
+        &:hover {
+          @apply text-[#7a8d9b];
+        }
+      }
+    }
+  }
+
+  @media (max-width: 1400px) {
+    .signup-form-container {
+      @apply w-[70%];
+    }
+  }
+
+  @media (max-width: 858px) {
+    .signup-form-container {
+      @apply w-[90%];
+    }
+  }
+
+  @media (max-width: 768px) {
+    @apply p-2;
+
+    .signup-form-container {
+      @apply w-[100%];
+    }
+  }
+
+  @media (max-width: 480px) {
+    .signup-form-container {
+      @apply w-[100%] px-4;
+    }
+  }
+}
+
+.MuiInputBase-root {
+  @apply rounded-xl text-[#143146] font-medium;
+}

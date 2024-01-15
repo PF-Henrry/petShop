@@ -1,7 +1,7 @@
 import { encrypt,isEqual } from "@/libs/crypt";
 import { Types, Schema, model, models} from "mongoose";
 import {INPUT_NAME_CHECKED, ADDRESS_CHECKED, URLIMG_CHECKED, EMAIL_CHECKED, PASSWORD_CHECKED, ZIP_CHECKED} from '@/utils/regex';
-
+import { sendEmail } from "@/libs/emailUtils";
 const userSchemma = new Schema({
 
     name:{
@@ -27,7 +27,6 @@ const userSchemma = new Schema({
         trim: true,
         minlength: 5,
         maxlength: 100,
-        match: ADDRESS_CHECKED
     },
     city:{
         type: Types.ObjectId,
@@ -85,11 +84,14 @@ userSchemma.pre('save', async function (next){
     try {
         const hashedPassword = await encrypt(user.password)
         user.password = hashedPassword;
+        await sendEmail(user.email,user.username);
+
         next();
     } catch (error) {
         return next(error);
     }
 })
+
 
 
 export default models.Users || model('Users',userSchemma) ;

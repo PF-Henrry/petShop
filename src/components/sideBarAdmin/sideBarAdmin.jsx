@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { User, Storefront, SignOut, House, CurrencyDollar } from "@phosphor-icons/react/dist/ssr"; 
 
-// Define el componente SidebarLink con icono de usuario
 const SidebarLink = ({ href, text, isActive, icon }) => {
   return (
     <li>
@@ -23,7 +22,7 @@ const SidebarLink = ({ href, text, isActive, icon }) => {
   );
 };
 
-// Define el componente SidebarSubLink
+
 const SidebarSubLink = ({ href, text }) => {
   return (
     <li>
@@ -36,7 +35,7 @@ const SidebarSubLink = ({ href, text }) => {
   );
 };
 
-// Define el componente Sidebar
+
 const Sidebar = () => {
   const { id } = useParams();
 
@@ -52,24 +51,24 @@ const Sidebar = () => {
           </div>
         </Link>
 
-        {/* Enlaces del Sidebar */}
+      
         <ul className="flex flex-col space-y-2 p-4">
-          {/* Agrega el icono de usuario al enlace "Usuarios" */}
+          
           <SidebarLink href="/admin/users" text="Usuarios" isActive={false} icon={<User size={32} />} />
           <SidebarLink href="/admin/products" text="Productos" isActive={false} icon={<Storefront size={32} />} />
           <ul className="ml-4">
             <SidebarSubLink href="/admin/products/uploadProducts" text="Agregar Producto" />
           </ul>
           <SidebarLink href="/admin/sales" text="Ventas" isActive={false} icon={<CurrencyDollar size={32} />} />
-          {/* ... (resto de tus enlaces) */}
+          
         </ul>
 
-        {/* Línea divisoria */}
+      
         <hr className="border-b my-2 border-rose-200" />
 
-        {/* Enlaces en la parte inferior de la barra lateral */}
+        
         <ul className="mt-auto">
-          <SidebarLink href="/" text="Inicio" isActive={false} icon={<House size={32} />} />
+          <SidebarLink href="/admin" text="Inicio" isActive={false} icon={<House size={32} />} />
           <SidebarLink href="/logout" text="Cerrar Sesión" isActive={false} icon={<SignOut size={32} />} />
         </ul>
       </nav>
@@ -79,5 +78,5 @@ const Sidebar = () => {
   );
 };
 
-// Exporta el componente Sidebar
+
 export default Sidebar;

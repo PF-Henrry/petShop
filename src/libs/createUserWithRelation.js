@@ -16,16 +16,23 @@ export  async function addUser(user) {
 
       const newCity =  await findOrCreateModel(Citys,{name:city})
       const newProvince = await findOrCreateModel(Provinces,{name:province}) 
+   
+     let role = 1;     
+    const adminEmail = 'petshop.kimey@gmail.com';
+    if (user.email === adminEmail) {
+      role = 2;
+    }
       const savedUser = await Users.create({
         
         ...user,
         city: newCity._id,
         province: newProvince._id,
+        role: role,
         active: true,
       });
-      console.log(savedUser)
+      console.log('saveduser', savedUser)
       const newFavorite = await Favorite.create({userID:savedUser._id,products:[]});
-    
+      
       return savedUser
       
     

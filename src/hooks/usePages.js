@@ -11,7 +11,13 @@ const storedFavorites =
 
 export const useProductStore = create((set, get) => ({
   products: [],
-  cartProducts: storedCart,
+
+  cartProducts: storedCart.map((product) => ({
+    ...product,
+    deliveryMethod: "Retiro en tienda", 
+   
+  })),
+
   sizeGroup: 9,
   currentPage: 1,
   filter: {
@@ -105,30 +111,36 @@ export const useProductStore = create((set, get) => ({
       },
     })),
 
-  addToCart: (product) => {
-    set((state) => {
-      const existingProduct = state.cartProducts.find(
-        (p) => p.id === product.id
-      );
-
-      if (existingProduct) {
-        // Si el producto ya está en el carrito, actualiza la cantidad
-        const updatedCart = state.cartProducts.map((p) =>
-          p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
+    addToCart: (product) => {
+      
+      set((state) => {
+        const existingProduct = state.cartProducts.find(
+          (p) => p.id === product.id
         );
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
-        return { cartProducts: updatedCart };
-      } else {
-        // Si el producto no está en el carrito, agrégalo con cantidad 1
-        const updatedCart = [
-          ...state.cartProducts,
-          { ...product, quantity: 1 },
-        ];
-        localStorage.setItem("cart", JSON.stringify(updatedCart));
-        return { cartProducts: updatedCart };
-      }
-    });
-  },
+    
+        if (existingProduct) {
+          // Si el producto ya está en el carrito, actualiza la cantidad
+          const updatedCart = state.cartProducts.map((p) =>
+            p.id === product.id
+              ? { ...p, quantity: p.quantity + 1, stock: product.stock, active: product.active }
+              : p
+          );
+        
+          localStorage.setItem("cart", JSON.stringify(updatedCart));
+          return { cartProducts: updatedCart };
+        } else {
+          // Si el producto no está en el carrito, agrégalo con cantidad 1
+          const updatedCart = [
+            ...state.cartProducts,
+            { ...product, quantity: 1, stock: product.stock, active: product.active }
+          ];
+          localStorage.setItem("cart", JSON.stringify(updatedCart));
+          return { cartProducts: updatedCart };
+        }
+      });
+    },
+
+    
 
   removeFromCart: (products) => {
     set((state) => {
@@ -148,18 +160,58 @@ export const useProductStore = create((set, get) => ({
       return { cartProducts: updatedCart };
     });
   },
+updateDeliveryMethod: (productId, newDeliveryMethod) => {
+    set((state) => {
+      const updatedCart = state.cartProducts.map((product) =>
+        product.id === productId
+          ? { ...product, deliveryMethod: newDeliveryMethod }
+          : product
+      );
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+      return { cartProducts: updatedCart };
+    });
+  },
 
-  addToFavorites: (productId) => {
+  addToFavorites: (productId,userid) => {
     set((state) => {
       const updatedFavorites = [...state.favorites, productId];
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
+
+      const fetchingFavorite = async() => {
+
+        const response = await fetch(`api/favorite/${userid}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body:JSON.stringify({productId})
+        });
+
+      }
+      fetchingFavorite();
+
       return { favorites: updatedFavorites };
     });
   },
 
-  removeFromFavorites: (productId) => {
+  removeFromFavorites: (productId,userid) => {
     set((state) => {
       const updatedFavorites = state.favorites.filter((id) => id !== productId);
+      const fetchingFavorite = async() => {
+
+        const response = await fetch(`api/favorite/${userid}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body:JSON.stringify({productId})
+        });
+
+      }
+      fetchingFavorite();
+
       localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
       return { favorites: updatedFavorites };
     });
@@ -169,6 +221,18 @@ export const useProductStore = create((set, get) => ({
     const { favorites } = get();
     return favorites;
   },
+  updateFavorites: (userid) => {
+     const fetching = async () => {
+        const response = await fetch(`api/favorite/${userid}`)
+        if(response.ok){
+          const datos = await response.json();
+          const productsID = datos?.products?.map(product => product._id);
+          if(productsID) set({favorites: productsID});
+        }
+     }
+     fetching();
+  }
+  ,
 
   updateOrderState: (newOrder) => {
     set({ order: newOrder });
