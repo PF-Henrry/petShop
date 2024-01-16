@@ -64,6 +64,10 @@ const userSchemma = new Schema({
     token:{
         type: String
     },
+    auth:{
+        type: Boolean,
+        default:false
+    },
     active:{
         type: Boolean,
         default: true

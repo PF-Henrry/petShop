@@ -10,6 +10,8 @@ export async function DELETE(request,{params}){
         const requestQuery = await request.json();
         const {productId} = requestQuery;
         const formatID = new Types.ObjectId(productId);
+        
+        console.log('este es el formatID',formatID)
         const findFavoriteUser = await favorite.findOne({userID:id});
         if(!findFavoriteUser) throw TypeError('user favorite not found');
         
@@ -20,19 +22,23 @@ export async function DELETE(request,{params}){
             { new: true });
 
 
-            const result = await favorite.findOne({userID:id})
-            .populate('products',{
-                name:1,
-                _id:1})
-            .populate('userID',{
-                name:1
-            });
+            const result = await favorite.findOne({userID:id}).populate({
+                path: 'products',
+                select: 'name price detail image _id',
+                populate: {
+                path: 'brand species category',
+                select: 'name _id'}
+              }).populate('userID',{
+                  _id:1,
+                  name:1
+              });
 
-        if(favorite) return NextResponse.json(result,{status:200})
+        if(result) return NextResponse.json(result,{status:200})
 
         throw TypeError('Error inesperado.')
 
     } catch (error) {
+        console.log(error.message)
         return NextResponse.json(error.message,{status:400})
     }
 }
@@ -73,14 +79,16 @@ export async function POST(request,{params}){
         { new: true });
 
 
-        const result = await favorite.findOne({userID:idUser})
-        .populate('products',{
-            name:1,
-            _id:1})
-        .populate('userID',{
-            _id:1,
-            name:1
-        });
+        const result = await favorite.findOne({userID:idUser}).populate({
+            path: 'products',
+            select: 'name price detail image _id',
+            populate: {
+            path: 'brand species category',
+            select: 'name _id'}
+          }).populate('userID',{
+              _id:1,
+              name:1
+          });
 
 
      if(result) return NextResponse.json(result,{status:200})
@@ -108,19 +116,17 @@ try {
     if(!id) throw TypeError('Id no proporcionada');
     
     const idUser = new Types.ObjectId(id);
-    const findUserFavorite = await favorite.findOne({userID:idUser}).populate('products',{
-        name: 1,
-        _id:1,
-        price:1,
-        detail:1,
-        image:1,
-        brand:1,
-        species:1,
-        category:1
+    const findUserFavorite = await favorite.findOne({userID:idUser}).populate({
+      path: 'products',
+      select: 'name price detail image _id',
+      populate: {
+      path: 'brand species category',
+      select: 'name _id'}
     }).populate('userID',{
         _id:1,
         name:1
     });
+
 
     if(findUserFavorite) return NextResponse.json(findUserFavorite,{status:200})
 

@@ -84,16 +84,16 @@ export default function CardProduct({
   const removeFromFavorites = useProductStore(
     (state) => state.removeFromFavorites
   );
-  const getFavorites = useProductStore((state) => state.getFavorites);
+  const getFavoritesId = useProductStore((state) => state.getFavoritesId);
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     if (session && sessionStatus === "authenticated") {
       
-     const favorites = getFavorites();
+     const favorites = getFavoritesId();
     setIsFavorite(favorites.includes(id));
     }
-  }, [getFavorites, id,session,sessionStatus]);
+  }, [getFavoritesId, id,session,sessionStatus]);
 
   const handleToggleFavorite = async () => {
     if (session && sessionStatus === "authenticated") {
@@ -105,7 +105,7 @@ export default function CardProduct({
         await addToFavorites(id,idUser);
       }
 
-      const updatedFavorites = getFavorites();
+      const updatedFavorites = getFavoritesId();
       setIsFavorite(updatedFavorites.includes(id));
     } else {
       router.push("/login");

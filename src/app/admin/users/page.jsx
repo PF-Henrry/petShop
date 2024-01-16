@@ -108,7 +108,7 @@ const UsersPage = () => {
 
         reader.onload = (event) => {
           const imageUrl = event.target.result;
-          setEditedUser({ ...editedUser, image: imageUrl });
+          setEditedUser({ ...editedUser, img: imageUrl });
         };
 
         reader.readAsDataURL(file);
