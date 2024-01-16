@@ -19,9 +19,8 @@ export const authOptions = {
 
                     const findUser = await Users.findOne({email:credentials.email});
                    
-                    console.log(findUser?.img)
                     if(!findUser) throw new Error("Credenciales incorrectas")
-                    if(findUser?.auth3rd) throw new Error('Account requires access through 3rd party');
+                    if(findUser?.auth) throw new Error('Account requires access through 3rd party');
                     
                     const matchPassword = await findUser.comparePassword(credentials.password);
                     if(!matchPassword)  throw new Error("Credenciales incorrectas")
@@ -53,20 +52,19 @@ export const authOptions = {
 
             if (account?.provider === 'credentials') {
                 // Realizas tu lógica de redirección aquí
-                if(findUser){
+                if(findUser?.active){
                     findUser.token = account.access_token
-                    
-                    await findUser.save();
+                     await findUser.save();
+                    return true // Redirigir al home después del inicio de sesión
                 }
 
-                return true // Redirigir al home después del inicio de sesión
               }
 
             if(account?.provider === 'facebook'){
                
                 if(findUser){
+                    if(!findUser?.active) return false
                     findUser.token =  account.access_token
-                   
                     await findUser.save();
                     return true
                 } else {
@@ -83,12 +81,12 @@ export const authOptions = {
                         username,
                         password:'Predeter123!',
                         email: user.email,
-                        city:'Unknown',
+                        city:'Desconocido',
                         codeP:0,
-                        province:'Unknown',
-                        adress:'Unknown',
+                        province:'Desconocido',
+                        adress:'Desconocido',
                         role: role,
-                        auth3rd:true,
+                        auth:true,
                         token:account.access_token,
                     });
                 }
@@ -98,6 +96,7 @@ export const authOptions = {
 
             if(account?.provider === 'google'){
                 if(findUser){
+                    if(!findUser?.active) return false
                     findUser.token =  account.access_token
                     await findUser.save();
                     return true
@@ -114,12 +113,12 @@ export const authOptions = {
                         username,
                         password:'Primkimei123!',
                         email: user.email,
-                        city:'Unknown',
+                        city:'Desconocido',
                         codeP:0,
-                        province:'Unknown',
-                        adress:'Unknown',
+                        province:'Desconocido',
+                        adress:'Desconocido',
                         role:1,
-                        auth3rd:true,
+                        auth:true,
                         token:account.access_token,
                     });
                 }
@@ -137,7 +136,6 @@ export const authOptions = {
                 return token
               },
               async session({ session, user, token }) {
-                //console.log('session:', token);
                 if(!conn.isConnected) connectDB()
 
                 const findUser = await Users.findOne({email:token.email});
