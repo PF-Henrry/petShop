@@ -4,10 +4,7 @@ const storedCart =
   typeof window !== "undefined"
     ? JSON.parse(localStorage.getItem("cart")) || []
     : [];
-const storedFavorites =
-  typeof window !== "undefined"
-    ? JSON.parse(localStorage.getItem("favorites")) || []
-    : [];
+const storedFavorites = [];
 
 export const useProductStore = create((set, get) => ({
   products: [],
@@ -174,11 +171,12 @@ updateDeliveryMethod: (productId, newDeliveryMethod) => {
 
   addToFavorites: (productId,userid) => {
     set((state) => {
-      const updatedFavorites = [...state.favorites, productId];
-      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
-
+      const findProduct = state.products.find((product) => {
+        return product._id == productId});
+      const updatedFavorites = [...state.favorites, findProduct];
+      
       const fetchingFavorite = async() => {
-
+        
         const response = await fetch(`api/favorite/${userid}`,
         {
           method: "POST",
@@ -187,6 +185,8 @@ updateDeliveryMethod: (productId, newDeliveryMethod) => {
           },
           body:JSON.stringify({productId})
         });
+        
+        console.log(await response.json())
 
       }
       fetchingFavorite();
@@ -197,7 +197,7 @@ updateDeliveryMethod: (productId, newDeliveryMethod) => {
 
   removeFromFavorites: (productId,userid) => {
     set((state) => {
-      const updatedFavorites = state.favorites.filter((id) => id !== productId);
+      const updatedFavorites = state.favorites.filter((product) => product._id !== productId);
       const fetchingFavorite = async() => {
 
         const response = await fetch(`api/favorite/${userid}`,
@@ -209,10 +209,10 @@ updateDeliveryMethod: (productId, newDeliveryMethod) => {
           body:JSON.stringify({productId})
         });
 
+        console.log(await response.json())
       }
       fetchingFavorite();
 
-      localStorage.setItem("favorites", JSON.stringify(updatedFavorites));
       return { favorites: updatedFavorites };
     });
   },
@@ -226,13 +226,17 @@ updateDeliveryMethod: (productId, newDeliveryMethod) => {
         const response = await fetch(`api/favorite/${userid}`)
         if(response.ok){
           const datos = await response.json();
-          const productsID = datos?.products?.map(product => product._id);
-          if(productsID) set({favorites: productsID});
+          
+          if(datos.products) set({favorites: datos.products});
         }
      }
      fetching();
-  }
-  ,
+  },
+  getFavoritesId: () => {
+    const {favorites} = get();
+    const favoriteId = favorites.map((favorite) => favorite._id);
+    return favoriteId
+  },
 
   updateOrderState: (newOrder) => {
     set({ order: newOrder });
