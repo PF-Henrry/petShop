@@ -236,6 +236,8 @@ const ProductsPage = () => {
                 className="cursor-pointer p-2 rounded mb-2 transition-all duration-300 ease-in-out hover:bg-pink-100 hover:text-black"
                 onClick={() => openModal(product)}
               >
+                <span className="hover:font-bold">{product.name}</span>
+                <p className="text-sm">Stock disponible: {product.stock}</p>
                 {product.active ? <span className="hover:font-bold">{product.name}</span> : <span className="hover:font-bold text-red-300">{product.name}</span> }
               </li>
             )})}
@@ -303,6 +305,11 @@ const ProductsPage = () => {
                   )}
                 </div>
               </div>
+
+              <p>
+      <span className="font-bold">Stock disponible:</span>{" "}
+      {selectedProduct.stock}
+    </p>
 
               {isEditing ? (
                 <>
