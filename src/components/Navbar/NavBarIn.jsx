@@ -39,6 +39,9 @@ export default function NavbarIn() {
   const isAdmin = userRole === 2;
 
   const [isAdminSwitch, setIsAdminSwitch] = useState(false);
+
+
+
   const router = useRouter();
 
   const handleAdminSwitchChange = () => {
@@ -76,16 +79,48 @@ export default function NavbarIn() {
     city: "",
   });
 
+ 
+
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       if (userSessionId) {
+  //         const response = await fetch("/api/users/" + userSessionId);
+
+  //         if (response.ok) {
+  //           const userData = await response.json();
+  //           // console.log("Datos del usuario obtenidos:", userData.img);
+  //           setUserData(userData);
+  //         } else {
+  //           console.error("Error al obtener los datos del usuario");
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error("Error de red al obtener los datos del usuario", error);
+  //     }
+  //   };
+  //   fetchUserData();
+
+  //   const storedUserData = localStorage.getItem("userData");
+  //   if (storedUserData) {
+  //     const parsedUserData = JSON.parse(storedUserData);
+  //     setUserData(parsedUserData);
+  //   }
+  // }, [userSessionId,setUserData]);
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         if (userSessionId) {
           const response = await fetch("/api/users/" + userSessionId);
-
+  
           if (response.ok) {
-            const userData = await response.json();
-            // console.log("Datos del usuario obtenidos:", userData.img);
-            setUserData(userData);
+            const newUserData = await response.json();
+            setUserData((prevUserData) => ({
+              ...prevUserData,
+              img: newUserData.img + `?${Math.random()}`,
+              name: newUserData.name,
+             
+            }));
           } else {
             console.error("Error al obtener los datos del usuario");
           }
@@ -94,14 +129,15 @@ export default function NavbarIn() {
         console.error("Error de red al obtener los datos del usuario", error);
       }
     };
+  
     fetchUserData();
-
+  
     const storedUserData = localStorage.getItem("userData");
     if (storedUserData) {
       const parsedUserData = JSON.parse(storedUserData);
       setUserData(parsedUserData);
     }
-  }, [userSessionId]);
+  }, [userSessionId, setUserData]);
 
   const handleCloseMenu = () => {
     const checkboxMenu = document.getElementById("check-menu");
@@ -114,6 +150,7 @@ export default function NavbarIn() {
     if (checkboxUser) checkboxUser.checked = false;
     if (detailsUser) detailsUser.removeAttribute("open");
   };
+ 
 
   return (
     <nav className="NavBarIn">
@@ -218,10 +255,13 @@ export default function NavbarIn() {
                     />
                   </p>
                 </summary>
+
                 <ListUser
                   userImg={userData.img || defaultImage}
+                  setUserData={setUserData}
                   handleCloseMenu={handleCloseMenu}
                 />
+
               </details>
             </section>
             <section className="block list-user-navBar">
@@ -229,6 +269,7 @@ export default function NavbarIn() {
               <Tippy content="Cuenta">
                 <label htmlFor="check-user" className="user-navBar">
                   <Image
+                    
                     src={userData.img || defaultImage}
                     alt="user"
                     width={30}
