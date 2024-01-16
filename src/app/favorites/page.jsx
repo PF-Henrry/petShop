@@ -15,41 +15,48 @@ import {
 import { Breadcrumbs, Typography } from "@mui/material";
 import Link from "next/link";
 import Tippy from "@tippyjs/react";
+import { useSession } from "next-auth/react";
 
 const FavoriteProducts = () => {
-  const favorites = useProductStore((state) => state.getFavorites());
-
+  const {data:session,status} = useSession();
+  const favorites = useProductStore((state) => state.favorites);
+  const updateFavorites = useProductStore((state) => state.updateFavorites);
   const [favoriteProducts, setFavoriteProducts] = useState([]);
 
-  const fetchProductDetails = async (productId) => {
-    try {
-      const response = await fetch(`/api/products/${productId}`);
-      if (!response.ok) {
-        throw new Error("Error al obtener detalles del producto");
-      }
-      const productDetails = await response.json();
-      return productDetails;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
-  };
+
+  // const fetchProductDetails = async (productId) => {
+  //   try {
+  //     const response = await fetch(`/api/products/${productId}`);
+  //     if (!response.ok) {
+  //       throw new Error("Error al obtener detalles del producto");
+  //     }
+  //     const productDetails = await response.json();
+  //     return productDetails;
+  //   } catch (error) {
+  //     console.error(error);
+  //     return null;
+  //   }
+  // };
 
   useEffect(() => {
     const fetchFavoriteProducts = async () => {
       try {
-        const detailsPromises = favorites.map((productId) =>
-          fetchProductDetails(productId)
-        );
-        const details = await Promise.all(detailsPromises);
-        setFavoriteProducts(details.filter((product) => product !== null));
+        // // const detailsPromises = favorites.map((productId) =>
+        // //   fetchProductDetails(productId)
+        // // );
+        // const details = await Promise.all(detailsPromises);
+        // setFavoriteProducts(details.filter((product) => product !== null));
+        if(status === 'authenticated'){
+          // await updateFavorites(session?.user?.id)
+         return  setFavoriteProducts(favorites)
+        }
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchFavoriteProducts();
-  }, [favorites]);
+  }, [favorites,session?.user?.id,status]);
 
   return (
     <div className="favorites-container">
