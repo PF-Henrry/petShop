@@ -112,6 +112,17 @@ export default function CardProduct({
     }
   };
 
+  const [stockAvailable, setStockAvailable] = useState(stock);
+
+  const handleUpdateStock = (newStock) => {
+    setStockAvailable(newStock);
+  };
+
+  useEffect(() => {
+    const updatedStock = stock > 0 ? stock : 0;
+    setStockAvailable(updatedStock);
+  }, [stock]);
+
   return (
     <div className="card-product">
        {showSuccessMessage && (
@@ -147,6 +158,7 @@ export default function CardProduct({
         className="px-2"
       />
       <p className="card-product-price">{formattedPrice} ARS</p>
+      <p className="card-product-stock">Disponible: {stockAvailable}</p>
       <button className="card-product-cart" onClick={handleAddToCart}>
         <ShoppingCartSimple size={32} className="card-product-cart-icon" />
         Añadir al carrito

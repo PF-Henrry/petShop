@@ -238,6 +238,7 @@ const ProductsPage = () => {
                 onClick={() => openModal(product)}
               >
                 <span className="hover:font-bold">{product.name}</span>
+                <p className="text-sm">Stock disponible: {product.stock}</p>
               </li>
             ))}
           </ul>
@@ -303,6 +304,11 @@ const ProductsPage = () => {
                   )}
                 </div>
               </div>
+
+              <p>
+      <span className="font-bold">Stock disponible:</span>{" "}
+      {selectedProduct.stock}
+    </p>
 
               {isEditing ? (
                 <>
