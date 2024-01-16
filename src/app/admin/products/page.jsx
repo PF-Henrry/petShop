@@ -14,7 +14,6 @@ import {
 
 const CategorySelect = ({ categories, selectedCategory, onSelectCategory }) => (
   <select
-    value={selectedCategory}
     onChange={(e) => onSelectCategory(e.target.value)}
   >
     <option value="">Selecciona una categoría</option>
@@ -28,7 +27,6 @@ const CategorySelect = ({ categories, selectedCategory, onSelectCategory }) => (
 
 const SpeciesSelect = ({ species, selectedSpecies, onSelectSpecies }) => (
   <select
-    value={selectedSpecies}
     onChange={(e) => onSelectSpecies(e.target.value)}
   >
     <option value="">Selecciona una especie</option>
@@ -43,7 +41,6 @@ const SpeciesSelect = ({ species, selectedSpecies, onSelectSpecies }) => (
 // Nuevo componente para la selección de marcas
 const BrandSelect = ({ brands, selectedBrand, onSelectBrand }) => (
   <select
-    value={selectedBrand}
     onChange={(e) => onSelectBrand(e.target.value)}
   >
     <option value="">Selecciona una marca</option>
@@ -68,24 +65,24 @@ const ProductsPage = () => {
   const [species, setSpecies] = useState([]);
   const [brands, setBrands] = useState([]);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch("/api/products");
-        if (!response.ok) {
-          throw new Error("Error al obtener la lista de productos");
-        }
-
-        const data = await response.json();
-        setProducts(data);
-        setError(null);
-      } catch (error) {
-        console.error(error.message);
-        setError(`No se encontraron coincidencias con ${searchTerm}`);
-      } finally {
-        setIsLoading(false);
+  const fetchProducts = async () => {
+    try {
+      const response = await fetch("/api/products");
+      if (!response.ok) {
+        throw new Error("Error al obtener la lista de productos");
       }
-    };
+
+      const data = await response.json();
+      setProducts(data);
+      setError(null);
+    } catch (error) {
+      console.error(error.message);
+      setError(`No se encontraron coincidencias con ${searchTerm}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
 
     fetchProducts();
   }, [searchTerm]);
@@ -172,8 +169,7 @@ const ProductsPage = () => {
 
       // Actualiza la lista de productos después de eliminar
       const updatedProducts = products.filter(product => product._id !== productId);
-      setProducts(updatedProducts);
-
+      fetchProducts();
       closeModal(); // Cierra el modal después de eliminar
     } catch (error) {
       console.error('Error al eliminar el producto:', error.message);
@@ -198,9 +194,10 @@ const ProductsPage = () => {
       const updatedProducts = products.map(product =>
         product._id === editedProduct._id ? editedProduct : product
       );
-      setProducts(updatedProducts);
-
+      fetchProducts();
+      
       setIsEditing(false); // Sale del modo de edición
+      closeModal();
     } catch (error) {
       console.error('Error al guardar los cambios:', error.message);
     }
@@ -230,16 +227,18 @@ const ProductsPage = () => {
         )}
 
         {!isLoading && filteredProducts.length > 0 && (
-          <ul>
-            {filteredProducts.map((product) => (
+          <ul className="overflow-y-scroll max-h-[65vh]">
+            {filteredProducts.map((product) => {
+              
+              return (
               <li
                 key={product._id}
                 className="cursor-pointer p-2 rounded mb-2 transition-all duration-300 ease-in-out hover:bg-pink-100 hover:text-black"
                 onClick={() => openModal(product)}
               >
-                <span className="hover:font-bold">{product.name}</span>
+                {product.active ? <span className="hover:font-bold">{product.name}</span> : <span className="hover:font-bold text-red-300">{product.name}</span> }
               </li>
-            ))}
+            )})}
           </ul>
         )}
 
@@ -265,10 +264,11 @@ const ProductsPage = () => {
             },
           }}
         >
+
           {selectedProduct && (
             <div>
               <div className="flex justify-between items-center mb-4">
-                <h2>{selectedProduct.name}</h2>
+                <h2>{selectedProduct?.name}</h2>
                 <div className="flex items-center">
                   {isEditing ? (
                     <>

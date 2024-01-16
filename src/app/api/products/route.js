@@ -8,16 +8,16 @@ import { iniciarIntervalo } from "@/app/api/softDelete/softDeleteProducts"
 export async function GET(request){
    try {
       if(!conn.isConnected) connectDB()
-      const res = await products.find({ active: true }).populate("category",{
-         _id:0,
+      const res = await products.find({}).populate("category",{
+         _id:1,
          name:1
      })
      .populate("species",{
-         _id:0,
+         _id:1,
          name:1,
      })
      .populate("brand",{
-         _id:0,
+         _id:1,
          name:1
      });
 
@@ -38,15 +38,15 @@ export async function POST(request){
         const newProduct = await addProduct(dataProduct)
         const findProduct = await products.findOne({_id:newProduct._id})
          .populate("category",{
-            _id:0,
+            _id:1,
             name:1
         })
         .populate("species",{
-            _id:0,
+            _id:1,
             name:1,
         })
         .populate("brand",{
-            _id:0,
+            _id:1,
             name:1
         });
 
@@ -78,7 +78,6 @@ export async function DELETE(request){
 
       if(!query) throw TypeError('Query is undefined');
 
-      // const res = await  products.findOneAndDelete({...query});
 
       await products.findOneAndUpdate(
          { ...query },
@@ -113,24 +112,23 @@ export async function PUT(request){
       
       if(!query) throw TypeError('Error query args');
 
-      
-      const findUpdate = await products.findOneAndUpdate({...query, active: true },dataProduct);
+      const findUpdate = await products.findOneAndUpdate({...query},{...dataProduct});
 
       if(!findUpdate) throw TypeError('Product not found');
 
       const findProduct =  await products.findOne({_id:findUpdate._id})
       .populate("category",{
-         _id:0,
+         _id:1,
          name:1
      })
      .populate("species",{
-         _id:0,
+         _id:1,
          name:1,
          age:1,
          size:1,
      })
      .populate("brand",{
-         _id:0,
+         _id:1,
          name:1
      });
       return NextResponse.json({state:true,

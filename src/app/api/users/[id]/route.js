@@ -48,9 +48,8 @@ export async function GET(request,{params}){
     try {
         if(!conn.isConnected) connectDB()
         const _id = params.id
-        // const findUser = await userDB.findOne({_id:_id},{password:0});
         const findUser = await userDB
-            .findOne({ _id: _id, active: true }, { password: 0 })
+            .findOne({ _id: _id}, { password: 0,token:0 })
             .populate('city', '_id name') 
             .populate('province', '_id name'); 
 
@@ -69,27 +68,23 @@ export async function PUT(request, {params}) {
         const idUser = params.id
         const data = await request.json()
         const {password, dataSinPass} = data;
-        const findUser = await userDB.findOne({_id: idUser, active: true});
+        const findUser = await userDB.findOne({_id: idUser});
 
-        console.log('Datos recibidos del cliente:', data);
 
         if (findUser) {
-            console.log('entra al primer if')
             const newImagen = await postImage(dataSinPass.img, idUser);
+            console.log(newImagen)
             if (password) {
                 findUser.password = password;
                 await findUser.save();
             }
 
             if (dataSinPass && newImagen) {
-                console.log('entra al segundo if')
                 if (dataSinPass.hasOwnProperty('province')) {
-                    console.log('entra al tercer if')
                     const newProvince = await findOrCreateModel(Provinces, {name: dataSinPass.province});
                     dataSinPass.province = newProvince._id;
                 }
                 if (dataSinPass.hasOwnProperty('city')) {
-                    console.log('entra al cuarto if')
                     const newCity = await findOrCreateModel(Citys, {name: dataSinPass.city});
                     dataSinPass.city = newCity._id;
                 }
@@ -98,11 +93,9 @@ export async function PUT(request, {params}) {
 
                 const result = await userDB.findOneAndUpdate(
                     {_id: idUser},
-                    {$set: {...dataSinPass}},
-                    {new: true} 
+                    {...dataSinPass},
                 );
 
-                console.log('Datos actualizados en la base de datos:', result);
 
                 if (result) return NextResponse.json(result, {status: 200});
             }
