@@ -5,7 +5,7 @@ import EditProfileForm from '../../components/EditProfile/EditProfileForm';
 
 const Profile = () => {
     const [editable, setEditable] = useState(false);
-    
+    const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
  
     const initialValues = {
@@ -22,36 +22,61 @@ const Profile = () => {
     };
 
    
-    
-    const handleSubmit = (values, { setSubmitting}) => {
-      // Lógica para manejar la subida de datos
-      console.log('Valores enviados:', values);
-      
-      setSubmitting(false);
-      setEditable(false); // Desactiva la edición después de guardar
+
+    useEffect(() => {
+      setShowSuccessMessage(false); 
+    }, [editable]);
+   
+    const handleSubmit = async (values, { setSubmitting }) => {
+      try {
+       
+        setShowSuccessMessage(true);
+  
+
+      } catch (error) {
+        console.error('Error submitting changes:', error);
+      } finally {
+        setSubmitting(false);
+        setEditable(false); 
+      }
     };
+  
   
     const handleEditClick = () => {
       setEditable(!editable); // Cambia el estado de editable al hacer clic
     };
   
     return (
-      <div>
+      <><div>
         <h1 className="text-3xl font-bold mb-6 flex items-center justify-center">Datos del Perfil</h1>
         <button
-    className={`block mx-auto py-2 px-4 rounded ${
-      editable ? 'bg-red-500' : 'bg-green-500'
-    } text-white`}
-    onClick={handleEditClick}
-  >
-    {editable ? 'Cancelar' : 'Editar'}
-  </button>
+          className={`block mx-auto py-2 px-4 rounded ${editable ? 'bg-red-500' : 'bg-green-500'} text-white`}
+          onClick={handleEditClick}
+        >
+          {editable ? 'Cancelar' : 'Editar'}
+        </button>
+
+
+        {showSuccessMessage && (
+          <div className="bg-green-500 text-white py-2 px-4 mt-4 rounded text-center">
+            Cambios guardados exitosamente.
+            Haga click en cancelar para salir del modo de edición.
+          </div>
+        )}
+
         <EditProfileForm
           initialValues={initialValues}
           onSubmit={handleSubmit}
           editable={editable}
-        />
-      </div>
+          setShowSuccessMessage={setShowSuccessMessage} 
+         
+          />
+      </div><button
+        className={`block mx-auto py-2 px-4 rounded ${editable ? 'bg-red-500' : 'bg-green-500'} text-white`}
+        onClick={handleEditClick}
+      >
+          {editable ? 'Cancelar' : 'Editar'}
+        </button></>
     );
   };
   

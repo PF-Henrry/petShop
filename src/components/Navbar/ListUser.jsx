@@ -11,10 +11,10 @@ import { useSession } from "next-auth/react";
 const defaultImage =
   "http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png";
 
-export default function ListUser({ handleCloseMenu }) {
+export default function ListUser({ handleCloseMenu, userImg }) {
   const { data: session } = useSession();
 
-  const userImg = session?.user?.image;
+  //const userImg = session?.user?.image;
 
   return (
     <ol>
