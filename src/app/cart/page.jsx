@@ -25,8 +25,8 @@ const Cart = () => {
   const cartProducts = useProductStore((state) => state.cartProducts);
   const updateOrderState = useProductStore((state) => state.updateOrderState);
   const [total, setTotal] = useState(0);
-  const [showInsufficientStockMessage, setShowInsufficientStockMessage] =
-    useState(false);
+  const [insufficientStockProducts, setInsufficientStockProducts] = useState([]);
+  const [showInsufficientStockMessage, setShowInsufficientStockMessage] = useState(false);
   const router = useRouter();
 
   const { data: session, status } = useSession();
@@ -101,38 +101,55 @@ const Cart = () => {
     localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
+  const handleScrollToMessage = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCloseInsufficientStockMessage = (productId) => {
+    const updatedInsufficientStockProducts = insufficientStockProducts.filter(
+      (product) => product.id !== productId
+    );
+  
+    setInsufficientStockProducts(updatedInsufficientStockProducts);
+  
+    if (updatedInsufficientStockProducts.length === 0) {
+      setShowInsufficientStockMessage(false);
+    }
+  };
+
   const handleCheckout = async () => {
     try {
       if (!userID) {
         console.error("No se pudo obtener el userID de la sesión");
         return;
       }
-
-      const insufficientStockProduct = cartProducts.find(
+  
+      // Filtra todos los productos sin stock
+      const insufficientStockProducts = cartProducts.filter(
         (product) => product.quantity > product.stock
       );
-
-      if (insufficientStockProduct) {
+  
+      if (insufficientStockProducts.length > 0) {
+        // Actualiza el estado con la lista de productos sin stock
+        setInsufficientStockProducts(insufficientStockProducts);
+        
+        // Muestra el mensaje de stock insuficiente
         setShowInsufficientStockMessage(true);
-        setShowInsufficientStockMessage(
-          `No hay suficiente stock para el producto: ${insufficientStockProduct.name}. Stock disponible: ${insufficientStockProduct.stock}`
-        );
-
+        handleScrollToMessage();
         return;
       }
-
+  
       const totalAmount = calculateTotal(cartProducts);
-
+  
       const products = cartProducts.map((product) => ({
         _id: product.id,
         name: product.name,
         price: product.price,
         count: product.quantity,
       }));
-
-      const address =
-        cartProducts.length > 0 ? cartProducts[0].deliveryMethod : {};
-
+  
+      const address = cartProducts.length > 0 ? cartProducts[0].deliveryMethod : {};
+  
       const response = await fetch("/api/mercadopago/create-order", {
         method: "POST",
         headers: {
@@ -140,18 +157,18 @@ const Cart = () => {
         },
         body: JSON.stringify({ userID, products, totalAmount, address }),
       });
-
+  
       if (!response.ok) {
         throw new Error("Error al crear la orden");
       }
-
+  
       const result = await response.json();
-
+  
       updateOrderState({
         orderID: result.id,
         status: "pending",
       });
-
+  
       clearCart();
       window.location.href = result.url;
     } catch (error) {
@@ -159,31 +176,34 @@ const Cart = () => {
     }
   };
 
+ 
   const priceFormatter = new Intl.NumberFormat("es-AR", {
     style: "currency",
     currency: "ARS",
   });
 
-  const handleCloseInsufficientStockMessage = () => {
-    setShowInsufficientStockMessage(false);
-    setShowInsufficientStockMessage("");
-  };
-
   const formatedTotal = priceFormatter.format(total);
 
   return (
     <div className="cart-container">
-      {showInsufficientStockMessage && (
-        <div className="flex items-center p-4 mb-4 text-white bg-red-500 rounded insufficient-stock-message">
-          <p className="flex-grow">{showInsufficientStockMessage}</p>
-          <button
-            onClick={handleCloseInsufficientStockMessage}
-            className="close-message-button"
-          >
-            <X size={20} color="white" />
-          </button>
-        </div>
-      )}
+
+{insufficientStockProducts.length > 0 && (
+  <div className="mb-4">
+    {insufficientStockProducts.map((product) => (
+      <div key={product.id} className="flex items-center p-4 mb-4 text-white bg-red-500 rounded insufficient-stock-message">
+        <p className="flex-grow">
+          No hay suficiente stock para el producto: {product.name}. Stock disponible: {product.stock}
+        </p>
+        <button
+          onClick={() => handleCloseInsufficientStockMessage(product.id)}
+          className="close-message-button"
+        >
+          <X size={20} color="white" />
+        </button>
+      </div>
+    ))}
+  </div>
+)}
 
       <div className="nav-breadcrumbs">
         <Breadcrumbs
