@@ -30,7 +30,7 @@ function UploadImage() {
       })
       .catch((error) => console.error('Error fetching options:', error));
   }, []);
-console.log('especies', speciesOptions )
+
 
   const handleOnChange = async (e) => {
     try {
@@ -82,6 +82,7 @@ console.log('especies', speciesOptions )
   
         if (response.ok) {
           showNotify('success', 'Producto subido');
+          router.push('/admin/products')
         }
       } else {
         router.push('/login');

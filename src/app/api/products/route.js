@@ -74,7 +74,6 @@ export async function DELETE(request){
       const dataProduct = await request.json();
       const {query} = dataProduct;
 
-      console.log(query)
 
 
       if(!query) throw TypeError('Query is undefined');

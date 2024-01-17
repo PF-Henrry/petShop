@@ -38,7 +38,7 @@ const SpeciesSelect = ({ species, selectedSpecies, onSelectSpecies }) => (
   </select>
 );
 
-// Nuevo componente para la selección de marcas
+
 const BrandSelect = ({ brands, selectedBrand, onSelectBrand }) => (
   <select
     onChange={(e) => onSelectBrand(e.target.value)}
@@ -178,18 +178,24 @@ const ProductsPage = () => {
 
   const saveChanges = async () => {
     try {
-      const response = await fetch(`/api/products/${editedProduct._id}`, {
+
+      if (!editedProduct.query) {
+        
+        editedProduct.query = { _id: editedProduct._id };
+      }
+  
+      const response = await fetch(`/api/products`, {
         method: 'PUT', 
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(editedProduct),
       });
-
+  
       if (!response.ok) {
         throw new Error('Error al guardar los cambios');
       }
-
+  
       // Actualiza la lista de productos después de guardar los cambios
       const updatedProducts = products.map(product =>
         product._id === editedProduct._id ? editedProduct : product
@@ -202,7 +208,7 @@ const ProductsPage = () => {
       console.error('Error al guardar los cambios:', error.message);
     }
   };
-
+  
   return (
     <LayoutAdmin>
        {isLoading && <Loader/>}
@@ -237,8 +243,12 @@ const ProductsPage = () => {
                 onClick={() => openModal(product)}
               >
                 <span className="hover:font-bold">{product.name}</span>
-                <p className="text-sm">Stock disponible: {product.stock}</p>
-                {product.active ? <span className="hover:font-bold">{product.name}</span> : <span className="hover:font-bold text-red-300">{product.name}</span> }
+                <p className="text-sm">
+                  Stock disponible: <span className={product.stock > 0 ? 'text-green-500' : 'text-red-500'}>
+                    {product.stock}
+                  </span>
+                </p>
+               
               </li>
             )})}
           </ul>
@@ -375,7 +385,7 @@ const ProductsPage = () => {
                     }
                   />
 
-                  {/* Nuevo selector de marcas */}
+                
                   <label className="font-bold block mb-2">Marcas:</label>
                   <BrandSelect
                     brands={brands}
@@ -388,6 +398,14 @@ const ProductsPage = () => {
                       handleInputChange("brand", value)
                     }
                   />
+           <label className="font-bold block mb-2">Stock:</label>
+                  <input
+                    type="number"
+                    value={editedProduct.stock}
+                    onChange={(e) => handleInputChange("stock", e.target.value)}
+                    className="border border-rosybrown rounded p-1 mb-2"
+                  />
+
                 </>
               ) : (
                 <>
@@ -427,6 +445,10 @@ const ProductsPage = () => {
                       .map((category) => category.name)
                       .join(", ")}
                   </p>
+                  <p>
+                    <span className="font-bold">Stock:</span>{" "}
+                    {selectedProduct.stock}
+                  </p>
                 </>
               )}
             </div>
@@ -438,5 +460,6 @@ const ProductsPage = () => {
 };
 
 export default ProductsPage;
+
 
 
