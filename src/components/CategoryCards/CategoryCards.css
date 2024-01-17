@@ -10,7 +10,7 @@
   }
 
   .card-category-container {
-    @apply flex flex-col items-center;
+    @apply flex flex-col items-center ;
 
     & img {
       @apply rounded-[2rem] duration-150 shadow-md hover:scale-105;
@@ -29,7 +29,7 @@
 
   @media (max-width: 952px) {
     .tag-category {
-      @apply text-xs;
+      @apply text-xs text-center;
     }
     .card-category-container {
       & p {

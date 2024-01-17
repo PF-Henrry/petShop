@@ -10,8 +10,8 @@ import "./CategoryCards.css";
 export default function CategoryCards() {
   return (
     <div className="categoryDiv">
-      <p className="tag-category text-[#7A8D9B] text-base">
-        Comprar por categoría
+      <p className="tag-category text-[#7A8D9B] text-base ">
+        Mirá todo lo que podes encontrar en nuestra tienda:
       </p>
       {/* bg-blue-200 p-4 */}
       <div className="cards-category-container">
@@ -30,19 +30,19 @@ export default function CategoryCards() {
           {/* <Link href="/category/2"> */}
             <Image src={foodCategory} alt="Comida" width={150} height={150} />
           {/* </Link> */}
-          <p>Alimento</p>
+          <p>Alimentos</p>
         </div>
         <div className="card-category-container">
           {/* <Link href="/category/3"> */}
             <Image src={hygCategory} alt="Higiene" width={150} height={150} />
           {/* </Link> */}
-          <p>Higiene</p>
+          <p>Elementos de Higiene</p>
         </div>
         <div className="card-category-container">
           {/* <Link href="/category/4"> */}
             <Image src={healthCategory} alt="Salud" width={150} height={150} />
           {/* </Link> */}
-          <p>Salud</p>
+          <p>Elementos de Salud</p>
         </div>
       </div>
     </div>

@@ -70,10 +70,20 @@ const DashboardInicio = () => {
         return acc;
       }, {});
 
-      const arrayVentasPorMes = Array.from(
-        { length: 12 },
-        (_, index) => ventasAgrupadasPorMes[index] || 0
+      const fechaUltimoCarrito = carritosConVentas.reduce(
+        (maxFecha, carrito) => {
+          const fechaCarrito = new Date(carrito.fecha);
+          return fechaCarrito > maxFecha ? fechaCarrito : maxFecha;
+        },
+        new Date(0)
       );
+
+      const arrayVentasPorMes = Array.from({ length: 12 }, (_, index) => {
+        if (index <= fechaUltimoCarrito.getMonth()) {
+          return ventasAgrupadasPorMes[index] || 0;
+        }
+        return 0;
+      });
 
       setVentasPorMes(arrayVentasPorMes);
     };

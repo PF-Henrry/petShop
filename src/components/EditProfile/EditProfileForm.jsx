@@ -6,8 +6,8 @@ import TextField from "@mui/material/TextField";
 import { InputLabel } from "@mui/material";
 import Button from "@mui/material/Button";
 import {
+  ADDRESS_CHECKED,
   EMAIL_CHECKED,
-  PASSWORD_CHECKED,
   INPUT_NAME_CHECKED,
   ZIP_CHECKED,
 } from "@/utils/regex";
@@ -20,24 +20,21 @@ const defaultImage =
 const validationSchema = Yup.object({
   name: Yup.string().matches(INPUT_NAME_CHECKED, "Ingresar solo letras"),
   lastname: Yup.string().matches(INPUT_NAME_CHECKED, "Ingresar solo letras"),
-  username: Yup.string(),
-  password: Yup.string().matches(
-    PASSWORD_CHECKED,
-    "La contraseña debe contener al menos una letra, un número y tener una longitud mínima de 8 caracteres"
-  ),
+  username: Yup.string().matches(/^.+$/, "No puede estar vacío"),
+ 
 
   email: Yup.string().matches(
     EMAIL_CHECKED,
     "El e-mail ingresado no es válido"
   ),
 
-  adress: Yup.string(),
+  adress: Yup.string().matches(ADDRESS_CHECKED, 'Ingrese una dirección válida'),
   codeP: Yup.string().matches(ZIP_CHECKED, "Ingrese un código postal válido"),
-  province: Yup.string(),
-  city: Yup.string(),
+  province: Yup.string().matches(/^.+$/, "No puede estar vacío"),
+  city: Yup.string().matches(/^.+$/, "No puede estar vacío"),
 });
 
-const EditProfileForm = ({ initialValues, editable }) => {
+const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
   const { data: session } = useSession();
 
   const userSessionId = session?.user?.id;
@@ -73,7 +70,9 @@ const EditProfileForm = ({ initialValues, editable }) => {
     codeP: "",
     province: "",
     city: "",
-  });
+  })
+
+  
 
   const handleRemoveImage = () => {
     setSelectedImage(defaultImage);
@@ -154,6 +153,11 @@ const EditProfileForm = ({ initialValues, editable }) => {
       if (response.ok) {
         const res = await response.json();
         console.log("Datos enviados correctamente al backend", res);
+
+        setShowSuccessMessage(true);
+
+      
+        
       } else {
         const errorResponse = await response.json();
         console.error(
@@ -201,15 +205,27 @@ const EditProfileForm = ({ initialValues, editable }) => {
               />
               {selectedImage && (
                 <button
-                  type="button"
-                  onClick={handleRemoveImage}
-                  className="text-red-500 underline cursor-pointer"
-                  disabled={!editable}
-                >
-                  Eliminar Imagen
-                </button>
+                type="button"
+                onClick={handleRemoveImage}
+                className={`text-${editable ? 'red-500' : 'gray-500'} no-underline cursor-pointer`}
+                disabled={!editable}
+              >
+                Eliminar Imagen
+              </button>
               )}
             </div>
+
+            <Button
+            type="submit"
+            variant="outlined"
+            disabled={!editable || isSubmitting || !isValid}
+            style={{ borderColor: "grey" }}
+            className={`text-black
+              py-2 px-4 rounded focus:outline-none focus:shadow-outline
+              active:shadow-md active:translate-y-1 block mx-auto w-1/4 mt-8 hover:bg-customSecondary`}
+          >
+            Guardar
+          </Button>
 
             <p className="text-xl font-bold mb-4">Datos Personales:</p>
             <div className="grid grid-cols-2 gap-4">
