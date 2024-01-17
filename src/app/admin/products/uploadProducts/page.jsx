@@ -1,10 +1,11 @@
 'use client'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import toastNotify from "@/libs/toast";
 import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
+import validations from "./validations"
 
 function UploadImage() {
   const { showNotify, ToastContainer } = toastNotify();
@@ -106,6 +107,59 @@ function UploadImage() {
     }
   };
 
+    //Validation
+
+    const [formError, setFormError] = useState({});
+
+    const [form, setForm] = useState({
+      name: "",
+      price: "",
+      detail: "",
+      brand: "",
+    },
+    )
+  
+    const handleValidation = () => {
+      const errors = validations(form)
+  
+      setFormError(errors)
+    }
+  
+    const handleFormData = (event) => {
+      const { name, value } = event.target;
+    
+      // Validación específica para el campo 'price'
+      let newValue = value;
+    
+      if (name === "price") {
+        // AsegURA de que el valor sea un número
+        const numericValue = parseFloat(value);
+    
+        // Si el valor es menor que 0, establecerlo en 0
+        newValue = isNaN(numericValue) ? 0 : Math.max(0, numericValue);
+      }
+    
+      setForm({ ...form, [name]: newValue });
+    };
+  
+    const disableButton = () => {
+      let aux = true;
+  
+      if (Object.keys(formError).length === 0) {
+        aux = false;
+      }
+  
+      return aux;
+    };
+  
+  
+    useEffect(() => {
+      handleValidation();
+      console.log("ejecutando use effect")
+    }, [form]);
+  
+    //Validation
+
   return (
     <LayoutAdmin>
       <section className="min-h-screen flex items-center justify-center mt-12">
@@ -130,8 +184,18 @@ function UploadImage() {
                 <input
                   type="text"
                   name="name"
+                  value={form.name}
+                  onChange={handleFormData}
                   className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
                 />
+
+               {formError.name ? 
+               (<p className="text-red-500">{formError.name}</p>) : 
+               (
+               <p>
+               <br />
+               </p>
+               )}
               </label>
 
               <label className="block text-sm font-medium text-gray-700 mt-4">
@@ -141,18 +205,39 @@ function UploadImage() {
                   <input
                     type="number"
                     name="price"
+                    value={form.price}
+                    onChange={handleFormData}
                     placeholder="100"
                     className="p-2 border border-gray-300 rounded-r focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
                   />
+                
+
                 </div>
+                {formError.price ? 
+                (<p className="text-red-500">{formError.price}</p>) : 
+                (
+                <p>
+                <br />
+                </p>
+                )}
               </label>
 
               <label className="block text-sm font-medium text-gray-700 mt-4">
                 Detalles
                 <textarea
                   name="detail"
+                  value={form.detail}
+                  onChange={handleFormData}
                   className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
                 />
+
+               {formError.detail ? 
+               (<p className="text-red-500">{formError.detail}</p>) : 
+               (
+               <p>
+               <br />
+               </p>
+               )}
               </label>
 
               <label className="block text-sm font-medium text-gray-700 mt-4">
@@ -160,8 +245,18 @@ function UploadImage() {
                 <input
                   type="text"
                   name="brand"
+                  value={form.brand}
+                  onChange={handleFormData}
                   className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
                 />
+
+               {formError.brand ? 
+               (<p className="text-red-500">{formError.brand}</p>) : 
+               (
+               <p>
+               <br />
+               </p>
+               )}
               </label>
             <div className="col-span-2">
               <label className="block text-sm font-medium text-gray-700 mt-4">
@@ -201,11 +296,14 @@ function UploadImage() {
               </label>
 
               <button
-                type="submit"
-                className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Subir Producto
-              </button>
+             type="submit"
+             disabled={disableButton()}
+             className={`inline-flex justify-center py-2 px-4 border shadow-sm text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${
+             disableButton() ? 'text-gray-500 bg-gray-300 cursor-not-allowed' : 'text-white bg-indigo-600 hover:bg-indigo-700'
+             }`}
+             >
+             Subir Producto
+          </button>
             </div>
           </form>
         </div>
