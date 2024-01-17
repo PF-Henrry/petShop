@@ -48,30 +48,23 @@ export default function UnificadoShop() {
           updateFavorites(userID);
         }
 
-       
-          const response = await fetch("api/products");
-          const data = await response.json();
+        const response = await fetch("api/products");
+        const data = await response.json();
 
-          setOriginalProductsCopy(data);
-          if (storeProducts) {
-            // setRatings(JSON.parse(storedRatings));
-  
-            setProductsStore(JSON.parse(storeProducts));
-            // setFilteredProducts(getArrayPage());
-            // setOriginalProductsCopy(JSON.parse(storeProducts));
-          }   else {
-            setProductsStore(data)
-          }
+        setOriginalProductsCopy(data);
+        if (storeProducts) {
+          setProductsStore(JSON.parse(storeProducts));
+        } else {
+          setProductsStore(data);
+        }
 
-          if (!storedRatings) {
-            const randomRatings = data.map(() => generateRandomRating());
-            setRatings(randomRatings);
-            localStorage.setItem("ratings", JSON.stringify(randomRatings));
-          }
+        if (!storedRatings) {
+          const randomRatings = data.map(() => generateRandomRating());
+          setRatings(randomRatings);
+          localStorage.setItem("ratings", JSON.stringify(randomRatings));
+        }
 
-          setFilteredProducts(getArrayPage());
-          // setOriginalProductsCopy(data);
-        
+        setFilteredProducts(getArrayPage());
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -115,7 +108,7 @@ export default function UnificadoShop() {
     setFilteredProducts(getArrayPage());
     localStorage.removeItem("filteredProducts");
   };
-  
+
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (event.key === "Backspace") {
@@ -176,24 +169,24 @@ export default function UnificadoShop() {
       <div className="w-full products-container">
         <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
         <div className="flex flex-wrap items-center justify-around gap-10">
-        {filteredProducts.length ? (
-        filteredProducts
-          .filter(product => product.active) // Filtra productos activos
-          .map((product, index) => (
-            <CardProduct
-                key={product?._id}
-                id={product?._id}
-                name={product?.name}
-                price={product?.price}
-                detail={product?.detail}
-                image={product?.image}
-                brand={product?.brand?.name}
-                specie={product?.species[0]?.name}
-                category={product?.category[0]?.name}
-                stock={product?.stock}
-                rating={ratings[index]}
-              />
-            ))
+          {filteredProducts.length ? (
+            filteredProducts
+              .filter((product) => product.active) // Filtra productos activos
+              .map((product, index) => (
+                <CardProduct
+                  key={product?._id}
+                  id={product?._id}
+                  name={product?.name}
+                  price={product?.price}
+                  detail={product?.detail}
+                  image={product?.image}
+                  brand={product?.brand?.name}
+                  specie={product?.species[0]?.name}
+                  category={product?.category[0]?.name}
+                  stock={product?.stock}
+                  rating={ratings[index]}
+                />
+              ))
           ) : (
             <p>No products found</p>
           )}
