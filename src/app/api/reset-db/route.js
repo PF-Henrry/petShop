@@ -13,7 +13,7 @@ export async function GET(){
 
          const findUser = await Users.findOne({email:session.user.email});
 
-        if(findUser.role !== 1) throw TypeError('Unauthorized access');
+        if(findUser.role !== 2) throw TypeError('Unauthorized access');
 
         const datos = leerDesdeJSON('Products.json');
         const newProduct = datos.map((producto) =>{
