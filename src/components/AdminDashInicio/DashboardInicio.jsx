@@ -117,9 +117,9 @@ const DashboardInicio = () => {
                   {totalVentas === 0
                     ? "Cargando..."
                     : totalVentas
-                        .filter((item) => item.status === true)
-                        .map((item) => item.items.length)
-                        .reduce((a, b) => a + b)}
+                        ?.filter((item) => item.status === true)
+                        ?.map((item) => item.items.length)
+                        ?.reduce((a, b) => a + b)}
                 </Typography>
               </Paper>
             </Grid>
