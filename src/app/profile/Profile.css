@@ -1,0 +1,211 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+.profile-container.editable {
+  @apply gap-2;
+}
+
+.profile-container {
+  @apply relative flex flex-col gap-8 p-4 mx-48 my-10 overflow-hidden bg-white shadow-lg rounded-2xl;
+
+  .profile-header-container {
+    @apply flex flex-row p-2 px-8 pb-8 items-center justify-between border-b border-[#DABEB6];
+
+    .profile-header {
+      @apply flex flex-row items-center gap-4;
+      .profile-header-img-container {
+        @apply w-32 h-32 overflow-hidden rounded-full shadow-md bg-slate-50;
+
+        & img {
+          @apply object-cover w-full h-full duration-200;
+        }
+      }
+
+      .profile-header-data {
+        @apply flex flex-col;
+
+        .data-names-container {
+          @apply flex flex-row items-end gap-1;
+          .data-name {
+            @apply text-[#143146] text-4xl font-semibold uppercase;
+          }
+
+          .data-username {
+            @apply text-[#DABEB6] text-sm pb-1;
+          }
+        }
+
+        .data-id {
+          @apply text-[rgba(122,141,155,0.7)] text-xs;
+        }
+
+        .data-email {
+          @apply text-[#2d638b] pt-3;
+        }
+      }
+    }
+
+    .data-edit-button-container {
+      @apply flex flex-row items-end justify-center gap-1 overflow-hidden shadow rounded-xl;
+
+      & button {
+        @apply bg-[#2d638b] text-white w-28 px-3 py-2 relative duration-200 border-none overflow-hidden;
+
+        .cancel-button {
+          @apply text-[#ffc3c3] font-semibold;
+        }
+
+        .circles-container {
+          @apply flex flex-row items-center h-full w-full justify-center gap-1 bg-[#2d638b] duration-200;
+
+          .circle-1 {
+            @apply w-2 h-2 rounded-full bg-[#eee0dd] animate-pulse;
+          }
+
+          .circle-2 {
+            @apply w-2 h-2 rounded-full bg-[#eee0dd] animate-pulse animation-delay-300;
+          }
+
+          .circle-3 {
+            @apply w-2 h-2 rounded-full bg-[#eee0dd] animate-pulse animation-delay-400;
+          }
+        }
+      }
+
+      &:hover {
+        & button {
+          @apply bg-[#265274] text-[#e0eedd];
+        }
+
+        .circles-container {
+          @apply bg-[#265274] rotate-180 opacity-0;
+        }
+      }
+    }
+  }
+
+  .profile-links-container {
+    @apply flex flex-row justify-around w-full gap-4 py-4;
+
+    & a {
+      @apply relative flex items-center justify-center text-white bg-[#265274] p-2 w-36 rounded-xl shadow-md overflow-hidden;
+
+      .profile-links-orders-icon {
+        @apply bg-[#2d638b] text-white absolute w-full h-full flex items-center justify-center duration-200 p-2 translate-y-28;
+      }
+
+      &:hover {
+        .profile-links-orders-icon {
+          @apply translate-y-0;
+        }
+      }
+    }
+  }
+
+  .profile-info-container {
+    @apply flex flex-row justify-around w-full px-8 pb-10 gap-x-20 gap-y-8;
+
+    .profile-info-personal {
+      @apply flex flex-col gap-2 p-4 overflow-hidden shadow-md w-full bg-slate-50 rounded-xl h-[26rem];
+
+      .profile-info-orders-title {
+        @apply text-xl text-[#143146];
+      }
+
+      .profile-info-personal-data {
+        @apply flex flex-col gap-4 p-4 overflow-y-auto rounded-md shadow-inner;
+
+        & li {
+          @apply text-[#2d638b] text-xs;
+
+          & p {
+            @apply text-[#143146] font-medium text-base;
+          }
+        }
+
+        &::-webkit-scrollbar {
+          width: 10px;
+        }
+        &::-webkit-scrollbar-track {
+          background-color: rgba(0, 0, 0, 0.08);
+          border-radius: 10px;
+        }
+        &::-webkit-scrollbar-thumb {
+          background-color: rgba(20, 49, 70, 0.2);
+          border-radius: 10px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+          background-color: rgba(20, 49, 70, 0.4);
+        }
+      }
+    }
+
+    .profile-info-orders {
+      @apply flex flex-col gap-2 p-4 overflow-hidden shadow-md w-full bg-slate-50 rounded-xl h-[26rem];
+
+      .profile-info-orders-title {
+        @apply text-xl text-[#143146] flex flex-row gap-1;
+      }
+
+      .profile-info-orders-data {
+        @apply flex flex-col h-full gap-4 p-4 overflow-y-auto rounded-md shadow-inner;
+
+        .profile-info-orders-card {
+          @apply p-4 bg-white rounded-md shadow-md;
+
+          & span {
+            @apply text-[#143146] text-base font-semibold flex flex-row gap-1 items-center;
+
+            & p {
+              @apply text-[#2d638b] text-sm font-normal;
+            }
+
+            .profile-info-orders-completed {
+              @apply text-[#143146] text-sm font-normal flex flex-row items-center gap-1;
+            }
+
+            .profile-info-orders-pending {
+              @apply text-[#ee2130] text-sm font-normal flex flex-row items-center gap-1;
+            }
+          }
+        }
+
+        &::-webkit-scrollbar {
+          width: 10px;
+        }
+        &::-webkit-scrollbar-track {
+          background-color: rgba(0, 0, 0, 0.08);
+          border-radius: 10px;
+        }
+        &::-webkit-scrollbar-thumb {
+          background-color: rgba(20, 49, 70, 0.2);
+          border-radius: 10px;
+        }
+        &::-webkit-scrollbar-thumb:hover {
+          background-color: rgba(20, 49, 70, 0.4);
+        }
+
+        .profile-info-no-orders {
+          @apply text-[#143146] text-base font-semibold items-center justify-center flex w-full h-full underline;
+        }
+      }
+
+      .profile-info-orders-button {
+        @apply flex bg-[#2d638b] mt-2 p-2 rounded-lg text-white w-auto shadow-md justify-center duration-200;
+
+        &:hover {
+          @apply bg-[#265274];
+        }
+      }
+    }
+  }
+}

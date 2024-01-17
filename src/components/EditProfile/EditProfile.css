@@ -1,0 +1,233 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+.edit-profile-form-container {
+  @apply flex flex-col w-full h-full gap-8 p-4 px-16;
+
+  .edit-profile-form-section1 {
+    @apply flex flex-row justify-around w-full gap-8;
+
+    .edit-personal-data-container {
+      @apply flex flex-col w-full gap-4 p-4 shadow-md bg-slate-50 rounded-xl;
+
+      .edit-personal-data-title {
+        @apply text-2xl font-semibold text-[#143146] text-center;
+      }
+
+      .edit-personal-data-section {
+        @apply flex flex-col gap-5;
+
+        .edit-personal-data-input {
+          @apply flex flex-col;
+
+          & label {
+            @apply pl-1 text-sm text-[#2d638b];
+          }
+
+          & input {
+            @apply bg-white rounded-lg text-[#143146];
+          }
+
+          .MuiInputBase-root {
+            @apply rounded-xl;
+          }
+
+          .edit-personal-data-error {
+            @apply pl-2 text-xs text-red-500;
+          }
+        }
+      }
+    }
+
+    .upload-image-container {
+      @apply flex flex-col items-center justify-between w-full p-4 shadow-md bg-slate-50 rounded-xl;
+      .upload-image-title {
+        @apply text-2xl font-semibold text-[#143146];
+      }
+      .upload-image-input {
+        @apply relative p-2 rounded-full shadow-lg bg-[#265274]/50;
+
+        & figure {
+          @apply object-cover overflow-hidden bg-white rounded-full w-36 h-36;
+
+          & img {
+            @apply object-cover w-full h-full duration-200;
+          }
+
+          &:hover {
+            & img {
+              @apply scale-110 brightness-95;
+            }
+          }
+
+          &:active {
+            & img {
+              @apply scale-95;
+            }
+          }
+        }
+
+        .upload-image-icon {
+          @apply cursor-pointer absolute bottom-0 left-0 m-2 bg-[#2d638b] text-white p-2 rounded-full duration-200;
+
+          &:hover {
+            @apply bg-[#265274];
+          }
+
+          &:active {
+            @apply bg-[#143146];
+          }
+        }
+      }
+
+      .remove-image-btn {
+        @apply text-lg text-[#ff5d68] cursor-pointer flex flex-row gap-1 items-center;
+
+        .remove-image-icon {
+          @apply duration-200;
+        }
+
+        &:hover {
+          @apply text-[#ff0000];
+
+          .remove-image-icon {
+            -webkit-animation: wobble-ver-right 0.8s both;
+            animation: wobble-ver-right 0.8s both;
+          }
+        }
+      }
+    }
+  }
+
+  .edit-profile-form-section2 {
+    @apply flex flex-col w-full gap-4 p-4 shadow-md bg-slate-50 rounded-xl;
+
+    .edit-address-title {
+      @apply text-2xl font-semibold text-[#143146];
+    }
+
+    .edit-address-subtitle {
+      @apply text-[#7A8D9B] text-sm underline flex flex-row items-center gap-1;
+    }
+
+    & label {
+      @apply pl-1 text-sm text-[#2d638b];
+    }
+
+    & input {
+      @apply bg-white rounded-lg text-[#143146];
+    }
+
+    .MuiInputBase-root {
+      @apply rounded-xl;
+    }
+
+    .edit-address-error {
+      @apply pl-2 text-xs text-red-500;
+    }
+
+    .edit-address-section1 {
+      @apply flex flex-row gap-8 pt-2;
+
+      & span {
+        @apply w-full;
+      }
+    }
+
+    .edit-address-section2 {
+      @apply flex flex-col gap-4;
+    }
+  }
+
+  .edit-profile-form-button-container {
+    @apply flex justify-center w-full;
+
+    .edit-profile-form-button {
+      @apply relative flex items-center justify-center w-1/4 py-2 bg-[#143146] text-white rounded-lg uppercase font-medium text-lg duration-200 shadow-md border-none overflow-hidden;
+
+      &.disabled {
+        @apply bg-[#7A8D9B] cursor-not-allowed;
+      }
+
+      .edit-profile-btn-icon {
+        @apply absolute w-full h-full bg-[#2d638b] duration-200 p-2 translate-y-64;
+      }
+
+      &:hover {
+        @apply bg-[#2d638b];
+
+        .edit-profile-btn-icon {
+          @apply translate-y-0;
+        }
+      }
+    }
+  }
+}
+
+@-webkit-keyframes wobble-ver-right {
+  0%,
+  100% {
+    -webkit-transform: translateY(0) rotate(0);
+    transform: translateY(0) rotate(0);
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+  }
+  15% {
+    -webkit-transform: translateY(-3px) rotate(6deg);
+    transform: translateY(-3px) rotate(6deg);
+  }
+  30% {
+    -webkit-transform: translateY(4px) rotate(-6deg);
+    transform: translateY(4px) rotate(-6deg);
+  }
+  45% {
+    -webkit-transform: translateY(-6px) rotate(2.6deg);
+    transform: translateY(-6px) rotate(2.6deg);
+  }
+  60% {
+    -webkit-transform: translateY(3px) rotate(-2.4deg);
+    transform: translateY(3px) rotate(-2.4deg);
+  }
+  75% {
+    -webkit-transform: translateY(-2px) rotate(1.2deg);
+    transform: translateY(-2px) rotate(1.2deg);
+  }
+}
+@keyframes wobble-ver-right {
+  0%,
+  100% {
+    -webkit-transform: translateY(0) rotate(0);
+    transform: translateY(0) rotate(0);
+    -webkit-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+  }
+  15% {
+    -webkit-transform: translateY(-3px) rotate(6deg);
+    transform: translateY(-3px) rotate(6deg);
+  }
+  30% {
+    -webkit-transform: translateY(4px) rotate(-6deg);
+    transform: translateY(4px) rotate(-6deg);
+  }
+  45% {
+    -webkit-transform: translateY(-6px) rotate(2.6deg);
+    transform: translateY(-6px) rotate(2.6deg);
+  }
+  60% {
+    -webkit-transform: translateY(3px) rotate(-2.4deg);
+    transform: translateY(3px) rotate(-2.4deg);
+  }
+  75% {
+    -webkit-transform: translateY(-2px) rotate(1.2deg);
+    transform: translateY(-2px) rotate(1.2deg);
+  }
+}
