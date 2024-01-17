@@ -85,7 +85,7 @@ export default function UnificadoShop() {
       return data;
     }
 
-    return data.filter(
+    return data?.filter(
       (product) =>
         product.name.toLowerCase().includes(filterQuery.toLowerCase()) ||
         product.category[0]?.name
@@ -172,8 +172,8 @@ export default function UnificadoShop() {
       <div className="w-full products-container">
         <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
         <div className="flex flex-wrap items-center justify-around gap-10">
-          {filteredProducts.length ? (
-            filteredProducts.map((product, index) => (
+          {filteredProducts?.length ? (
+            filteredProducts?.map((product, index) => (
               <CardProduct
                 key={product?._id}
                 id={product?._id}
@@ -189,7 +189,7 @@ export default function UnificadoShop() {
               />
             ))
           ) : (
-            <p>No products found</p>
+            <p className="text-center">No products found</p>
           )}
         </div>
       </div>
