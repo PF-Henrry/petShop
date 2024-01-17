@@ -61,7 +61,7 @@
         @apply bg-[#2d638b] text-white w-28 px-3 py-2 relative duration-200 border-none overflow-hidden;
 
         .cancel-button {
-          @apply text-[#ff5d68] font-semibold;
+          @apply text-[#ffc3c3] font-semibold;
         }
 
         .circles-container {
@@ -200,7 +200,11 @@
       }
 
       .profile-info-orders-button {
-        @apply flex bg-[#2d638b] mt-2 p-2 rounded-lg text-[#eee0dd] w-auto shadow-md justify-center;
+        @apply flex bg-[#2d638b] mt-2 p-2 rounded-lg text-white w-auto shadow-md justify-center duration-200;
+
+        &:hover {
+          @apply bg-[#265274];
+        }
       }
     }
   }
