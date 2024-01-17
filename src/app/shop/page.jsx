@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
 import CardProduct from "@/components/CardsProducts/CardProduct";
 import SearchBar from "@/components/SearchBar/SearchBarCatalogo";
 import CatalogCarousel from "@/components/CatalogCarousel/CatalogCarousel";
@@ -13,9 +13,7 @@ import {
 } from "@/hooks/usePages";
 
 import { useSession } from "next-auth/react";
-
 import "./ShopStyles.css";
-import Loading from "../loading";
 
 export default function UnificadoShop() {
   const { data: session, status: sessionStatus } = useSession();
@@ -41,7 +39,6 @@ export default function UnificadoShop() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const storeProducts = localStorage.getItem("products");
         const storedRatings = localStorage.getItem("ratings");
         const userID = session?.user?.id;
         if (userID) {
@@ -52,11 +49,7 @@ export default function UnificadoShop() {
         const data = await response.json();
 
         setOriginalProductsCopy(data);
-        if (storeProducts) {
-          setProductsStore(JSON.parse(storeProducts));
-        } else {
-          setProductsStore(data);
-        }
+        setProductsStore(data);
 
         if (!storedRatings) {
           const randomRatings = data.map(() => generateRandomRating());
@@ -102,12 +95,12 @@ export default function UnificadoShop() {
     localStorage.setItem("filteredProducts", JSON.stringify(filtered));
   };
 
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     setFilter({ name: "name", value: "" });
     setProductsStore(originalProductsCopy);
     setFilteredProducts(getArrayPage());
     localStorage.removeItem("filteredProducts");
-  };
+  }, [setFilter, setProductsStore, originalProductsCopy, getArrayPage]);
 
   useEffect(() => {
     const handleKeyPress = (event) => {
