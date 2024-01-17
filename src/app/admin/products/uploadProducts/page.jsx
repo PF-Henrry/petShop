@@ -12,11 +12,25 @@ function UploadImage() {
 
   const [url, setUrl] = useState(null);
   const [data, setData] = useState({});
-  const [categorys, setCategorys] = useState([]);
-  const [species, setSpecies] = useState([]);
+
   const router = useRouter();
 
+  const [categoriesOptions, setCategoriesOptions] = useState([]);
+  const [speciesOptions, setSpeciesOptions] = useState([]);
+  const [brandsOptions, setBrandsOptions] = useState([]);
   const { data: session, status } = useSession();
+
+  useEffect(() => {
+    fetch('/api/infoids')
+      .then((response) => response.json())
+      .then((data) => {
+        setCategoriesOptions(data.category);
+        setSpeciesOptions(data.specie);
+        setBrandsOptions(data.brand);
+      })
+      .catch((error) => console.error('Error fetching options:', error));
+  }, []);
+
 
   const handleOnChange = async (e) => {
     try {
@@ -40,51 +54,22 @@ function UploadImage() {
     });
   };
 
-  const handleOptions = (type) => {
-    const inputName = type === 'addCategory' ? 'category' : 'specie';
-    const inputValue = document.querySelector(`input[name="${inputName}"]`).value.trim();
 
-    if (inputValue !== '') {
-      if (type === 'addCategory') {
-        setCategorys((prevCategories) => [...prevCategories, inputValue]);
-      } else {
-        const ageInputs = document.querySelectorAll('input[name="age"]:checked');
-        const sizeInputs = document.querySelectorAll('input[name="size"]:checked');
-        const ageData = Array.from(ageInputs).map((age) => age.value);
-        const sizeData = Array.from(sizeInputs).map((size) => size.value);
-
-        setSpecies((prevSpecies) => [
-          ...prevSpecies,
-          { name: inputValue, size: sizeData[0], age: ageData[0] }
-        ]);
-      }
-
-      document.querySelector(`input[name="${inputName}"]`).value = '';
-    }
-  };
-
-  const handleDelete = (name, type) => {
-    if (type === 'category') {
-      setCategorys((prevCategories) => prevCategories.filter((category) => category !== name));
-    } else {
-      setSpecies((prevSpecies) => prevSpecies.filter((specie) => specie.name !== name));
-    }
-  };
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     try {
       if (status === "authenticated") {
         const dataToSend = {
-          name: e.target.querySelector('input[name="name"]').value,
-          price: e.target.querySelector('input[name="price"]').value,
-          detail: e.target.querySelector('textarea[name="detail"]').value,
+          name: form.name,
+          price: form.price,
+          detail: form.detail,
           image: url,
-          brand: e.target.querySelector('input[name="brand"]').value,
-          specie: [...species],
-          category: categorys
+          brand: form.brand,
+          species: [form.specie],  
+          category: [form.category]
         };
-
+  console.log('data to send', dataToSend)
         const response = await fetch('/api/products', {
           method: 'POST',
           headers: {
@@ -92,11 +77,12 @@ function UploadImage() {
           },
           body: JSON.stringify(dataToSend),
         }).then((res) => res.json());
-
+  
         console.log(response);
-
+  
         if (response.ok) {
           showNotify('success', 'Producto subido');
+          router.push('/admin/products')
         }
       } else {
         router.push('/login');
@@ -106,8 +92,7 @@ function UploadImage() {
       console.error(error.message);
     }
   };
-
-    //Validation
+  
 
     const [formError, setFormError] = useState({});
 
@@ -158,7 +143,7 @@ function UploadImage() {
       console.log("ejecutando use effect")
     }, [form]);
   
-    //Validation
+   
 
   return (
     <LayoutAdmin>
@@ -241,60 +226,66 @@ function UploadImage() {
               </label>
 
               <label className="block text-sm font-medium text-gray-700 mt-4">
-                Marca
-                <input
-                  type="text"
-                  name="brand"
-                  value={form.brand}
-                  onChange={handleFormData}
-                  className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
-                />
+              Marca
+              <select
+                name="brand"
+                value={form.brand}
+                onChange={handleFormData}
+                className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
+              >
+                <option value="">Seleccionar Marca</option>
+                {brandsOptions.map((brand) => (
+                  <option key={brand._id} value={brand.name}>
+                    {brand.name}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-               {formError.brand ? 
+               {/* {formError.brand ? 
                (<p className="text-red-500">{formError.brand}</p>) : 
                (
                <p>
                <br />
                </p>
-               )}
-              </label>
+               )} */}
+             
             <div className="col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mt-4">
-                Categoría
-                <input type="text" name="category" className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm" />
-                <div className="flex space-x-2 mt-2">
-                  <button
-                    type="button"
-                    onClick={() => handleOptions('addCategory')}
-                    className="bg-pink-500 text-white px-3 py-1 rounded hover:bg-pink-600 focus:outline-none focus:ring focus:border-blue-300"
-                  >
-                    Add
-                  </button>
-                  {categorys.length > 0 ? (
-                    <span className="text-red-500 cursor-pointer" onClick={() => handleDelete(categorys[categorys.length - 1], 'category')}>Undo</span>
-                  ) : null}
-                </div>
-              </label>
+            <label className="block text-sm font-medium text-gray-700 mt-4">
+              Categoría
+              <select
+                name="category"
+                value={form.category}
+                onChange={handleFormData}
+                className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
+              >
+                <option value="">Seleccionar Categoría</option>
+                {categoriesOptions?.map((category) => (
+                  <option key={category._id} value={category.name}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </label>
 
-              <label className="block text-sm font-medium text-gray-700 mt-4">
-                Especie
-                <input type="text" name="specie" className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm" />
-                <div className="flex space-x-2 mt-2">
-                  <button
-                    type="button"
-                    onClick={() => handleOptions('addSpecie')}
-                    className="bg-pink-500 text-white px-3 py-1 rounded hover:bg-pink-600 focus:outline-none focus:ring focus:border-blue-300"
-                  >
-                    Add
-                  </button>
-                  {species.length > 0 ? (
-                    <span className="text-red-500 cursor-pointer" onClick={() => handleDelete(species[species.length - 1].name, 'specie')}>Undo</span>
-                  ) : null}
-                </div>
-                
-                
-              </label>
+            <label className="block text-sm font-medium text-gray-700 mt-4">
+              Especie
+              <select
+                name="specie"
+                value={form.specie}
+                onChange={handleFormData}
+                className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
+              >
+                <option value="">Seleccionar Especie</option>
+                {speciesOptions?.map((specie) => (
+                  <option key={specie._id} value={specie.name}>
+                    {specie.name}
+                  </option>
+                ))}
+              </select>
+            </label>
 
+            
               <button
              type="submit"
              disabled={disableButton()}

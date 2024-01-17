@@ -17,7 +17,7 @@ export async function GET(){
         const AllBrands = await brands.find({});
 
 
-        const result = {category: [...Allcategory], species: [...Allspecie], brand: [...AllBrands]}
+        const result = {category: [...Allcategory], specie: [...Allspecie], brand: [...AllBrands]}
         
         return NextResponse.json(result,{status:200});
     } catch (error) {
