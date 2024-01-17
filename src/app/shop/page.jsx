@@ -176,9 +176,11 @@ export default function UnificadoShop() {
       <div className="w-full products-container">
         <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
         <div className="flex flex-wrap items-center justify-around gap-10">
-          {filteredProducts.length ? (
-            filteredProducts.map((product, index) => (
-              <CardProduct
+        {filteredProducts.length ? (
+        filteredProducts
+          .filter(product => product.active) // Filtra productos activos
+          .map((product, index) => (
+            <CardProduct
                 key={product?._id}
                 id={product?._id}
                 name={product?.name}

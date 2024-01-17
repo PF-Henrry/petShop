@@ -404,10 +404,27 @@ const ProductsPage = () => {
                     value={editedProduct.stock}
                     onChange={(e) => handleInputChange("stock", e.target.value)}
                     className="border border-rosybrown rounded p-1 mb-2"
-                  />
+                    />
 
-                </>
-              ) : (
+                    <label className="font-bold block mb-2">Activo:</label>
+                    {isEditing ? (
+                      <select
+                        value={editedProduct.active ? "Sí" : "No"}
+                        onChange={(e) =>
+                          handleInputChange("active", e.target.value === "Sí")
+                        }
+                        className={`border border-rosybrown rounded p-1 mb-2 ${
+                          isEditing ? "bg-rosybrown-light" : ""
+                        }`}
+                      >
+                        <option value="Sí">Sí</option>
+                        <option value="No">No</option>
+                      </select>
+                    ) : (
+                      <p>{selectedProduct.active ? "Sí" : "No"}</p>
+                    )}
+                  </>
+                ) : (
                 <>
                   <p>
                     <span className="font-bold">Precio:</span>{" "}
@@ -449,6 +466,10 @@ const ProductsPage = () => {
                     <span className="font-bold">Stock:</span>{" "}
                     {selectedProduct.stock}
                   </p>
+                  <p>
+                    <span className="font-bold">Activo:</span>{" "}
+                    {selectedProduct.active ? "Sí" : "No"}
+                  </p>
                 </>
               )}
             </div>
@@ -460,6 +481,4 @@ const ProductsPage = () => {
 };
 
 export default ProductsPage;
-
-
 
