@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState, useEffect } from "react";
 import * as Yup from "yup";
@@ -12,7 +11,7 @@ import {
   ZIP_CHECKED,
 } from "@/utils/regex";
 import { useSession } from "next-auth/react";
-
+import Image from "next/image";
 
 const defaultImage =
   "http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png";
@@ -21,20 +20,23 @@ const validationSchema = Yup.object({
   name: Yup.string().matches(INPUT_NAME_CHECKED, "Ingresar solo letras"),
   lastname: Yup.string().matches(INPUT_NAME_CHECKED, "Ingresar solo letras"),
   username: Yup.string().matches(/^.+$/, "No puede estar vacío"),
- 
 
   email: Yup.string().matches(
     EMAIL_CHECKED,
     "El e-mail ingresado no es válido"
   ),
 
-  adress: Yup.string().matches(ADDRESS_CHECKED, 'Ingrese una dirección válida'),
+  adress: Yup.string().matches(ADDRESS_CHECKED, "Ingrese una dirección válida"),
   codeP: Yup.string().matches(ZIP_CHECKED, "Ingrese un código postal válido"),
   province: Yup.string().matches(/^.+$/, "No puede estar vacío"),
   city: Yup.string().matches(/^.+$/, "No puede estar vacío"),
 });
 
-const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
+const EditProfileForm = ({
+  initialValues,
+  editable,
+  setShowSuccessMessage,
+}) => {
   const { data: session } = useSession();
 
   const userSessionId = session?.user?.id;
@@ -70,9 +72,7 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
     codeP: "",
     province: "",
     city: "",
-  })
-
-  
+  });
 
   const handleRemoveImage = () => {
     setSelectedImage(defaultImage);
@@ -86,7 +86,7 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
     const fetchUserData = async () => {
       try {
         if (userSessionId) {
-          const response = await fetch("/api/users/" + userSessionId);
+          const response = await fetch(`/api/users/${userSessionId}`);
 
           if (response.ok) {
             const userData = await response.json();
@@ -142,7 +142,7 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
 
       console.log("Datos que se enviarán al backend:", dataUser);
 
-      const response = await fetch("api/users/" + userSessionId, {
+      const response = await fetch(`/api/users/${userSessionId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -155,9 +155,6 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
         console.log("Datos enviados correctamente al backend", res);
 
         setShowSuccessMessage(true);
-
-      
-        
       } else {
         const errorResponse = await response.json();
         console.error(
@@ -165,8 +162,7 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
           response.status,
           errorResponse
         );
-        }
-      
+      }
     } catch (error) {
       console.error("Error de red al enviar datos al backend", error.message);
     }
@@ -182,11 +178,11 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
       enableReinitialize // Permite reinicializar los valores cuando cambia la propiedad initialValues
     >
       {({ isSubmitting, isValid }) => (
-        <Form className="max-w-5xl mx-auto my-8 p-8 rounded shadow border border-gray-300 bg-customPrimary">
+        <Form className="max-w-5xl p-8 mx-auto my-8 border border-gray-300 rounded shadow bg-customPrimary">
           <div className="mb-4">
             <div className="flex flex-col items-center justify-center">
               <label htmlFor="upload-image-input">
-                <img
+                <Image
                   name="img"
                   src={userImageToShow}
                   alt="Imagen de perfil"
@@ -205,32 +201,34 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
               />
               {selectedImage && (
                 <button
-                type="button"
-                onClick={handleRemoveImage}
-                className={`text-${editable ? 'red-500' : 'gray-500'} no-underline cursor-pointer`}
-                disabled={!editable}
-              >
-                Eliminar Imagen
-              </button>
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className={`text-${
+                    editable ? "red-500" : "gray-500"
+                  } no-underline cursor-pointer`}
+                  disabled={!editable}
+                >
+                  Eliminar Imagen
+                </button>
               )}
             </div>
 
             <Button
-            type="submit"
-            variant="outlined"
-            disabled={!editable || isSubmitting || !isValid}
-            style={{ borderColor: "grey" }}
-            className={`text-black
+              type="submit"
+              variant="outlined"
+              disabled={!editable || isSubmitting || !isValid}
+              style={{ borderColor: "grey" }}
+              className={`text-black
               py-2 px-4 rounded focus:outline-none focus:shadow-outline
               active:shadow-md active:translate-y-1 block mx-auto w-1/4 mt-8 hover:bg-customSecondary`}
-          >
-            Guardar
-          </Button>
+            >
+              Guardar
+            </Button>
 
-            <p className="text-xl font-bold mb-4">Datos Personales:</p>
+            <p className="mb-4 text-xl font-bold">Datos Personales:</p>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col">
-                <InputLabel htmlFor="name" className="text-sm font-bold mb-1">
+                <InputLabel htmlFor="name" className="mb-1 text-sm font-bold">
                   Nombre:
                 </InputLabel>
                 <Field
@@ -249,7 +247,7 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
               <div className="flex flex-col">
                 <InputLabel
                   htmlFor="lastname"
-                  className="text-sm font-bold mb-1"
+                  className="mb-1 text-sm font-bold"
                 >
                   Apellido:
                 </InputLabel>
@@ -269,7 +267,7 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
               <div className="flex flex-col">
                 <InputLabel
                   htmlFor="username"
-                  className="text-sm font-bold mb-1"
+                  className="mb-1 text-sm font-bold"
                 >
                   Nombre de Usuario:
                 </InputLabel>
@@ -289,13 +287,13 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
           </div>
 
           <div className="mb-4">
-            <p className="text-xl font-bold mb-1">Dirección de Envío:</p>
-            <p className="text-sm text-gray-500 mt-1 mb-3">
+            <p className="mb-1 text-xl font-bold">Dirección de Envío:</p>
+            <p className="mt-1 mb-3 text-sm text-gray-500">
               Para envíos fuera de CABA, contactar al vendedor
             </p>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col">
-                <InputLabel htmlFor="adress" className="text-sm font-bold mb-1">
+                <InputLabel htmlFor="adress" className="mb-1 text-sm font-bold">
                   Dirección (calle y n°):
                 </InputLabel>
                 <Field
@@ -312,7 +310,7 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
               </div>
 
               <div className="flex flex-col">
-                <InputLabel htmlFor="codeP" className="text-sm font-bold mb-1">
+                <InputLabel htmlFor="codeP" className="mb-1 text-sm font-bold">
                   Código Postal:
                 </InputLabel>
                 <Field
@@ -332,7 +330,7 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
 
           <div className="mb-4">
             <div className="flex flex-col">
-              <InputLabel htmlFor="city" className="text-sm font-bold mb-1">
+              <InputLabel htmlFor="city" className="mb-1 text-sm font-bold">
                 Localidad:
               </InputLabel>
               <Field
@@ -350,7 +348,7 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
           </div>
           <div>
             <div className="flex flex-col">
-              <InputLabel htmlFor="province" className="text-sm font-bold mb-1">
+              <InputLabel htmlFor="province" className="mb-1 text-sm font-bold">
                 Provincia:
               </InputLabel>
               <Field
@@ -380,7 +378,6 @@ const EditProfileForm = ({ initialValues, editable,setShowSuccessMessage}) => {
           </Button>
         </Form>
       )}
-      
     </Formik>
   );
 };
