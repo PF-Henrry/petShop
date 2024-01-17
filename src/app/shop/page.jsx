@@ -41,23 +41,27 @@ export default function UnificadoShop() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const storeProducts = localStorage.getItem("storeProducts");
+        const storeProducts = localStorage.getItem("products");
         const storedRatings = localStorage.getItem("ratings");
         const userID = session?.user?.id;
         if (userID) {
           updateFavorites(userID);
         }
 
-        if (storeProducts && storedRatings) {
-          setRatings(JSON.parse(storedRatings));
-          setProductsStore(JSON.parse(storeProducts));
-          setFilteredProducts(getArrayPage());
-          setOriginalProductsCopy(JSON.parse(storeProducts));
-        } else {
+       
           const response = await fetch("api/products");
           const data = await response.json();
 
-          setProductsStore(data);
+          setOriginalProductsCopy(data);
+          if (storeProducts) {
+            // setRatings(JSON.parse(storedRatings));
+  
+            setProductsStore(JSON.parse(storeProducts));
+            // setFilteredProducts(getArrayPage());
+            // setOriginalProductsCopy(JSON.parse(storeProducts));
+          }   else {
+            setProductsStore(data)
+          }
 
           if (!storedRatings) {
             const randomRatings = data.map(() => generateRandomRating());
@@ -66,8 +70,8 @@ export default function UnificadoShop() {
           }
 
           setFilteredProducts(getArrayPage());
-          setOriginalProductsCopy(data);
-        }
+          // setOriginalProductsCopy(data);
+        
       } catch (error) {
         console.error("Error fetching data:", error);
       }
