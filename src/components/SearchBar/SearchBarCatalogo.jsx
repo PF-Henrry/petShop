@@ -36,15 +36,26 @@ export default function SearchBar({ onSearch, onClear }) {
     setQuery(e.target.value);
   };
 
+  // const handleKeyDown = (e) => {
+  //   if (e.key === "Backspace" && query.length > 0) {
+  //     const updatedQuery = query.slice(0, -1);
+  //     setQuery(updatedQuery);
+  //     onSearch(updatedQuery);
+  //     localStorage.setItem("searchQuery", updatedQuery);
+  //   }
+  // };
+
   const handleKeyDown = (e) => {
     if (e.key === "Backspace" && query.length > 0) {
       const updatedQuery = query.slice(0, -1);
       setQuery(updatedQuery);
       onSearch(updatedQuery);
       localStorage.setItem("searchQuery", updatedQuery);
+    } else if (e.key === "Enter" && query.trim() !== "") {
+      handleSearch();
     }
   };
-
+  
   return (
     <div className="search-bar-container">
       <input
