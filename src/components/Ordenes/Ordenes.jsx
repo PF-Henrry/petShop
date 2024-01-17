@@ -68,7 +68,8 @@ export default function Ordenes({ id }) {
           </Link>
         </div>
       ) : (
-        data &&
+        Array.isArray(data) &&
+        data.length > 0 &&
         data.map((order, index) => (
           <div key={index} className="orden-card">
             <section className="orden-info-container">
