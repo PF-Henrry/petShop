@@ -90,7 +90,7 @@ const FavoriteProducts = () => {
             </p>
           </span>
           <div className="favorite-products">
-            {favoriteProducts.map((product) => (
+            {favoriteProducts?.map((product) => (
               <CardProduct
                 key={product?._id}
                 id={product?._id}
@@ -101,6 +101,7 @@ const FavoriteProducts = () => {
                 brand={product?.brand?.name}
                 specie={product?.species[0]?.name}
                 category={product?.category[0]?.name}
+                stock={product?.stock}
               />
             ))}
           </div>
