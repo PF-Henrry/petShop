@@ -38,7 +38,6 @@ const SpeciesSelect = ({ species, selectedSpecies, onSelectSpecies }) => (
   </select>
 );
 
-
 const BrandSelect = ({ brands, selectedBrand, onSelectBrand }) => (
   <select
     onChange={(e) => onSelectBrand(e.target.value)}
@@ -111,12 +110,22 @@ const ProductsPage = () => {
     fetchProductDetails();
   }, [isEditing]);
 
+  
+
   const filteredProducts = products.filter((product) => {
     const productName = product.name.toLowerCase();
     const searchTermLower = searchTerm.toLowerCase();
     const searchWords = searchTermLower.split(" ");
     return searchWords.every((word) => productName.includes(word));
   });
+  const activeProducts = filteredProducts.filter(
+    (product) => product.active && product.stock > 0
+  );
+
+  const inactiveProducts = filteredProducts.filter(
+    (product) => !product.active || product.stock <= 0
+  );
+  
 
   const openModal = (product) => {
     setSelectedProduct(product);
@@ -232,26 +241,58 @@ const ProductsPage = () => {
           </div>
         )}
 
-        {!isLoading && filteredProducts.length > 0 && (
-          <ul className="overflow-y-scroll max-h-[65vh]">
-            {filteredProducts.map((product) => {
-              
-              return (
-              <li
-                key={product._id}
-                className="cursor-pointer p-2 rounded mb-2 transition-all duration-300 ease-in-out hover:bg-pink-100 hover:text-black"
-                onClick={() => openModal(product)}
-              >
-                <span className="hover:font-bold">{product.name}</span>
-                <p className="text-sm">
-                  Stock disponible: <span className={product.stock > 0 ? 'text-green-500' : 'text-red-500'}>
-                    {product.stock}
-                  </span>
-                </p>
-               
-              </li>
-            )})}
-          </ul>
+{!isLoading && filteredProducts.length > 0 && (
+          <div className="flex">
+            <div className="w-1/2 pr-4">
+              <h2 className="text-lg font-semibold mb-2">Activos</h2>
+              <ul className="overflow-y-scroll max-h-[65vh]">
+                {activeProducts.map((product) => (
+                  <li
+                    key={product._id}
+                    className="cursor-pointer p-2 rounded mb-2 transition-all duration-300 ease-in-out hover:bg-pink-100 hover:text-black"
+                    onClick={() => openModal(product)}
+                  >
+                    <span className="hover:font-bold">{product.name}</span>
+                    <p className="text-sm">
+                      Stock disponible:{" "}
+                      <span
+                        className={
+                          product.stock > 0 ? "text-green-500" : "text-red-500"
+                        }
+                      >
+                        {product.stock}
+                      </span>
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="w-1/2 pl-4">
+              <h2 className="text-lg font-semibold mb-2 mt-4">No Activos</h2>
+              <ul className="overflow-y-scroll max-h-[65vh]">
+                {inactiveProducts.map((product) => (
+                  <li
+                    key={product._id}
+                    className="cursor-pointer p-2 rounded mb-2 transition-all duration-300 ease-in-out hover:bg-pink-100 hover:text-black"
+                    onClick={() => openModal(product)}
+                  >
+                    <span className="hover:font-bold">{product.name}</span>
+                    <p className="text-sm">
+                      Stock disponible:{" "}
+                      <span
+                        className={
+                          product.stock > 0 ? "text-green-500" : "text-red-500"
+                        }
+                      >
+                        {product.stock}
+                      </span>
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         )}
 
         <Modal
@@ -481,4 +522,5 @@ const ProductsPage = () => {
 };
 
 export default ProductsPage;
+
 
