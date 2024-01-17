@@ -90,7 +90,10 @@ const FavoriteProducts = () => {
             </p>
           </span>
           <div className="favorite-products">
-            {favoriteProducts?.map((product) => (
+            {
+            favoriteProducts &&
+            favoriteProducts?.filter((product) => product?.active)
+            ?.map((product) => (
               <CardProduct
                 key={product?._id}
                 id={product?._id}
