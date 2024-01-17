@@ -74,8 +74,8 @@ export default function Filter({ handleOnChange, handleOnClick }) {
           <span>
             <p className="filter-title-select">Especie</p>
             <select onChange={(e) => handleOnChange(e)} name="species">
-              {data?.species.length &&
-                data.species.map((specie) => {
+              {data?.species?.length &&
+                data.species?.map((specie) => {
                   return (
                     <option key={specie?._id} value={specie?._id}>
                       {specie?.name}
@@ -176,8 +176,8 @@ export default function Filter({ handleOnChange, handleOnClick }) {
             <span>
               <p className="filter-title-select">Especie</p>
               <select onChange={(e) => handleOnChange(e)} name="species">
-                {data?.species.length &&
-                  data.species.map((specie) => {
+                {data?.species?.length &&
+                  data.species?.map((specie) => {
                     return (
                       <option key={specie?._id} value={specie?._id}>
                         {specie?.name}
