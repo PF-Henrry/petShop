@@ -38,7 +38,6 @@ const SpeciesSelect = ({ species, selectedSpecies, onSelectSpecies }) => (
   </select>
 );
 
-// Nuevo componente para la selección de marcas
 const BrandSelect = ({ brands, selectedBrand, onSelectBrand }) => (
   <select
     onChange={(e) => onSelectBrand(e.target.value)}
@@ -111,12 +110,22 @@ const ProductsPage = () => {
     fetchProductDetails();
   }, [isEditing]);
 
+  
+
   const filteredProducts = products.filter((product) => {
     const productName = product.name.toLowerCase();
     const searchTermLower = searchTerm.toLowerCase();
     const searchWords = searchTermLower.split(" ");
     return searchWords.every((word) => productName.includes(word));
   });
+  const activeProducts = filteredProducts.filter(
+    (product) => product.active && product.stock > 0
+  );
+
+  const inactiveProducts = filteredProducts.filter(
+    (product) => !product.active || product.stock <= 0
+  );
+  
 
   const openModal = (product) => {
     setSelectedProduct(product);
@@ -178,18 +187,24 @@ const ProductsPage = () => {
 
   const saveChanges = async () => {
     try {
-      const response = await fetch(`/api/products/${editedProduct._id}`, {
+
+      if (!editedProduct.query) {
+        
+        editedProduct.query = { _id: editedProduct._id };
+      }
+  
+      const response = await fetch(`/api/products`, {
         method: 'PUT', 
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(editedProduct),
       });
-
+  
       if (!response.ok) {
         throw new Error('Error al guardar los cambios');
       }
-
+  
       // Actualiza la lista de productos después de guardar los cambios
       const updatedProducts = products.map(product =>
         product._id === editedProduct._id ? editedProduct : product
@@ -202,7 +217,7 @@ const ProductsPage = () => {
       console.error('Error al guardar los cambios:', error.message);
     }
   };
-
+  
   return (
     <LayoutAdmin>
        {isLoading && <Loader/>}
@@ -226,22 +241,58 @@ const ProductsPage = () => {
           </div>
         )}
 
-        {!isLoading && filteredProducts.length > 0 && (
-          <ul className="overflow-y-scroll max-h-[65vh]">
-            {filteredProducts.map((product) => {
-              
-              return (
-              <li
-                key={product._id}
-                className="cursor-pointer p-2 rounded mb-2 transition-all duration-300 ease-in-out hover:bg-pink-100 hover:text-black"
-                onClick={() => openModal(product)}
-              >
-                <span className="hover:font-bold">{product.name}</span>
-                <p className="text-sm">Stock disponible: {product.stock}</p>
-                {product.active ? <span className="hover:font-bold">{product.name}</span> : <span className="hover:font-bold text-red-300">{product.name}</span> }
-              </li>
-            )})}
-          </ul>
+{!isLoading && filteredProducts.length > 0 && (
+          <div className="flex">
+            <div className="w-1/2 pr-4">
+              <h2 className="text-lg font-semibold mb-2">Activos</h2>
+              <ul className="overflow-y-scroll max-h-[65vh]">
+                {activeProducts.map((product) => (
+                  <li
+                    key={product._id}
+                    className="cursor-pointer p-2 rounded mb-2 transition-all duration-300 ease-in-out hover:bg-pink-100 hover:text-black"
+                    onClick={() => openModal(product)}
+                  >
+                    <span className="hover:font-bold">{product.name}</span>
+                    <p className="text-sm">
+                      Stock disponible:{" "}
+                      <span
+                        className={
+                          product.stock > 0 ? "text-green-500" : "text-red-500"
+                        }
+                      >
+                        {product.stock}
+                      </span>
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="w-1/2 pl-4">
+              <h2 className="text-lg font-semibold mb-2 mt-4">No Activos</h2>
+              <ul className="overflow-y-scroll max-h-[65vh]">
+                {inactiveProducts.map((product) => (
+                  <li
+                    key={product._id}
+                    className="cursor-pointer p-2 rounded mb-2 transition-all duration-300 ease-in-out hover:bg-pink-100 hover:text-black"
+                    onClick={() => openModal(product)}
+                  >
+                    <span className="hover:font-bold">{product.name}</span>
+                    <p className="text-sm">
+                      Stock disponible:{" "}
+                      <span
+                        className={
+                          product.stock > 0 ? "text-green-500" : "text-red-500"
+                        }
+                      >
+                        {product.stock}
+                      </span>
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         )}
 
         <Modal
@@ -375,7 +426,7 @@ const ProductsPage = () => {
                     }
                   />
 
-                  {/* Nuevo selector de marcas */}
+                
                   <label className="font-bold block mb-2">Marcas:</label>
                   <BrandSelect
                     brands={brands}
@@ -388,8 +439,33 @@ const ProductsPage = () => {
                       handleInputChange("brand", value)
                     }
                   />
-                </>
-              ) : (
+           <label className="font-bold block mb-2">Stock:</label>
+                  <input
+                    type="number"
+                    value={editedProduct.stock}
+                    onChange={(e) => handleInputChange("stock", e.target.value)}
+                    className="border border-rosybrown rounded p-1 mb-2"
+                    />
+
+                    <label className="font-bold block mb-2">Activo:</label>
+                    {isEditing ? (
+                      <select
+                        value={editedProduct.active ? "Sí" : "No"}
+                        onChange={(e) =>
+                          handleInputChange("active", e.target.value === "Sí")
+                        }
+                        className={`border border-rosybrown rounded p-1 mb-2 ${
+                          isEditing ? "bg-rosybrown-light" : ""
+                        }`}
+                      >
+                        <option value="Sí">Sí</option>
+                        <option value="No">No</option>
+                      </select>
+                    ) : (
+                      <p>{selectedProduct.active ? "Sí" : "No"}</p>
+                    )}
+                  </>
+                ) : (
                 <>
                   <p>
                     <span className="font-bold">Precio:</span>{" "}
@@ -426,6 +502,14 @@ const ProductsPage = () => {
                     {selectedProduct.category
                       .map((category) => category.name)
                       .join(", ")}
+                  </p>
+                  <p>
+                    <span className="font-bold">Stock:</span>{" "}
+                    {selectedProduct.stock}
+                  </p>
+                  <p>
+                    <span className="font-bold">Activo:</span>{" "}
+                    {selectedProduct.active ? "Sí" : "No"}
                   </p>
                 </>
               )}

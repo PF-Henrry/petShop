@@ -53,7 +53,10 @@ export const useProductStore = create((set, get) => ({
     return filter;
   },
 
-  setProducts: (products) => set({ products }),
+  setProducts: (products) => {
+    localStorage.setItem("products", JSON.stringify(products));
+    set({ products })
+  },
 
   getProducts: () => {
     const { products } = get();

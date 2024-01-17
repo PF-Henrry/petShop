@@ -29,15 +29,15 @@ const validations = (form) => {
       errors.detail = "No debe tener más de 160 caracteres";
     }
   
-    if (!form.brand) {
-      errors.brand = "Marca es requerida";
-    } else if (!/^[A-Z][a-zA-Z\s]*$/.test(form.brand)) {
-      errors.brand = "Use mayúsculas y evite números o caracteres especiales";
-    } else if (form.brand.length < 3){
-      errors.brand = "Debe tener minimo 3 caracteres"
-    } else if (form.brand.length > 30) {
-      errors.brand = "No debe tener más de 30 caracteres";
-    }
+    // if (!form.brand) {
+    //   errors.brand = "Marca es requerida";
+    // } else if (!/^[A-Z][a-zA-Z\s]*$/.test(form.brand)) {
+    //   errors.brand = "Use mayúsculas y evite números o caracteres especiales";
+    // } else if (form.brand.length < 3){
+    //   errors.brand = "Debe tener minimo 3 caracteres"
+    // } else if (form.brand.length > 30) {
+    //   errors.brand = "No debe tener más de 30 caracteres";
+    // }
 
     return errors;
   };

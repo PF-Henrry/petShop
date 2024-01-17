@@ -49,7 +49,7 @@ export async function POST(request){
             _id:1,
             name:1
         });
-
+        console.log('dataproduct', dataProduct);
         //guardado de la imagen en cloudinary.
         if(dataProduct.image) {
            const newImg = await postImage(dataProduct.image,findProduct._id);
@@ -61,6 +61,7 @@ export async function POST(request){
             status:200
          })
     } catch (error) {
+      console.log('error',error.message)
         return NextResponse.json(error,{
             status:400
         })
@@ -73,7 +74,6 @@ export async function DELETE(request){
       const dataProduct = await request.json();
       const {query} = dataProduct;
 
-      console.log(query)
 
 
       if(!query) throw TypeError('Query is undefined');

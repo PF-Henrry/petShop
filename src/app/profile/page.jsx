@@ -100,6 +100,13 @@ const Profile = () => {
     currency: "ARS",
   });
 
+  const goToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   const lastname =
     profileData?.lastname === "Unknown" || profileData?.lastname === undefined
       ? "---"
@@ -124,6 +131,7 @@ const Profile = () => {
         <div className="px-4 py-2 mt-4 text-center text-white bg-green-500 rounded">
           Cambios guardados exitosamente. Haga click en cancelar para salir del
           modo de edición.
+          {goToTop()}
         </div>
       )}
       <section className="profile-header-container">
@@ -168,7 +176,7 @@ const Profile = () => {
         </div>
       </section>
 
-      <div className={`profile-edit ${editable ? "block" : "hidden"}`}>
+      <div className={`profile-edit ${editable ? "" : "hidden"}`}>
         <EditProfileForm
           initialValues={initialValues}
           onSubmit={handleSubmit}
@@ -198,7 +206,9 @@ const Profile = () => {
 
         <div className="profile-info-container">
           <section className="profile-info-personal">
-            <h1 className="profile-info-orders-title">Información Personal</h1>
+            <h1 className="profile-info-orders-title">
+              Información del perfil
+            </h1>
             <ul className="profile-info-personal-data">
               <li>
                 Nombre

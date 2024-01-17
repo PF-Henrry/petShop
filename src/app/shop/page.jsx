@@ -41,33 +41,30 @@ export default function UnificadoShop() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const storeProducts = localStorage.getItem("storeProducts");
+        const storeProducts = localStorage.getItem("products");
         const storedRatings = localStorage.getItem("ratings");
         const userID = session?.user?.id;
         if (userID) {
           updateFavorites(userID);
         }
 
-        if (storeProducts && storedRatings) {
-          setRatings(JSON.parse(storedRatings));
+        const response = await fetch("api/products");
+        const data = await response.json();
+
+        setOriginalProductsCopy(data);
+        if (storeProducts) {
           setProductsStore(JSON.parse(storeProducts));
-          setFilteredProducts(getArrayPage());
-          setOriginalProductsCopy(JSON.parse(storeProducts));
         } else {
-          const response = await fetch("api/products");
-          const data = await response.json();
-
           setProductsStore(data);
-
-          if (!storedRatings) {
-            const randomRatings = data.map(() => generateRandomRating());
-            setRatings(randomRatings);
-            localStorage.setItem("ratings", JSON.stringify(randomRatings));
-          }
-
-          setFilteredProducts(getArrayPage());
-          setOriginalProductsCopy(data);
         }
+
+        if (!storedRatings) {
+          const randomRatings = data.map(() => generateRandomRating());
+          setRatings(randomRatings);
+          localStorage.setItem("ratings", JSON.stringify(randomRatings));
+        }
+
+        setFilteredProducts(getArrayPage());
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -111,7 +108,7 @@ export default function UnificadoShop() {
     setFilteredProducts(getArrayPage());
     localStorage.removeItem("filteredProducts");
   };
-  
+
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (event.key === "Backspace") {
@@ -173,21 +170,23 @@ export default function UnificadoShop() {
         <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
         <div className="flex flex-wrap items-center justify-around gap-10">
           {filteredProducts.length ? (
-            filteredProducts.map((product, index) => (
-              <CardProduct
-                key={product?._id}
-                id={product?._id}
-                name={product?.name}
-                price={product?.price}
-                detail={product?.detail}
-                image={product?.image}
-                brand={product?.brand?.name}
-                specie={product?.species[0]?.name}
-                category={product?.category[0]?.name}
-                stock={product?.stock}
-                rating={ratings[index]}
-              />
-            ))
+            filteredProducts
+              .filter((product) => product.active) // Filtra productos activos
+              .map((product, index) => (
+                <CardProduct
+                  key={product?._id}
+                  id={product?._id}
+                  name={product?.name}
+                  price={product?.price}
+                  detail={product?.detail}
+                  image={product?.image}
+                  brand={product?.brand?.name}
+                  specie={product?.species[0]?.name}
+                  category={product?.category[0]?.name}
+                  stock={product?.stock}
+                  rating={ratings[index]}
+                />
+              ))
           ) : (
             <p>No products found</p>
           )}
