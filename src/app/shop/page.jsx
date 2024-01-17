@@ -184,6 +184,7 @@ export default function UnificadoShop() {
                 brand={product?.brand?.name}
                 specie={product?.species[0]?.name}
                 category={product?.category[0]?.name}
+                stock={product?.stock}
                 rating={ratings[index]}
               />
             ))

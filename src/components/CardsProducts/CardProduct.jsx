@@ -112,6 +112,17 @@ export default function CardProduct({
     }
   };
 
+  const [stockAvailable, setStockAvailable] = useState(stock);
+
+  const handleUpdateStock = (newStock) => {
+    setStockAvailable(newStock);
+  };
+
+  useEffect(() => {
+    const updatedStock = stock > 0 ? stock : 0;
+    setStockAvailable(updatedStock);
+  }, [stock]);
+
   return (
     <div className="card-product">
        {showSuccessMessage && (
@@ -119,6 +130,13 @@ export default function CardProduct({
         <span className="mr-2">✔</span> Producto agregado al carrito con éxito
       </div>
       )}
+
+       {stockAvailable === 0 && (
+      <div className="out-of-stock-message bg-red-500 text-white p-4 rounded-md absolute top-0 right-0 m-4 shadow-md mt-8">
+        Sin stock
+      </div>
+    )}
+
       <button className="card-product-favorite" onClick={handleToggleFavorite}>
         {isFavorite ? (
           <HeartStraight size={20} weight="fill" color="#ee2130" />
@@ -147,7 +165,14 @@ export default function CardProduct({
         className="px-2"
       />
       <p className="card-product-price">{formattedPrice} ARS</p>
-      <button className="card-product-cart" onClick={handleAddToCart}>
+      {stockAvailable > 0 && (
+     <div className="flex items-center justify-center w-full">
+     <p className="text-green-500 ">
+       Disponible: {stockAvailable > 0 ? stockAvailable : "Agotado"}
+     </p>
+   </div>
+    )}
+      <button className="card-product-cart" onClick={handleAddToCart} >
         <ShoppingCartSimple size={32} className="card-product-cart-icon" />
         Añadir al carrito
       </button>

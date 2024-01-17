@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState, useEffect } from "react";
 import * as Yup from "yup";
@@ -6,13 +5,13 @@ import TextField from "@mui/material/TextField";
 import { InputLabel } from "@mui/material";
 import Button from "@mui/material/Button";
 import {
+  ADDRESS_CHECKED,
   EMAIL_CHECKED,
-  PASSWORD_CHECKED,
   INPUT_NAME_CHECKED,
   ZIP_CHECKED,
 } from "@/utils/regex";
 import { useSession } from "next-auth/react";
-
+import Image from "next/image";
 
 const defaultImage =
   "http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png";
@@ -20,24 +19,24 @@ const defaultImage =
 const validationSchema = Yup.object({
   name: Yup.string().matches(INPUT_NAME_CHECKED, "Ingresar solo letras"),
   lastname: Yup.string().matches(INPUT_NAME_CHECKED, "Ingresar solo letras"),
-  username: Yup.string(),
-  password: Yup.string().matches(
-    PASSWORD_CHECKED,
-    "La contraseña debe contener al menos una letra, un número y tener una longitud mínima de 8 caracteres"
-  ),
+  username: Yup.string().matches(/^.+$/, "No puede estar vacío"),
 
   email: Yup.string().matches(
     EMAIL_CHECKED,
     "El e-mail ingresado no es válido"
   ),
 
-  adress: Yup.string(),
+  adress: Yup.string().matches(ADDRESS_CHECKED, "Ingrese una dirección válida"),
   codeP: Yup.string().matches(ZIP_CHECKED, "Ingrese un código postal válido"),
-  province: Yup.string(),
-  city: Yup.string(),
+  province: Yup.string().matches(/^.+$/, "No puede estar vacío"),
+  city: Yup.string().matches(/^.+$/, "No puede estar vacío"),
 });
 
-const EditProfileForm = ({ initialValues, editable }) => {
+const EditProfileForm = ({
+  initialValues,
+  editable,
+  setShowSuccessMessage,
+}) => {
   const { data: session } = useSession();
 
   const userSessionId = session?.user?.id;
@@ -87,7 +86,7 @@ const EditProfileForm = ({ initialValues, editable }) => {
     const fetchUserData = async () => {
       try {
         if (userSessionId) {
-          const response = await fetch("/api/users/" + userSessionId);
+          const response = await fetch(`/api/users/${userSessionId}`);
 
           if (response.ok) {
             const userData = await response.json();
@@ -143,7 +142,7 @@ const EditProfileForm = ({ initialValues, editable }) => {
 
       console.log("Datos que se enviarán al backend:", dataUser);
 
-      const response = await fetch("api/users/" + userSessionId, {
+      const response = await fetch(`/api/users/${userSessionId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -154,6 +153,8 @@ const EditProfileForm = ({ initialValues, editable }) => {
       if (response.ok) {
         const res = await response.json();
         console.log("Datos enviados correctamente al backend", res);
+
+        setShowSuccessMessage(true);
       } else {
         const errorResponse = await response.json();
         console.error(
@@ -161,8 +162,7 @@ const EditProfileForm = ({ initialValues, editable }) => {
           response.status,
           errorResponse
         );
-        }
-      
+      }
     } catch (error) {
       console.error("Error de red al enviar datos al backend", error.message);
     }
@@ -178,11 +178,11 @@ const EditProfileForm = ({ initialValues, editable }) => {
       enableReinitialize // Permite reinicializar los valores cuando cambia la propiedad initialValues
     >
       {({ isSubmitting, isValid }) => (
-        <Form className="max-w-5xl mx-auto my-8 p-8 rounded shadow border border-gray-300 bg-customPrimary">
+        <Form className="max-w-5xl p-8 mx-auto my-8 border border-gray-300 rounded shadow bg-customPrimary">
           <div className="mb-4">
             <div className="flex flex-col items-center justify-center">
               <label htmlFor="upload-image-input">
-                <img
+                <Image
                   name="img"
                   src={userImageToShow}
                   alt="Imagen de perfil"
@@ -203,7 +203,9 @@ const EditProfileForm = ({ initialValues, editable }) => {
                 <button
                   type="button"
                   onClick={handleRemoveImage}
-                  className="text-red-500 underline cursor-pointer"
+                  className={`text-${
+                    editable ? "red-500" : "gray-500"
+                  } no-underline cursor-pointer`}
                   disabled={!editable}
                 >
                   Eliminar Imagen
@@ -211,10 +213,22 @@ const EditProfileForm = ({ initialValues, editable }) => {
               )}
             </div>
 
-            <p className="text-xl font-bold mb-4">Datos Personales:</p>
+            <Button
+              type="submit"
+              variant="outlined"
+              disabled={!editable || isSubmitting || !isValid}
+              style={{ borderColor: "grey" }}
+              className={`text-black
+              py-2 px-4 rounded focus:outline-none focus:shadow-outline
+              active:shadow-md active:translate-y-1 block mx-auto w-1/4 mt-8 hover:bg-customSecondary`}
+            >
+              Guardar
+            </Button>
+
+            <p className="mb-4 text-xl font-bold">Datos Personales:</p>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col">
-                <InputLabel htmlFor="name" className="text-sm font-bold mb-1">
+                <InputLabel htmlFor="name" className="mb-1 text-sm font-bold">
                   Nombre:
                 </InputLabel>
                 <Field
@@ -233,7 +247,7 @@ const EditProfileForm = ({ initialValues, editable }) => {
               <div className="flex flex-col">
                 <InputLabel
                   htmlFor="lastname"
-                  className="text-sm font-bold mb-1"
+                  className="mb-1 text-sm font-bold"
                 >
                   Apellido:
                 </InputLabel>
@@ -253,7 +267,7 @@ const EditProfileForm = ({ initialValues, editable }) => {
               <div className="flex flex-col">
                 <InputLabel
                   htmlFor="username"
-                  className="text-sm font-bold mb-1"
+                  className="mb-1 text-sm font-bold"
                 >
                   Nombre de Usuario:
                 </InputLabel>
@@ -273,13 +287,13 @@ const EditProfileForm = ({ initialValues, editable }) => {
           </div>
 
           <div className="mb-4">
-            <p className="text-xl font-bold mb-1">Dirección de Envío:</p>
-            <p className="text-sm text-gray-500 mt-1 mb-3">
+            <p className="mb-1 text-xl font-bold">Dirección de Envío:</p>
+            <p className="mt-1 mb-3 text-sm text-gray-500">
               Para envíos fuera de CABA, contactar al vendedor
             </p>
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col">
-                <InputLabel htmlFor="adress" className="text-sm font-bold mb-1">
+                <InputLabel htmlFor="adress" className="mb-1 text-sm font-bold">
                   Dirección (calle y n°):
                 </InputLabel>
                 <Field
@@ -296,7 +310,7 @@ const EditProfileForm = ({ initialValues, editable }) => {
               </div>
 
               <div className="flex flex-col">
-                <InputLabel htmlFor="codeP" className="text-sm font-bold mb-1">
+                <InputLabel htmlFor="codeP" className="mb-1 text-sm font-bold">
                   Código Postal:
                 </InputLabel>
                 <Field
@@ -316,7 +330,7 @@ const EditProfileForm = ({ initialValues, editable }) => {
 
           <div className="mb-4">
             <div className="flex flex-col">
-              <InputLabel htmlFor="city" className="text-sm font-bold mb-1">
+              <InputLabel htmlFor="city" className="mb-1 text-sm font-bold">
                 Localidad:
               </InputLabel>
               <Field
@@ -334,7 +348,7 @@ const EditProfileForm = ({ initialValues, editable }) => {
           </div>
           <div>
             <div className="flex flex-col">
-              <InputLabel htmlFor="province" className="text-sm font-bold mb-1">
+              <InputLabel htmlFor="province" className="mb-1 text-sm font-bold">
                 Provincia:
               </InputLabel>
               <Field
@@ -364,7 +378,6 @@ const EditProfileForm = ({ initialValues, editable }) => {
           </Button>
         </Form>
       )}
-      
     </Formik>
   );
 };
