@@ -14,6 +14,11 @@ function NavPages() {
   const handleChangePage = (page) => {
     productsStore.setCurrentPage(parseInt(page));
   };
+  
+  if (totalPages === 0) {
+   
+    return null;
+  }
 
   return (
     <div className="pagination-container mt-6 w-full">
