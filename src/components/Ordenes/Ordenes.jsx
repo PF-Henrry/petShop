@@ -1,18 +1,14 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import {
-  ArrowRight,
-  Cardholder,
-  CaretDown,
-  CheckCircle,
-  Storefront,
-  WarningCircle,
-} from "@phosphor-icons/react/dist/ssr";
+import Image from "next/image";
+import { ArrowRight, CaretDown, CheckCircle, WarningCircle } from "@phosphor-icons/react/dist/ssr";
 import Tippy from "@tippyjs/react";
+import { Breadcrumbs, Typography } from "@mui/material";
+import Loader from "@/components/Loader/Loader";
 
-export default function Ordenes({ id }) {
+const Ordenes = ({ id, handleStatusChange }) => {
+  const { data: session } = useSession();
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -21,8 +17,6 @@ export default function Ordenes({ id }) {
         const res = await fetch(`api/users/carts?id=${id}`);
         if (!res.ok) throw TypeError("Error al obtener los datos");
         const newData = await res.json();
-        // console.log(newData);
-
         setData(newData);
       } catch (error) {
         console.log(error);
@@ -48,10 +42,11 @@ export default function Ordenes({ id }) {
     return new Date(date).toLocaleDateString("es-AR", options);
   };
 
-  // console.log(data);
   return (
     <section className="orden-container">
-      {data?.length === 0 || data === null ? (
+      {data === null ? (
+        <Loader />
+      ) : data.length === 0 ? (
         <div className="orden-empty-container">
           <p className="empty-orden-text">
             No se encontraron pedidos
@@ -63,7 +58,6 @@ export default function Ordenes({ id }) {
             <p>Ir a la tienda</p>
             <span>
               <ArrowRight size={32} />
-              <Storefront size={32} />
             </span>
           </Link>
         </div>
@@ -80,6 +74,9 @@ export default function Ordenes({ id }) {
                 </span>
                 <p className="orden-date">
                   Creado el {formatDate(order.fecha)}
+                </p>
+                <p className="orden-send-status">
+                  Estado de envío: {order.sendStatus}
                 </p>
               </span>
               <span className="orden-pago">
@@ -119,31 +116,6 @@ export default function Ordenes({ id }) {
                 )}
               </div>
             </section>
-            <span className="orden-total">
-              {order.status === false ? (
-                <p className="orden-total-pendiente">
-                  Total a pagar:{" "}
-                  {priceFormatter.format(
-                    order?.items?.reduce((total, item) => {
-                      const itemPrice = item.count * item.product.price;
-                      return total + itemPrice;
-                    }, 0)
-                  )}{" "}
-                  ARS
-                </p>
-              ) : (
-                <p className="orden-total-completado">
-                  Total pagado:{" "}
-                  {priceFormatter.format(
-                    order?.items?.reduce((total, item) => {
-                      const itemPrice = item.count * item.product.price;
-                      return total + itemPrice;
-                    }, 0)
-                  )}{" "}
-                  ARS
-                </p>
-              )}
-            </span>
             <details className="orden-details">
               <summary className="orden-summary">
                 Productos:{" "}
@@ -180,4 +152,8 @@ export default function Ordenes({ id }) {
       )}
     </section>
   );
-}
+};
+
+export default Ordenes;
+
+

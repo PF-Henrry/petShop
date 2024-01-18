@@ -1,49 +1,78 @@
-import { NextResponse } from "next/server";
-import { connectDB, conn } from "@/libs/mongodb";
+import { conn, connectDB } from "@/libs/mongodb";
 import orderPaymet from "@/models/orderPaymet";
 import { Types } from "mongoose";
+import { NextResponse } from "next/server";
 
-export async function GET(request) {
-  try {
-    const url = new URL(request.url);
-    const searchParams = new URLSearchParams(url.search);
-    const id = searchParams.get("id");
 
-    if (!conn.isConnected) await connectDB();
+export async function GET(request,{params}){
+    try {
+      if(!conn.isConnected) await connectDB();
+        const id = params.id;
+        const orderID = new Types.ObjectId(id);
+        const findOrder = await orderPaymet.findById(orderID)
+        .populate('items.product',{
+            _id:1,
+            name:1,
+            price:1,
+            detail:1,
+            image:1,
+            stock:1
+        })
+        .populate('userID',{
+            name:1,
+            lastname:1,
+            username:1,
+            email:1,
+            adress:1,
+            _id:1
+        })
 
-    let query = {}; // La consulta por defecto para obtener todos los carritos
+        if(!findOrder) throw TypeError('Error id order no found');
 
-    if (id) {
-      // Si hay un ID, ajusta la consulta para buscar por ese ID
-      const userID = new Types.ObjectId(id);
-      query = { userID: { _id: userID } };
+        return NextResponse.json(findOrder,{status:200})
+    } catch (error) {
+        
+        return NextResponse.json(error.message,{status:400})
     }
 
-    const findCarts = await orderPaymet
-      .find(query)
-      .populate("items.product", {
-        _id: 1,
-        name: 1,
-        price: 1,
-        detail: 1,
-        image: 1,
-        stock: 1,
-      })
-      .populate("userID", {
-        name: 1,
-        lastname: 1,
-        username: 1,
-        email: 1,
-        adress: 1,
-        _id: 1,
-      });
-
-    if (!findCarts || findCarts.length === 0) {
-      throw TypeError("No carts found");
-    }
-
-    return NextResponse.json(findCarts, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(error.message, { status: 400 });
-  }
 }
+
+export async function PUT(request, { params }) {
+    try {
+      const id = params.id;
+      const idOrder = new Types.ObjectId(id);
+      const findOrder = await orderPaymet.findById(idOrder);
+      const data = await request.json();
+      const { sendStatus } = data;
+  
+      if (!findOrder) throw TypeError("Error: Order ID not found");
+  
+      // Actualiza el estado de sendStatus en el modelo orderPayment
+      await findOrder.updateStatus(sendStatus);
+  
+      // Devuelve la orden actualizada como respuesta
+      return NextResponse.json(findOrder, { status: 200 });
+    } catch (error) {
+      return NextResponse.json(error.message, { status: 400 });
+    }
+  }
+
+export async function DELETE(request,{params}){
+    try {
+        const id = params.id;
+        if(!id) throw TypeError('Id is undefined or null');
+        const idOrder = new Types.ObjectId(id);
+        const findOrder = await orderPaymet.findByIdAndDelete(idOrder);
+
+        
+
+        if(!findOrder) throw TypeError('Id order is not found');
+
+        return NextResponse.json(findOrder,{status:200});
+        
+    } catch (error) {
+        console.log(error.message)
+        return NextResponse.json(error.message,{status:400})
+    }
+}
+
