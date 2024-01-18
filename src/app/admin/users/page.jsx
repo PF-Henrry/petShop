@@ -230,8 +230,8 @@ const UsersPage = () => {
           </div>
         )}
 
-        {!isLoading && sortedUsers.length > 0 && (
-          <ul>
+        {!isLoading && Array.isArray(sortedUsers) && sortedUsers.length > 0 && (
+          <ul className="overflow-y-scroll max-h-[52vh] w-[60vw] max-w-[60vw]">
             {sortedUsers.map((user) => (
               <li
                 key={user._id}
@@ -268,7 +268,7 @@ const UsersPage = () => {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <h2>
-                  {selectedUser.name} {selectedUser.lastname}
+                  {selectedUser?.name} {selectedUser?.lastname}
                 </h2>
                 <div className="flex items-center">
                   {isEditing ? (

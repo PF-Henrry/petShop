@@ -41,7 +41,7 @@ const SalesPage = () => {
                 ?.reduce((a, b) => a + b)}
             </p>
 
-            <section className="flex flex-col gap-5">
+            <section className="flex flex-wrap gap-5">
               {Array.isArray(totalVentas) &&
                 totalVentas
                   .filter((item) => item?.status === true)
