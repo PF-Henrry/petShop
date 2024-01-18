@@ -11,7 +11,7 @@ const SalesPage = () => {
   useEffect(() => {
     const getCarts = async () => {
       try {
-        const response = await fetch("../api/users/carts");
+        const response = await fetch("/api/users/carts");
         if(response.ok){
           const newCarts = await response.json();
           if(Array.isArray(newCarts))
