@@ -107,6 +107,7 @@ export default function UnificadoShop() {
     setProductsStore(originalProductsCopy);
     setFilteredProducts(getArrayPage());
     localStorage.removeItem("filteredProducts");
+    localStorage.removeItem("products");
   }, [setFilter, setProductsStore, originalProductsCopy, getArrayPage]);
 
   useEffect(() => {
