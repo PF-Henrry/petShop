@@ -27,7 +27,7 @@ import {
   TippyDetailsPayment,
   TippyDetailsPickup,
 } from "@/components/Tooltips/TippyDetails";
-import Loading from "./loading";
+import Loading from "@/app/loading";
 
 const DetailProduct = () => {
   const paramsQuery = useSearchParams();
@@ -143,128 +143,134 @@ const DetailProduct = () => {
 
   // Renderiza los detalles del producto
   return (
-    <div className="detail-product-container">
-      <Suspense fallback={<Loading />}>
-        {/* {console.log("esto es product", product)} */}
-        <div className="nav-breadcrumbs">
-          <Breadcrumbs
-            separator={<CaretRight size={15} />}
-            aria-label="breadcrumb"
-          >
-            <Link underline="hover" color="inherit" href="/">
-              Inicio
-            </Link>
-            <Link underline="hover" color="inherit" href="/shop">
-              Tienda
-            </Link>
-            <Typography color="text.primary">{product?.name}</Typography>
-          </Breadcrumbs>
-        </div>
-        <section className="detail-product">
-          <div className="detail-product-img-container">
-            <Zoom>
-              <Image
-                src={product?.image}
-                alt={product?.name}
-                width={700}
-                height={700}
-                className="detail-product-img"
-              />
-            </Zoom>
+    <>
+      {product === null || !relatedProducts?.length ? (
+        <Loading />
+      ) : (
+        <div className="detail-product-container">
+          {/* {console.log("esto es product", product)} */}
+          <div className="nav-breadcrumbs">
+            <Breadcrumbs
+              separator={<CaretRight size={15} />}
+              aria-label="breadcrumb"
+            >
+              <Link underline="hover" color="inherit" href="/">
+                Inicio
+              </Link>
+              <Link underline="hover" color="inherit" href="/shop">
+                Tienda
+              </Link>
+              <Typography color="text.primary">{product?.name}</Typography>
+            </Breadcrumbs>
           </div>
-          <span className="detail-product-info">
-            <div className="flex flex-col gap-1">
-              <p className="category-detail">
-                {product?.category && product.category[0]?.name}
-              </p>
-              <h1 className="title-detail">{product?.name}</h1>
-              <p className="brand-detail">Marca: {product?.brand?.name}</p>
-              <p className="rating-detail">
-                {rating && rating}
-                <Rating
-                  name="read-only"
-                  value={rating}
-                  readOnly
-                  size="small"
-                  precision={0.1}
-                  className="stars-detail"
+          <section className="detail-product">
+            <div className="detail-product-img-container">
+              <Zoom>
+                <Image
+                  src={product?.image}
+                  alt={product?.name}
+                  width={700}
+                  height={700}
+                  className="detail-product-img"
                 />
-              </p>
+              </Zoom>
             </div>
-            <p className="price-detail">{formattedPrice} ARS</p>
-            <div className="payment-pickup">
-              <Tippy
-                content={<TippyDetailsPayment />}
-                arrow={true}
-                delay={0}
-                allowHTML={true}
-                interactive={true}
-              >
-                <span className="cursor-help">
-                  <Cardholder size={32} />
-                  <p>Metodos de pago</p>
-                </span>
-              </Tippy>
-              <Tippy
-                content={<TippyDetailsPickup />}
-                arrow={true}
-                delay={0}
-                allowHTML={true}
-                interactive={true}
-              >
-                <span className="cursor-help">
-                  <Package size={32} />
-                  <p>Opciones de entrega</p>
-                </span>
-              </Tippy>
-            </div>
+            <span className="detail-product-info">
+              <div className="flex flex-col gap-1">
+                <p className="category-detail">
+                  {product?.category && product.category[0]?.name}
+                </p>
+                <h1 className="title-detail">{product?.name}</h1>
+                <p className="brand-detail">Marca: {product?.brand?.name}</p>
+                <p className="rating-detail">
+                  {rating && rating}
+                  <Rating
+                    name="read-only"
+                    value={rating}
+                    readOnly
+                    size="small"
+                    precision={0.1}
+                    className="stars-detail"
+                  />
+                </p>
+              </div>
+              <p className="price-detail">{formattedPrice} ARS</p>
+              <div className="payment-pickup">
+                <Tippy
+                  content={<TippyDetailsPayment />}
+                  arrow={true}
+                  delay={0}
+                  allowHTML={true}
+                  interactive={true}
+                >
+                  <span className="cursor-help">
+                    <Cardholder size={32} />
+                    <p>Metodos de pago</p>
+                  </span>
+                </Tippy>
+                <Tippy
+                  content={<TippyDetailsPickup />}
+                  arrow={true}
+                  delay={0}
+                  allowHTML={true}
+                  interactive={true}
+                >
+                  <span className="cursor-help">
+                    <Package size={32} />
+                    <p>Opciones de entrega</p>
+                  </span>
+                </Tippy>
+              </div>
 
-            <span className="description-detail">
-              <p>Sobre el producto:</p>
-              <ul>
-                <li>Marca: {product?.brand?.name}</li>
-                <li>Descripción: {product?.detail}</li>
-                <li>Especie: {product?.species && product.species[0]?.name}</li>
-                <li>
-                  Categoría: {product?.category && product.category[0]?.name}
-                </li>
-              </ul>
+              <span className="description-detail">
+                <p>Sobre el producto:</p>
+                <ul>
+                  <li>Marca: {product?.brand?.name}</li>
+                  <li>Descripción: {product?.detail}</li>
+                  <li>
+                    Especie: {product?.species && product.species[0]?.name}
+                  </li>
+                  <li>
+                    Categoría: {product?.category && product.category[0]?.name}
+                  </li>
+                </ul>
+              </span>
+              <button className="card-product-cart" onClick={handleAddToCart}>
+                <ShoppingCartSimple
+                  size={32}
+                  className="card-product-cart-icon"
+                />
+                Añadir al carrito
+              </button>
             </span>
-            <button className="card-product-cart" onClick={handleAddToCart}>
-              <ShoppingCartSimple
-                size={32}
-                className="card-product-cart-icon"
-              />
-              Añadir al carrito
-            </button>
-          </span>
-        </section>
+          </section>
 
-        <span className="related-products">
-          <span className="title-related">
-            Productos similares a <p>{product?.species[0]?.name}</p>
+          <span className="related-products">
+            <span className="title-related">
+              Productos similares a <p>{product?.species[0]?.name}</p>
+            </span>
+            <RelatedProducts
+              product={product}
+              relatedProducts={relatedProducts}
+              priceFormatter={priceFormatter}
+              filter={detailSpecies}
+            />
           </span>
-          <RelatedProducts
-            product={product}
-            relatedProducts={relatedProducts}
-            priceFormatter={priceFormatter}
-            filter={detailSpecies}
-          />
-        </span>
-        <span className="related-products">
-          <span className="title-related">
-            Productos similares a <p>{product?.category[0]?.name}</p>
+          <span className="related-products">
+            <span className="title-related">
+              Productos similares a <p>{product?.category[0]?.name}</p>
+            </span>
+            <RelatedProducts
+              product={product}
+              relatedProducts={relatedProducts}
+              priceFormatter={priceFormatter}
+              filter={detailCategory}
+            />
           </span>
-          <RelatedProducts
-            product={product}
-            relatedProducts={relatedProducts}
-            priceFormatter={priceFormatter}
-            filter={detailCategory}
-          />
-        </span>
-        <ToastContainer position="top-center" />
-      </Suspense>
-    </div>
+          <ToastContainer position="top-center" />
+        </div>
+      )}
+    </>
   );
 };
 
