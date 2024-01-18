@@ -14,10 +14,10 @@
   @apply sticky top-28 bg-[#eed0c6] rounded-lg shadow-lg h-full;
 
   .filters-container-visibility {
-    @apply flex flex-col gap-5 w-full;
+    @apply flex flex-col w-full gap-5;
   }
   .select-filters-container {
-    @apply flex flex-col gap-6 w-full p-4;
+    @apply flex flex-col w-full gap-6 p-4 max-w-52;
 
     .filters-title {
       @apply text-[#143146] text-xl font-semibold;
@@ -30,7 +30,7 @@
         @apply text-[#2d638b] text-sm;
       }
       & select {
-        @apply p-2 bg-white rounded duration-100 cursor-pointer;
+        @apply p-2 duration-100 bg-white rounded cursor-pointer;
 
         &:focus {
           @apply outline-0;
@@ -105,7 +105,7 @@
       @apply block;
     }
     .select-filters-container {
-      @apply flex-row flex-wrap gap-2 gap-y-1 p-3 pt-0;
+      @apply flex-row flex-wrap gap-2 p-3 pt-0 gap-y-1;
 
       .filters-title {
         @apply hidden;
@@ -135,7 +135,7 @@
       @apply w-full flex flex-col justify-center items-center gap-[1px];
 
       .btn-filter {
-        @apply flex justify-center items-center gap-2 p-2 text-sm;
+        @apply flex items-center justify-center gap-2 p-2 text-sm;
 
         &:hover {
           @apply bg-[#2d638b];
@@ -152,7 +152,7 @@
       }
 
       .btn-reset-filters {
-        @apply flex justify-center items-center gap-2 p-2 text-sm;
+        @apply flex items-center justify-center gap-2 p-2 text-sm;
 
         &:hover {
           @apply bg-[#2d638b];
