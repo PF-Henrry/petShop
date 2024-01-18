@@ -54,11 +54,10 @@ export const useProductStore = create((set, get) => ({
   },
 
   setProducts: (products) => {
-    const newProducts = products.filter(product => product.active);
-    set({ products: newProducts })
+    set({ products: products })
     if(products?.length < 109)
-    localStorage.setItem("products", JSON.stringify([...newProducts]));
-    console.log('esto se guarda en products',newProducts)
+    localStorage.setItem("products", JSON.stringify([...products]));
+    console.log('esto se guarda en products',products)
   },
 
   getProducts: () => {
