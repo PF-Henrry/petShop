@@ -65,6 +65,7 @@ const DetailProduct = () => {
   useEffect(() => {
     const obtenerProductosRelacionados = async () => {
       try {
+        if(!product) return
         const response = await fetch("/api/products");
         const allProducts = await response.json();
 
