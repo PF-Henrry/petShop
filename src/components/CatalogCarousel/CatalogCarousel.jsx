@@ -9,13 +9,13 @@ import "./CarouselCatalog.css";
 
 const catalogImages = [
   {
-    src: "https://res.cloudinary.com/kimeipetshop/image/upload/v1704005814/banner_catalogo1_oy4inh.jpg",
+    src: "https://res.cloudinary.com/kimeipetshop/image/upload/v1704005814/Ilustraciones/banner_catalogo1_oy4inh.jpg",
   },
   {
-    src: "https://res.cloudinary.com/kimeipetshop/image/upload/v1704005814/banner_catalogo2_axyayr.jpg",
+    src: "https://res.cloudinary.com/kimeipetshop/image/upload/v1704005814/Ilustraciones/banner_catalogo2_axyayr.jpg",
   },
   {
-    src: "https://res.cloudinary.com/kimeipetshop/image/upload/v1704005810/banner_catalogo3_tzpuew.png",
+    src: "https://res.cloudinary.com/kimeipetshop/image/upload/v1704005810/Ilustraciones/banner_catalogo3_tzpuew.png",
   },
 ];
 

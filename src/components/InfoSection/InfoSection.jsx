@@ -10,21 +10,21 @@ const InfoSection = () => {
         <p className="payment-title">Todos los medios de pago:</p>
         <div className="flex items-center justify-center gap-4">
           <Image
-            src="https://res.cloudinary.com/kimeipetshop/image/upload/v1704005811/mp_ch7xhz.png"
+            src="https://res.cloudinary.com/kimeipetshop/image/upload/v1704005811/Ilustraciones/mp_ch7xhz.png"
             width={48}
             height={48}
             alt="MP logo"
             className="payment-logo"
           />
           <Image
-            src="https://res.cloudinary.com/kimeipetshop/image/upload/v1704005813/tarjeta_c7ggiu.png"
+            src="https://res.cloudinary.com/kimeipetshop/image/upload/v1704005813/Ilustraciones/tarjeta_c7ggiu.png"
             width={48}
             height={48}
             alt="Card logo"
             className="payment-logo"
           />
           <Image
-            src="https://res.cloudinary.com/kimeipetshop/image/upload/v1704005809/efectivo_ocm3j7.png"
+            src="https://res.cloudinary.com/kimeipetshop/image/upload/v1704005809/Ilustraciones/efectivo_ocm3j7.png"
             width={48}
             height={48}
             alt="Cash logo"

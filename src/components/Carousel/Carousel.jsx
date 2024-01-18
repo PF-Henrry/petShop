@@ -10,9 +10,18 @@ import "tippy.js/dist/svg-arrow.css";
 import "./carousel.css";
 
 const images = [
-  { src: "https://i.imgur.com/m696SBy.png", link: "/shop" },
-  { src: "https://i.imgur.com/mFesy5s.png", link: "/ruta-2" },
-  { src: "https://i.imgur.com/nDpy21j.png", link: "/ruta-3" },
+  {
+    src: "https://res.cloudinary.com/kimeipetshop/image/upload/v1704005815/Ilustraciones/banner__catalogo_fzfky7.png",
+    link: "/shop",
+  },
+  {
+    src: "https://res.cloudinary.com/kimeipetshop/image/upload/v1704005814/Ilustraciones/banner_adopciones_g7vjpl.png",
+    link: "/",
+  },
+  {
+    src: "https://res.cloudinary.com/kimeipetshop/image/upload/v1704005810/Ilustraciones/banner_pelu_eovkvn.png",
+    link: "/",
+  },
 ];
 
 const Carousel = () => {
