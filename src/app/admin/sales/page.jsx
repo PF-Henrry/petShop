@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
 import Loader from "@/components/Loader/Loader";
-import Ordenes from "@/components/Ordenes/Ordenes"; // Asegúrate de tener la ruta correcta
 
 const SalesPage = () => {
   const [totalVentas, setTotalVentas] = useState([]);
@@ -123,9 +122,6 @@ const SalesPage = () => {
                   </div>
                 ))}
             </section>
-
-            {/* Pasa handleStatusChange como prop a Ordenes */}
-            <Ordenes id={id} handleStatusChange={handleStatusChange} />
           </>
         )}
       </div>
