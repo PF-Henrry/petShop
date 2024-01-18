@@ -12,8 +12,9 @@ const SalesPage = () => {
     const getCarts = async () => {
       try {
         const response = await fetch("../api/users/carts");
+        if(!response.ok) return getCarts();
         const newCarts = await response.json();
-        console.log(newCarts);
+        if(Array.isArray(newCarts))
         setTotalVentas(newCarts);
       } catch (error) {
         console.error("Error al obtener usuarios: ", error);
@@ -42,24 +43,23 @@ const SalesPage = () => {
             </p>
 
             <section className="flex flex-wrap gap-5">
-              {Array.isArray(totalVentas) && totalVentas.length && 
-                totalVentas
+              {Array.isArray(totalVentas) && totalVentas.length
                   .filter((item) => item?.status === true)
                   .map((item) => (
                     <div
-                      key={item._id}
+                      key={item?._id}
                       className="p-10 bg-white rounded-lg shadow-md"
                     >
-                      <p>Order ID: {item.orderID}</p>
-                      <p>Cart ID: {item._id}</p>
+                      <p>Order ID: {item?.orderID}</p>
+                      <p>Cart ID: {item?._id}</p>
                       <span>
                         <p>User Data</p>
-                        <p>ID: {item.userID?._id}</p>
-                        <p>Name: {item.userID?.name}</p>
+                        <p>ID: {item?.userID?._id}</p>
+                        <p>Name: {item?.userID?.name}</p>
                       </span>
-                      <p>Created at: {item.fecha}</p>
-                      <p>Items count: {item.items.length}</p>
-                      <p>Amount: {item.amount}</p>
+                      <p>Created at: {item?.fecha}</p>
+                      <p>Items count: {item?.items?.length}</p>
+                      <p>Amount: {item?.amount}</p>
                     </div>
                   ))}
             </section>
