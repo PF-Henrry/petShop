@@ -95,7 +95,7 @@ const DashboardInicio = () => {
 
   return (
     <>
-      {totalVentas === null || numUsersReg === null || numProductos === null ? (
+      {totalVentas === null || numUsersReg === null || numProductos === null || Array.isArray(totalVentas) ? (
         <Loading />
       ) : (
         <>
