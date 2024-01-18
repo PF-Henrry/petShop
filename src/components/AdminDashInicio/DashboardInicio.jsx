@@ -114,7 +114,7 @@ const DashboardInicio = () => {
                   Ventas totales
                 </Typography>
                 <Typography variant="h4">
-                  {totalVentas === 0
+                  { Array.isArray(totalVentas) &&  totalVentas.length
                     ? "Cargando..."
                     : totalVentas
                         ?.filter((item) => item.status === true)
