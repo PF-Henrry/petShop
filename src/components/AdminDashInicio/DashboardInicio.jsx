@@ -9,7 +9,7 @@ import Loading from "@/app/loading";
 const DashboardInicio = () => {
   const [numUsersReg, setNumUsersReg] = useState(null);
   const [numProductos, setNumProductos] = useState(null);
-  const [totalVentas, setTotalVentas] = useState(0);
+  const [totalVentas, setTotalVentas] = useState(null);
 
   useEffect(() => {
     const getCarts = async () => {
@@ -42,6 +42,7 @@ const DashboardInicio = () => {
 
         const responseProducts = await fetch("api/products");
         const dataProducts = await responseProducts.json();
+        if(Array.isArray(dataProducts))
         setNumProductos(dataProducts.length);
       } catch (error) {
         console.error("Error al obtener usuarios: ", error);
@@ -56,10 +57,10 @@ const DashboardInicio = () => {
     const getVentasPorMes = () => {
       if (!totalVentas) return;
 
-      const carritosConVentas = totalVentas.filter(
-        (carrito) => carrito.status === true
+      const carritosConVentas = Array.isArray(totalVentas) && totalVentas.length && totalVentas.filter(
+        (carrito) => carrito?.status === true
       );
-
+        if(!carritosConVentas) return
       const ventasAgrupadasPorMes = carritosConVentas.reduce((acc, carrito) => {
         const fecha = new Date(carrito.fecha);
         const mes = fecha.getMonth();
@@ -94,7 +95,7 @@ const DashboardInicio = () => {
 
   return (
     <>
-      {totalVentas === null || numUsersReg === null || numProductos === null ? (
+      {totalVentas === null || numUsersReg === null || numProductos === null  ? (
         <Loading />
       ) : (
         <>
@@ -123,7 +124,7 @@ const DashboardInicio = () => {
                       Ventas totales
                     </Typography>
                     <Typography variant="h4">
-                      {!Array.isArray(totalVentas) || !totalVentas.length
+                      {!Array.isArray(totalVentas) || !totalVentas.length || !totalVentas
                         ? "Cargando..."
                         : totalVentas
                             ?.filter((item) => item.status === true)
