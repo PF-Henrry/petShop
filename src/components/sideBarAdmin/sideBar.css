@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+.sidebar-container {
+  @apply flex flex-col p-3 my-2 ml-4 bg-white rounded-lg shadow-md w-60 min-w-60;
+
+  .sidebar-nav-container {
+    @apply flex flex-col gap-4;
+
+    .sidebar-title {
+      @apply text-2xl font-bold text-[#143146] w-full p-3;
+    }
+
+    .sidebar-nav-links {
+      @apply flex flex-col gap-4;
+
+      .sidebar-nav-link {
+        @apply flex items-center text-base font-normal;
+
+        .sidebar-nav-link-btn {
+          @apply flex items-center w-full gap-2 p-3 duration-300 bg-white rounded-lg text-[#0d1d29];
+
+          & figure {
+            @apply w-6 h-6;
+
+            & svg {
+              @apply w-full h-full;
+            }
+          }
+
+          &:hover {
+            @apply shadow-sm bg-slate-100;
+          }
+
+          &.active-link-admin {
+            @apply bg-[#2d638b] text-white font-medium shadow-sm;
+          }
+          &.sing-out-sidebar {
+            @apply bg-[#143146] text-white font-medium duration-200;
+
+            &:hover {
+              @apply bg-[#265274];
+            }
+          }
+        }
+      }
+    }
+  }
+}

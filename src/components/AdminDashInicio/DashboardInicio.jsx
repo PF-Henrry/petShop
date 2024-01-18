@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import { CssBaseline, Container, Typography, Grid, Paper } from "@mui/material";
 import VentasCharts from "../GraficoVentas/VentasCharts";
+import Loading from "@/app/loading";
 
 const DashboardInicio = () => {
   const [numUsersReg, setNumUsersReg] = useState(null);
@@ -93,77 +94,95 @@ const DashboardInicio = () => {
 
   return (
     <>
-      <CssBaseline />
-      <Container
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          minHeight: "86vh",
-        }}
-      >
-        <Grid container spacing={2}>
-          <Grid container spacing={1}>
-            <Grid item xs={12} md={4}>
-              <Paper
-                elevation={3}
-                style={{ padding: "20px", textAlign: "center", width: "80%" }}
-              >
-                <Typography variant="h6" gutterBottom>
-                  Ventas totales
-                </Typography>
-                <Typography variant="h4">
-                  {totalVentas === 0
-                    ? "Cargando..."
-                    : totalVentas
-                        ?.filter((item) => item.status === true)
-                        ?.map((item) => item.items.length)
-                        ?.reduce((a, b) => a + b)}
-                </Typography>
-              </Paper>
-            </Grid>
+      {totalVentas === null || numUsersReg === null || numProductos === null ? (
+        <Loading />
+      ) : (
+        <>
+          <CssBaseline />
+          <Container
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              minHeight: "86vh",
+            }}
+          >
+            <Grid container spacing={2}>
+              <Grid container spacing={1}>
+                <Grid item xs={12} md={4}>
+                  <Paper
+                    elevation={3}
+                    style={{
+                      padding: "20px",
+                      textAlign: "center",
+                      width: "80%",
+                    }}
+                  >
+                    <Typography variant="h6" gutterBottom>
+                      Ventas totales
+                    </Typography>
+                    <Typography variant="h4">
+                      {!Array.isArray(totalVentas) || !totalVentas.length
+                        ? "Cargando..."
+                        : totalVentas
+                            ?.filter((item) => item.status === true)
+                            ?.map((item) => item.items.length)
+                            ?.reduce((a, b) => a + b)}
+                    </Typography>
+                  </Paper>
+                </Grid>
 
-            <Grid item xs={12} md={4}>
-              <Paper
-                elevation={3}
-                style={{ padding: "20px", textAlign: "center", width: "80%" }}
-              >
-                <Typography variant="h6" gutterBottom>
-                  Usuarios registrados
-                </Typography>
-                <Typography variant="h4">
-                  {numUsersReg !== null ? numUsersReg : "Cargando..."}
-                </Typography>
-              </Paper>
-            </Grid>
+                <Grid item xs={12} md={4}>
+                  <Paper
+                    elevation={3}
+                    style={{
+                      padding: "20px",
+                      textAlign: "center",
+                      width: "80%",
+                    }}
+                  >
+                    <Typography variant="h6" gutterBottom>
+                      Usuarios registrados
+                    </Typography>
+                    <Typography variant="h4">
+                      {numUsersReg !== null ? numUsersReg : "Cargando..."}
+                    </Typography>
+                  </Paper>
+                </Grid>
 
-            <Grid item xs={12} md={4}>
-              <Paper
-                elevation={3}
-                style={{ padding: "23px", textAlign: "center", width: "80%" }}
-              >
-                <Typography variant="h6">Productos disponibles</Typography>
-                <Typography variant="h4">
-                  {numProductos !== null ? numProductos : "Cargando..."}
-                </Typography>
-              </Paper>
-            </Grid>
-          </Grid>
+                <Grid item xs={12} md={4}>
+                  <Paper
+                    elevation={3}
+                    style={{
+                      padding: "23px",
+                      textAlign: "center",
+                      width: "80%",
+                    }}
+                  >
+                    <Typography variant="h6">Productos disponibles</Typography>
+                    <Typography variant="h4">
+                      {numProductos !== null ? numProductos : "Cargando..."}
+                    </Typography>
+                  </Paper>
+                </Grid>
+              </Grid>
 
-          <Grid item xs={12} md={11}>
-            <Paper
-              elevation={3}
-              style={{ padding: "20px", textAlign: "center" }}
-            >
-              <Typography variant="h6" gutterBottom>
-                Ventas Mensuales
-              </Typography>
-              <VentasCharts ventasMensuales={ventasPorMes} />
-            </Paper>
-          </Grid>
-        </Grid>
-      </Container>
+              <Grid item xs={12} md={11}>
+                <Paper
+                  elevation={3}
+                  style={{ padding: "20px", textAlign: "center" }}
+                >
+                  <Typography variant="h6" gutterBottom>
+                    Ventas Mensuales
+                  </Typography>
+                  <VentasCharts ventasMensuales={ventasPorMes} />
+                </Paper>
+              </Grid>
+            </Grid>
+          </Container>
+        </>
+      )}
     </>
   );
 };
