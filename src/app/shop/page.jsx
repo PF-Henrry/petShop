@@ -14,6 +14,8 @@ import {
 
 import { useSession } from "next-auth/react";
 import "./ShopStyles.css";
+import Loading from "../loading";
+import { WarningCircle } from "@phosphor-icons/react/dist/ssr";
 
 export default function UnificadoShop() {
   const { data: session, status: sessionStatus } = useSession();
@@ -49,8 +51,8 @@ export default function UnificadoShop() {
         const response = await fetch("api/products");
         const data = await response.json();
 
-        if(storeProducts) setProductsStore(JSON.parse(storeProducts));
-        else setProductsStore(data)
+        if (storeProducts) setProductsStore(JSON.parse(storeProducts));
+        else setProductsStore(data);
 
         setOriginalProductsCopy(data);
 
@@ -84,7 +86,9 @@ export default function UnificadoShop() {
         product?.category[0]?.name
           ?.toLowerCase()
           ?.includes(filterQuery.toLowerCase()) ||
-        product?.brand?.name.toLowerCase().includes(filterQuery.toLowerCase()) ||
+        product?.brand?.name
+          .toLowerCase()
+          .includes(filterQuery.toLowerCase()) ||
         product?.species[0]?.name
           ?.toLowerCase()
           ?.includes(filterQuery.toLowerCase())
@@ -157,38 +161,55 @@ export default function UnificadoShop() {
   const generateRandomRating = () => Math.floor(Math.random() * 5) + 1;
 
   return (
-    <div className="relative container-shop">
-      <CatalogCarousel />
-      <InfoSection />
-      <SearchBar onSearch={handleSearch} onClear={handleClear} />
-      <NavPages />
-      <div className="w-full products-container">
-        <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
-        <div className="flex flex-wrap items-center justify-around gap-10">
-          { Array.isArray(filteredProducts) && filteredProducts?.length ? (
-            filteredProducts
-              ?.filter((product) => product.active) // Filtra productos activos
-              ?.map((product, index) => (
-                <CardProduct
-                  key={product?._id}
-                  id={product?._id}
-                  name={product?.name}
-                  price={product?.price}
-                  detail={product?.detail}
-                  image={product?.image}
-                  brand={product?.brand?.name}
-                  specie={product?.species[0]?.name}
-                  category={product?.category[0]?.name}
-                  stock={product?.stock}
-                  rating={ratings[index]}
-                />
-              ))
-          ) : (
-            <p>No products found</p>
-          )}
+    <>
+      {sessionStatus === "loading" || !originalProductsCopy?.length ? (
+        <Loading />
+      ) : (
+        <div className="relative container-shop">
+          <CatalogCarousel />
+          <InfoSection />
+          <SearchBar onSearch={handleSearch} onClear={handleClear} />
+          <NavPages />
+          <div className="w-full products-container">
+            <Filter
+              handleOnChange={handleOnChange}
+              handleOnClick={handleOnClick}
+            />
+            <div className="products-container-cards">
+              {Array.isArray(filteredProducts) && filteredProducts?.length ? (
+                filteredProducts
+                  ?.filter((product) => product.active) // Filtra productos activos
+                  ?.map((product, index) => (
+                    <CardProduct
+                      key={product?._id}
+                      id={product?._id}
+                      name={product?.name}
+                      price={product?.price}
+                      detail={product?.detail}
+                      image={product?.image}
+                      brand={product?.brand?.name}
+                      specie={product?.species[0]?.name}
+                      category={product?.category[0]?.name}
+                      stock={product?.stock}
+                      rating={ratings[index]}
+                    />
+                  ))
+              ) : (
+                <span className="products-not-found-shop">
+                  <p className="products-not-found-title">
+                    No se encontraron coincidencias con la búsqueda
+                    <WarningCircle size={32} />
+                  </p>
+                  <p className="products-not-found-subtitle">
+                    Inténtalo de nuevo.
+                  </p>
+                </span>
+              )}
+            </div>
+          </div>
+          <NavPages />
         </div>
-      </div>
-      <NavPages />
-    </div>
+      )}
+    </>
   );
 }
