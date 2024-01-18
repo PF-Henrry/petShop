@@ -49,7 +49,9 @@ const DetailProduct = () => {
         fetch(`/api/products/${id}`)
           .then((data) => data.json())
           .then((data) => {
+            if(data)
             setProduct({ ...data });
+
           });
       } catch (error) {
         console.error("Error al obtener detalles del producto:", error);
@@ -144,8 +146,8 @@ const DetailProduct = () => {
   // Renderiza los detalles del producto
   return (
     <div className="detail-product-container">
-      <Suspense fallback={<Loading />}>
-        {/* {console.log("esto es product", product)} */}
+      {product && (<Suspense fallback={<Loading />}>
+        
         <div className="nav-breadcrumbs">
           <Breadcrumbs
             separator={<CaretRight size={15} />}
@@ -263,7 +265,7 @@ const DetailProduct = () => {
           />
         </span>
         <ToastContainer position="top-center" />
-      </Suspense>
+      </Suspense>)}
     </div>
   );
 };

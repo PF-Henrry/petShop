@@ -12,7 +12,7 @@ export async function GET(request, { params }) {
 
     if (!conn.isConnected) connectDB();
 
-    const result = await Products.findOne({ _id: id, active: true })
+    const result = await Products.findOne({ _id: id})
       .populate("category", {
         _id: 1,
         name: 1,
