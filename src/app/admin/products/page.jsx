@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import validationEdit from "./validationEdit";
 import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
 import Loader from "@/components/Loader/Loader"
 import Image from "next/image";
@@ -147,7 +148,14 @@ const ProductsPage = () => {
   };
 
   const handleInputChange = (field, value) => {
+
     setEditedProduct({ ...editedProduct, [field]: value });
+
+    //VALIDACION
+  
+    setForm({ ...form, [field]: value });
+
+    //VALIDACION
   };
 
   const handleImageChange = (file) => {
@@ -188,6 +196,8 @@ const ProductsPage = () => {
   const saveChanges = async () => {
     try {
 
+      console.log("Estoy aca")
+
       if (!editedProduct.query) {
         
         editedProduct.query = { _id: editedProduct._id };
@@ -217,6 +227,46 @@ const ProductsPage = () => {
       console.error('Error al guardar los cambios:', error.message);
     }
   };
+
+  //VALIDATION
+  const [formError, setFormError] = useState({});
+
+    const [form, setForm] = useState({
+      price: "",
+      // detail: "",
+      stock: "",
+    },
+    )
+
+    const handleValidation = () => {
+      const errors = validationEdit(form)
+  
+      setFormError(errors)
+    }
+  
+  
+    useEffect(() => {
+      handleValidation();
+      
+    }, [form]);
+
+    const disableButton = () => {
+      let aux = true;
+  
+      if (Object.keys(formError).length === 0) {
+        aux = false;
+      }
+  
+      return aux;
+    };
+
+    useEffect(() => {
+      // Este useEffect se ejecutará solo cuando el componente se monte
+      // Reinicia el formulario estableciendo los valores iniciales
+      setFormError({});
+    }, []);
+
+  
   
   return (
     <LayoutAdmin>
@@ -328,6 +378,7 @@ const ProductsPage = () => {
                       <button
                         className="bg-green-500 text-white px-2 py-1 rounded mr-2"
                         onClick={saveChanges}
+                        disabled={disableButton()}
                       >
                         <FloppyDisk size={24} />
                       </button>
@@ -361,7 +412,7 @@ const ProductsPage = () => {
       <span className="font-bold">Stock disponible:</span>{" "}
       {selectedProduct.stock}
     </p>
-
+            
               {isEditing ? (
                 <>
                   <div className="mb-4">
@@ -384,11 +435,18 @@ const ProductsPage = () => {
 
                   <label className="font-bold block mb-2">Precio:</label>
                   <input
-                    type="text"
+                    type="number"
                     value={editedProduct.price}
                     onChange={(e) => handleInputChange("price", e.target.value)}
                     className="border border-rosybrown rounded p-1 mb-2"
                   />
+                {formError.price ? 
+                (<p className="text-red-500">{formError.price}</p>) : 
+                (
+                <p>
+                <br />
+                </p>
+                )}
 
                   <label className="font-bold block mb-2">Detalle:</label>
                   <input
@@ -399,6 +457,13 @@ const ProductsPage = () => {
                     }
                     className="border border-rosybrown rounded p-1 mb-2"
                   />
+              {formError.detail ? 
+               (<p className="text-red-500">{formError.detail}</p>) : 
+               (
+               <p>
+               <br />
+               </p>
+               )}
 
                   <label className="font-bold block mb-2">Categorías:</label>
                   <CategorySelect
@@ -446,6 +511,14 @@ const ProductsPage = () => {
                     onChange={(e) => handleInputChange("stock", e.target.value)}
                     className="border border-rosybrown rounded p-1 mb-2"
                     />
+               {formError.stock ? 
+               (<p className="text-red-500">{formError.stock}</p>) : 
+               (
+               <p>
+               <br />
+               </p>
+               )}
+
 
                     <label className="font-bold block mb-2">Activo:</label>
                     {isEditing ? (

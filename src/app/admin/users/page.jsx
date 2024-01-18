@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
+import validationUsers from "./validationUsers";
 import Loader from "@/components/Loader/Loader"
 import Image from "next/image";
 import Modal from "react-modal";
@@ -99,6 +100,7 @@ const UsersPage = () => {
 
   const handleInputChange = (field, value) => {
     setEditedUser({ ...editedUser, [field]: value });
+    setForm({ ...form, [field]: value });
   };
 
   const handleImageChange = (file) => {
@@ -139,6 +141,7 @@ const UsersPage = () => {
 
   const saveChanges = async () => {
     try {
+
       const response = await fetch(`/api/users/${selectedUser._id}`, {
         method: "PUT",
         headers: {
@@ -158,12 +161,57 @@ const UsersPage = () => {
       fetchUsers();
       setEditedUser(null);
     } catch (error) {
+
       console.error("Error al actualizar el usuario:", error);
       setError(
         "Error al actualizar el usuario. Por favor, inténtalo de nuevo."
       );
     }
   };
+
+  //VALIDATION
+  const [formError, setFormError] = useState({});
+
+
+    const [form, setForm] = useState({
+      name: "",
+      lastname: "",
+      username: "",
+      adress: "",
+      city: "",
+      province: "",
+      email: "",
+      codeP: "",
+      token: ""
+    },
+    )
+
+    const handleValidation = () => {
+      const errors = validationUsers(form)
+  
+      setFormError(errors)
+    }
+  
+    useEffect(() => {
+      handleValidation();
+      
+    }, [form]);
+
+    const disableButton = () => {
+      let aux = true;
+  
+      if (Object.keys(formError).length === 0) {
+        aux = false;
+      }
+  
+      return aux;
+    };
+
+    useEffect(() => {
+      // Este useEffect se ejecutará solo cuando el componente se monte
+      // Reinicia el formulario estableciendo los valores iniciales
+      setFormError({});
+    }, []);
 
   return (
     <LayoutAdmin>
@@ -235,6 +283,7 @@ const UsersPage = () => {
                       <button
                         className="bg-green-500 text-white px-2 py-1 rounded mr-2"
                         onClick={saveChanges}
+                        disabled={disableButton()}
                       >
                         <FloppyDisk size={24} />
                       </button>
@@ -295,6 +344,14 @@ const UsersPage = () => {
                       isEditing ? "bg-rosybrown-light" : ""
                     }`}
                   />
+                {formError.name ? 
+                (<p className="text-red-500">{formError.name}</p>) : 
+                (
+                <p>
+                <br />
+                </p>
+                )}
+
 
                   <label className="font-bold block mb-2">Apellido:</label>
                   <input
@@ -307,6 +364,13 @@ const UsersPage = () => {
                       isEditing ? "bg-rosybrown-light" : ""
                     }`}
                   />
+                {formError.lastname ? 
+                (<p className="text-red-500">{formError.lastname}</p>) : 
+                (
+                <p>
+                <br />
+                </p>
+                )}
 
                   <label className="font-bold block mb-2">
                     Nombre de usuario:
@@ -322,6 +386,14 @@ const UsersPage = () => {
                     }`}
                   />
 
+                {formError.username ? 
+                (<p className="text-red-500">{formError.username}</p>) : 
+                (
+                <p>
+                <br />
+                </p>
+                )}
+
                   <label className="font-bold block mb-2">Dirección:</label>
                   <input
                     type="text"
@@ -333,6 +405,14 @@ const UsersPage = () => {
                       isEditing ? "bg-rosybrown-light" : ""
                     }`}
                   />
+
+                 {formError.adress ? 
+                (<p className="text-red-500">{formError.adress}</p>) : 
+                (
+                <p>
+                <br />
+                </p>
+                )}
 
                   <label className="font-bold block mb-2">Ciudad:</label>
                   <input
@@ -384,6 +464,14 @@ const UsersPage = () => {
                     }`}
                   />
 
+                {formError.email ? 
+                (<p className="text-red-500">{formError.email}</p>) : 
+                (
+                <p>
+                <br />
+                </p>
+                )}
+
                   <label className="font-bold block mb-2">Código Postal:</label>
                   <input
                     type="text"
@@ -394,6 +482,15 @@ const UsersPage = () => {
                     }`}
                   />
 
+                  
+                {formError.codeP ? 
+                (<p className="text-red-500">{formError.codeP}</p>) : 
+                (
+                <p>
+                <br />
+                </p>
+                )}
+
                   <label className="font-bold block mb-2">Token:</label>
                   <input
                     type="text"
@@ -403,6 +500,15 @@ const UsersPage = () => {
                       isEditing ? "bg-rosybrown-light" : ""
                     }`}
                   />
+
+                {/* {formError.token ? 
+                (<p className="text-red-500">{formError.token}</p>) : 
+                (
+                <p>
+                <br />
+                </p>
+                )} */}
+
 
                   <label className="font-bold block mb-2">Activo:</label>
                   {isEditing ? (
