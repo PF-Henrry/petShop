@@ -19,6 +19,7 @@
     "bcrypt": "^5.1.1",
     "chart.js": "^4.4.1",
     "cloudinary": "^1.41.1",
+    "clsx": "^2.1.0",
     "formik": "^2.4.5",
     "framer-motion": "^10.16.16",
     "mercadopago": "1.5.16",

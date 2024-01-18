@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
 import validationUsers from "./validationUsers";
-import Loader from "@/components/Loader/Loader"
+import Loader from "@/components/Loader/Loader";
 import Image from "next/image";
 import Modal from "react-modal";
 import {
@@ -141,7 +141,6 @@ const UsersPage = () => {
 
   const saveChanges = async () => {
     try {
-
       const response = await fetch(`/api/users/${selectedUser._id}`, {
         method: "PUT",
         headers: {
@@ -161,7 +160,6 @@ const UsersPage = () => {
       fetchUsers();
       setEditedUser(null);
     } catch (error) {
-
       console.error("Error al actualizar el usuario:", error);
       setError(
         "Error al actualizar el usuario. Por favor, inténtalo de nuevo."
@@ -172,62 +170,57 @@ const UsersPage = () => {
   //VALIDATION
   const [formError, setFormError] = useState({});
 
+  const [form, setForm] = useState({
+    name: "",
+    lastname: "",
+    username: "",
+    adress: "",
+    city: "",
+    province: "",
+    email: "",
+    codeP: "",
+    token: "",
+  });
 
-    const [form, setForm] = useState({
-      name: "",
-      lastname: "",
-      username: "",
-      adress: "",
-      city: "",
-      province: "",
-      email: "",
-      codeP: "",
-      token: ""
-    },
-    )
+  const handleValidation = () => {
+    const errors = validationUsers(form);
 
-    const handleValidation = () => {
-      const errors = validationUsers(form)
-  
-      setFormError(errors)
+    setFormError(errors);
+  };
+
+  useEffect(() => {
+    handleValidation();
+  }, [form]);
+
+  const disableButton = () => {
+    let aux = true;
+
+    if (Object.keys(formError).length === 0) {
+      aux = false;
     }
-  
-    useEffect(() => {
-      handleValidation();
-      
-    }, [form]);
 
-    const disableButton = () => {
-      let aux = true;
-  
-      if (Object.keys(formError).length === 0) {
-        aux = false;
-      }
-  
-      return aux;
-    };
+    return aux;
+  };
 
-    useEffect(() => {
-      // Este useEffect se ejecutará solo cuando el componente se monte
-      // Reinicia el formulario estableciendo los valores iniciales
-      setFormError({});
-    }, []);
+  useEffect(() => {
+    // Este useEffect se ejecutará solo cuando el componente se monte
+    // Reinicia el formulario estableciendo los valores iniciales
+    setFormError({});
+  }, []);
 
   return (
-    <LayoutAdmin>
-      {isLoading && <Loader/>} 
+    <>
+      {isLoading && <Loader />}
       <div className="p-4">
-        <h1 className="text-2xl font-semibold mb-4">Lista de Usuarios</h1>
+        <h1 className="mb-4 text-2xl font-semibold">Lista de Usuarios</h1>
 
         <input
           type="text"
           placeholder="Buscar por nombre"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="p-2 border border-gray-300 rounded mb-4"
+          className="p-2 mb-4 border border-gray-300 rounded"
         />
-
-        
 
         {error && <div className="mb-4 text-red-500">{error}</div>}
 
@@ -242,7 +235,7 @@ const UsersPage = () => {
             {sortedUsers.map((user) => (
               <li
                 key={user._id}
-                className="cursor-pointer p-2 rounded mb-2 transition-all duration-300 ease-in-out hover:bg-pink-100 hover:text-black"
+                className="p-2 mb-2 transition-all duration-300 ease-in-out rounded cursor-pointer hover:bg-pink-100 hover:text-black"
                 onClick={() => openModal(user)}
               >
                 <span className="hover:font-bold">{user.name}</span>
@@ -273,7 +266,7 @@ const UsersPage = () => {
         >
           {selectedUser && (
             <div>
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex items-center justify-between mb-4">
                 <h2>
                   {selectedUser.name} {selectedUser.lastname}
                 </h2>
@@ -281,20 +274,20 @@ const UsersPage = () => {
                   {isEditing ? (
                     <>
                       <button
-                        className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                        className="px-2 py-1 mr-2 text-white bg-green-500 rounded"
                         onClick={saveChanges}
                         disabled={disableButton()}
                       >
                         <FloppyDisk size={24} />
                       </button>
                       <button
-                        className="bg-gray-500 text-white px-2 py-1 rounded"
+                        className="px-2 py-1 text-white bg-gray-500 rounded"
                         onClick={() => setIsEditing(false)}
                       >
                         <Prohibit size={24} />
                       </button>
                       <button
-                        className="bg-red-500 text-white px-2 py-1 rounded ml-2"
+                        className="px-2 py-1 ml-2 text-white bg-red-500 rounded"
                         onClick={deleteUser}
                       >
                         Eliminar
@@ -316,7 +309,7 @@ const UsersPage = () => {
               {isEditing ? (
                 <>
                   <div className="mb-4">
-                    <span className="font-bold block mb-2">Imagen:</span>
+                    <span className="block mb-2 font-bold">Imagen:</span>
                     {editedUser.img && (
                       <Image
                         src={editedUser.img}
@@ -335,7 +328,7 @@ const UsersPage = () => {
                     />
                   </div>
 
-                  <label className="font-bold block mb-2">Nombre:</label>
+                  <label className="block mb-2 font-bold">Nombre:</label>
                   <input
                     type="text"
                     value={editedUser.name}
@@ -344,16 +337,15 @@ const UsersPage = () => {
                       isEditing ? "bg-rosybrown-light" : ""
                     }`}
                   />
-                {formError.name ? 
-                (<p className="text-red-500">{formError.name}</p>) : 
-                (
-                <p>
-                <br />
-                </p>
-                )}
+                  {formError.name ? (
+                    <p className="text-red-500">{formError.name}</p>
+                  ) : (
+                    <p>
+                      <br />
+                    </p>
+                  )}
 
-
-                  <label className="font-bold block mb-2">Apellido:</label>
+                  <label className="block mb-2 font-bold">Apellido:</label>
                   <input
                     type="text"
                     value={editedUser.lastname}
@@ -364,15 +356,15 @@ const UsersPage = () => {
                       isEditing ? "bg-rosybrown-light" : ""
                     }`}
                   />
-                {formError.lastname ? 
-                (<p className="text-red-500">{formError.lastname}</p>) : 
-                (
-                <p>
-                <br />
-                </p>
-                )}
+                  {formError.lastname ? (
+                    <p className="text-red-500">{formError.lastname}</p>
+                  ) : (
+                    <p>
+                      <br />
+                    </p>
+                  )}
 
-                  <label className="font-bold block mb-2">
+                  <label className="block mb-2 font-bold">
                     Nombre de usuario:
                   </label>
                   <input
@@ -386,15 +378,15 @@ const UsersPage = () => {
                     }`}
                   />
 
-                {formError.username ? 
-                (<p className="text-red-500">{formError.username}</p>) : 
-                (
-                <p>
-                <br />
-                </p>
-                )}
+                  {formError.username ? (
+                    <p className="text-red-500">{formError.username}</p>
+                  ) : (
+                    <p>
+                      <br />
+                    </p>
+                  )}
 
-                  <label className="font-bold block mb-2">Dirección:</label>
+                  <label className="block mb-2 font-bold">Dirección:</label>
                   <input
                     type="text"
                     value={editedUser.adress}
@@ -406,15 +398,15 @@ const UsersPage = () => {
                     }`}
                   />
 
-                 {formError.adress ? 
-                (<p className="text-red-500">{formError.adress}</p>) : 
-                (
-                <p>
-                <br />
-                </p>
-                )}
+                  {formError.adress ? (
+                    <p className="text-red-500">{formError.adress}</p>
+                  ) : (
+                    <p>
+                      <br />
+                    </p>
+                  )}
 
-                  <label className="font-bold block mb-2">Ciudad:</label>
+                  <label className="block mb-2 font-bold">Ciudad:</label>
                   <input
                     type="text"
                     value={editedUser.city}
@@ -424,7 +416,7 @@ const UsersPage = () => {
                     }`}
                   />
 
-                  <label className="font-bold block mb-2">Provincia:</label>
+                  <label className="block mb-2 font-bold">Provincia:</label>
                   <input
                     type="text"
                     value={editedUser.province}
@@ -436,7 +428,7 @@ const UsersPage = () => {
                     }`}
                   />
 
-                  <label className="font-bold block mb-2">Rol:</label>
+                  <label className="block mb-2 font-bold">Rol:</label>
                   {isEditing ? (
                     <select
                       value={editedUser.role}
@@ -454,7 +446,7 @@ const UsersPage = () => {
                     <p>{selectedUser.role === "1" ? "Opción 1" : "Opción 2"}</p>
                   )}
 
-                  <label className="font-bold block mb-2">Email:</label>
+                  <label className="block mb-2 font-bold">Email:</label>
                   <input
                     type="text"
                     value={editedUser.email}
@@ -464,15 +456,15 @@ const UsersPage = () => {
                     }`}
                   />
 
-                {formError.email ? 
-                (<p className="text-red-500">{formError.email}</p>) : 
-                (
-                <p>
-                <br />
-                </p>
-                )}
+                  {formError.email ? (
+                    <p className="text-red-500">{formError.email}</p>
+                  ) : (
+                    <p>
+                      <br />
+                    </p>
+                  )}
 
-                  <label className="font-bold block mb-2">Código Postal:</label>
+                  <label className="block mb-2 font-bold">Código Postal:</label>
                   <input
                     type="text"
                     value={editedUser.codeP}
@@ -482,16 +474,15 @@ const UsersPage = () => {
                     }`}
                   />
 
-                  
-                {formError.codeP ? 
-                (<p className="text-red-500">{formError.codeP}</p>) : 
-                (
-                <p>
-                <br />
-                </p>
-                )}
+                  {formError.codeP ? (
+                    <p className="text-red-500">{formError.codeP}</p>
+                  ) : (
+                    <p>
+                      <br />
+                    </p>
+                  )}
 
-                  <label className="font-bold block mb-2">Token:</label>
+                  <label className="block mb-2 font-bold">Token:</label>
                   <input
                     type="text"
                     value={editedUser.token}
@@ -501,7 +492,7 @@ const UsersPage = () => {
                     }`}
                   />
 
-                {/* {formError.token ? 
+                  {/* {formError.token ? 
                 (<p className="text-red-500">{formError.token}</p>) : 
                 (
                 <p>
@@ -509,8 +500,7 @@ const UsersPage = () => {
                 </p>
                 )} */}
 
-
-                  <label className="font-bold block mb-2">Activo:</label>
+                  <label className="block mb-2 font-bold">Activo:</label>
                   {isEditing ? (
                     <select
                       value={editedUser.active ? "Sí" : "No"}
@@ -591,7 +581,7 @@ const UsersPage = () => {
           )}
         </Modal>
       </div>
-    </LayoutAdmin>
+    </>
   );
 };
 

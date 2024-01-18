@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import validationEdit from "./validationEdit";
 import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
-import Loader from "@/components/Loader/Loader"
+import Loader from "@/components/Loader/Loader";
 import Image from "next/image";
 import Modal from "react-modal";
 import {
@@ -14,9 +14,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 
 const CategorySelect = ({ categories, selectedCategory, onSelectCategory }) => (
-  <select
-    onChange={(e) => onSelectCategory(e.target.value)}
-  >
+  <select onChange={(e) => onSelectCategory(e.target.value)}>
     <option value="">Selecciona una categoría</option>
     {categories.map((category) => (
       <option key={category._id} value={category._id}>
@@ -27,22 +25,19 @@ const CategorySelect = ({ categories, selectedCategory, onSelectCategory }) => (
 );
 
 const SpeciesSelect = ({ species, selectedSpecies, onSelectSpecies }) => (
-  <select
-    onChange={(e) => onSelectSpecies(e.target.value)}
-  >
+  <select onChange={(e) => onSelectSpecies(e.target.value)}>
     <option value="">Selecciona una especie</option>
-    {species && species.map((specie) => (
-      <option key={specie._id} value={specie?._id}>
-        {specie?.name}
-      </option>
-    ))}
+    {species &&
+      species.map((specie) => (
+        <option key={specie._id} value={specie?._id}>
+          {specie?.name}
+        </option>
+      ))}
   </select>
 );
 
 const BrandSelect = ({ brands, selectedBrand, onSelectBrand }) => (
-  <select
-    onChange={(e) => onSelectBrand(e.target.value)}
-  >
+  <select onChange={(e) => onSelectBrand(e.target.value)}>
     <option value="">Selecciona una marca</option>
     {brands.map((brand) => (
       <option key={brand._id} value={brand._id}>
@@ -83,7 +78,6 @@ const ProductsPage = () => {
     }
   };
   useEffect(() => {
-
     fetchProducts();
   }, [searchTerm]);
 
@@ -91,7 +85,7 @@ const ProductsPage = () => {
     const fetchProductDetails = async () => {
       if (isEditing) {
         try {
-          const response = await fetch("/api/infoids"); 
+          const response = await fetch("/api/infoids");
           if (!response.ok) {
             throw new Error("Error al obtener información de filtros");
           }
@@ -100,7 +94,6 @@ const ProductsPage = () => {
           setSpecies(data.specie);
           setBrands(data.brand);
           setError(null);
-        
         } catch (error) {
           console.error(error.message);
           setError("Error al obtener información de filtros");
@@ -110,8 +103,6 @@ const ProductsPage = () => {
 
     fetchProductDetails();
   }, [isEditing]);
-
-  
 
   const filteredProducts = products.filter((product) => {
     const productName = product.name.toLowerCase();
@@ -126,7 +117,6 @@ const ProductsPage = () => {
   const inactiveProducts = filteredProducts.filter(
     (product) => !product.active || product.stock <= 0
   );
-  
 
   const openModal = (product) => {
     setSelectedProduct(product);
@@ -148,11 +138,10 @@ const ProductsPage = () => {
   };
 
   const handleInputChange = (field, value) => {
-
     setEditedProduct({ ...editedProduct, [field]: value });
 
     //VALIDACION
-  
+
     setForm({ ...form, [field]: value });
 
     //VALIDACION
@@ -177,111 +166,105 @@ const ProductsPage = () => {
   const deleteProduct = async (productId) => {
     try {
       const response = await fetch(`/api/products/${productId}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
 
       if (!response.ok) {
-        throw new Error('Error al eliminar el producto');
+        throw new Error("Error al eliminar el producto");
       }
 
       // Actualiza la lista de productos después de eliminar
-      const updatedProducts = products.filter(product => product._id !== productId);
+      const updatedProducts = products.filter(
+        (product) => product._id !== productId
+      );
       fetchProducts();
       closeModal(); // Cierra el modal después de eliminar
     } catch (error) {
-      console.error('Error al eliminar el producto:', error.message);
+      console.error("Error al eliminar el producto:", error.message);
     }
   };
 
   const saveChanges = async () => {
     try {
-
-      console.log("Estoy aca")
+      console.log("Estoy aca");
 
       if (!editedProduct.query) {
-        
         editedProduct.query = { _id: editedProduct._id };
       }
-  
+
       const response = await fetch(`/api/products`, {
-        method: 'PUT', 
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(editedProduct),
       });
-  
+
       if (!response.ok) {
-        throw new Error('Error al guardar los cambios');
+        throw new Error("Error al guardar los cambios");
       }
-  
+
       // Actualiza la lista de productos después de guardar los cambios
-      const updatedProducts = products.map(product =>
+      const updatedProducts = products.map((product) =>
         product._id === editedProduct._id ? editedProduct : product
       );
       fetchProducts();
-      
+
       setIsEditing(false); // Sale del modo de edición
       closeModal();
     } catch (error) {
-      console.error('Error al guardar los cambios:', error.message);
+      console.error("Error al guardar los cambios:", error.message);
     }
   };
 
   //VALIDATION
   const [formError, setFormError] = useState({});
 
-    const [form, setForm] = useState({
-      price: "",
-      // detail: "",
-      stock: "",
-    },
-    )
+  const [form, setForm] = useState({
+    price: "",
+    // detail: "",
+    stock: "",
+  });
 
-    const handleValidation = () => {
-      const errors = validationEdit(form)
-  
-      setFormError(errors)
+  const handleValidation = () => {
+    const errors = validationEdit(form);
+
+    setFormError(errors);
+  };
+
+  useEffect(() => {
+    handleValidation();
+  }, [form]);
+
+  const disableButton = () => {
+    let aux = true;
+
+    if (Object.keys(formError).length === 0) {
+      aux = false;
     }
-  
-  
-    useEffect(() => {
-      handleValidation();
-      
-    }, [form]);
 
-    const disableButton = () => {
-      let aux = true;
-  
-      if (Object.keys(formError).length === 0) {
-        aux = false;
-      }
-  
-      return aux;
-    };
+    return aux;
+  };
 
-    useEffect(() => {
-      // Este useEffect se ejecutará solo cuando el componente se monte
-      // Reinicia el formulario estableciendo los valores iniciales
-      setFormError({});
-    }, []);
+  useEffect(() => {
+    // Este useEffect se ejecutará solo cuando el componente se monte
+    // Reinicia el formulario estableciendo los valores iniciales
+    setFormError({});
+  }, []);
 
-  
-  
   return (
-    <LayoutAdmin>
-       {isLoading && <Loader/>}
+    <>
+      {isLoading && <Loader />}
       <div className="p-4">
-        <h1 className="text-2xl font-semibold mb-4">Lista de Productos</h1>
-       
+        <h1 className="mb-4 text-2xl font-semibold">Lista de Productos</h1>
+
         <input
           type="text"
           placeholder="Buscar por nombre"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="p-2 border border-gray-300 rounded mb-4"
+          className="p-2 mb-4 border border-gray-300 rounded"
         />
- 
 
         {error && <div className="mb-4 text-red-500">{error}</div>}
 
@@ -291,15 +274,15 @@ const ProductsPage = () => {
           </div>
         )}
 
-{!isLoading && filteredProducts.length > 0 && (
+        {!isLoading && filteredProducts.length > 0 && (
           <div className="flex">
             <div className="w-1/2 pr-4">
-              <h2 className="text-lg font-semibold mb-2">Activos</h2>
+              <h2 className="mb-2 text-lg font-semibold">Activos</h2>
               <ul className="overflow-y-scroll max-h-[65vh]">
                 {activeProducts.map((product) => (
                   <li
                     key={product._id}
-                    className="cursor-pointer p-2 rounded mb-2 transition-all duration-300 ease-in-out hover:bg-pink-100 hover:text-black"
+                    className="p-2 mb-2 transition-all duration-300 ease-in-out rounded cursor-pointer hover:bg-pink-100 hover:text-black"
                     onClick={() => openModal(product)}
                   >
                     <span className="hover:font-bold">{product.name}</span>
@@ -319,12 +302,12 @@ const ProductsPage = () => {
             </div>
 
             <div className="w-1/2 pl-4">
-              <h2 className="text-lg font-semibold mb-2 mt-4">No Activos</h2>
+              <h2 className="mt-4 mb-2 text-lg font-semibold">No Activos</h2>
               <ul className="overflow-y-scroll max-h-[65vh]">
                 {inactiveProducts.map((product) => (
                   <li
                     key={product._id}
-                    className="cursor-pointer p-2 rounded mb-2 transition-all duration-300 ease-in-out hover:bg-pink-100 hover:text-black"
+                    className="p-2 mb-2 transition-all duration-300 ease-in-out rounded cursor-pointer hover:bg-pink-100 hover:text-black"
                     onClick={() => openModal(product)}
                   >
                     <span className="hover:font-bold">{product.name}</span>
@@ -367,23 +350,22 @@ const ProductsPage = () => {
             },
           }}
         >
-
           {selectedProduct && (
             <div>
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex items-center justify-between mb-4">
                 <h2>{selectedProduct?.name}</h2>
                 <div className="flex items-center">
                   {isEditing ? (
                     <>
                       <button
-                        className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                        className="px-2 py-1 mr-2 text-white bg-green-500 rounded"
                         onClick={saveChanges}
                         disabled={disableButton()}
                       >
                         <FloppyDisk size={24} />
                       </button>
                       <button
-                        className="bg-gray-500 text-white px-2 py-1 rounded"
+                        className="px-2 py-1 text-white bg-gray-500 rounded"
                         onClick={() => setIsEditing(false)}
                       >
                         <Prohibit size={24} />
@@ -398,25 +380,25 @@ const ProductsPage = () => {
                         <XCircle size={24} />
                       </button>
                       <button
-                        className="bg-red-500 text-white px-2 py-1 rounded ml-2"
+                        className="px-2 py-1 ml-2 text-white bg-red-500 rounded"
                         onClick={() => deleteProduct(selectedProduct._id)}
                       >
                         <Trash size={32} />
-                                              </button>
+                      </button>
                     </>
                   )}
                 </div>
               </div>
 
               <p>
-      <span className="font-bold">Stock disponible:</span>{" "}
-      {selectedProduct.stock}
-    </p>
-            
+                <span className="font-bold">Stock disponible:</span>{" "}
+                {selectedProduct.stock}
+              </p>
+
               {isEditing ? (
                 <>
                   <div className="mb-4">
-                    <span className="font-bold block mb-2">Imagen:</span>
+                    <span className="block mb-2 font-bold">Imagen:</span>
                     {editedProduct.image && (
                       <Image
                         src={editedProduct.image}
@@ -429,43 +411,43 @@ const ProductsPage = () => {
                     <input
                       type="file"
                       onChange={(e) => handleImageChange(e.target.files[0])}
-                      className="border border-rosybrown p-2 rounded mt-2"
+                      className="p-2 mt-2 border rounded border-rosybrown"
                     />
                   </div>
 
-                  <label className="font-bold block mb-2">Precio:</label>
+                  <label className="block mb-2 font-bold">Precio:</label>
                   <input
                     type="number"
                     value={editedProduct.price}
                     onChange={(e) => handleInputChange("price", e.target.value)}
-                    className="border border-rosybrown rounded p-1 mb-2"
+                    className="p-1 mb-2 border rounded border-rosybrown"
                   />
-                {formError.price ? 
-                (<p className="text-red-500">{formError.price}</p>) : 
-                (
-                <p>
-                <br />
-                </p>
-                )}
+                  {formError.price ? (
+                    <p className="text-red-500">{formError.price}</p>
+                  ) : (
+                    <p>
+                      <br />
+                    </p>
+                  )}
 
-                  <label className="font-bold block mb-2">Detalle:</label>
+                  <label className="block mb-2 font-bold">Detalle:</label>
                   <input
                     type="text"
                     value={editedProduct.detail}
                     onChange={(e) =>
                       handleInputChange("detail", e.target.value)
                     }
-                    className="border border-rosybrown rounded p-1 mb-2"
+                    className="p-1 mb-2 border rounded border-rosybrown"
                   />
-              {formError.detail ? 
-               (<p className="text-red-500">{formError.detail}</p>) : 
-               (
-               <p>
-               <br />
-               </p>
-               )}
+                  {formError.detail ? (
+                    <p className="text-red-500">{formError.detail}</p>
+                  ) : (
+                    <p>
+                      <br />
+                    </p>
+                  )}
 
-                  <label className="font-bold block mb-2">Categorías:</label>
+                  <label className="block mb-2 font-bold">Categorías:</label>
                   <CategorySelect
                     categories={categories}
                     selectedCategory={
@@ -478,7 +460,7 @@ const ProductsPage = () => {
                     }
                   />
 
-                  <label className="font-bold block mb-2">Especies:</label>
+                  <label className="block mb-2 font-bold">Especies:</label>
                   <SpeciesSelect
                     species={species}
                     selectedSpecies={
@@ -491,8 +473,7 @@ const ProductsPage = () => {
                     }
                   />
 
-                
-                  <label className="font-bold block mb-2">Marcas:</label>
+                  <label className="block mb-2 font-bold">Marcas:</label>
                   <BrandSelect
                     brands={brands}
                     selectedBrand={
@@ -500,45 +481,42 @@ const ProductsPage = () => {
                         ? editedProduct.brand
                         : selectedProduct.brand
                     }
-                    onSelectBrand={(value) =>
-                      handleInputChange("brand", value)
-                    }
+                    onSelectBrand={(value) => handleInputChange("brand", value)}
                   />
-           <label className="font-bold block mb-2">Stock:</label>
+                  <label className="block mb-2 font-bold">Stock:</label>
                   <input
                     type="number"
                     value={editedProduct.stock}
                     onChange={(e) => handleInputChange("stock", e.target.value)}
-                    className="border border-rosybrown rounded p-1 mb-2"
-                    />
-               {formError.stock ? 
-               (<p className="text-red-500">{formError.stock}</p>) : 
-               (
-               <p>
-               <br />
-               </p>
-               )}
+                    className="p-1 mb-2 border rounded border-rosybrown"
+                  />
+                  {formError.stock ? (
+                    <p className="text-red-500">{formError.stock}</p>
+                  ) : (
+                    <p>
+                      <br />
+                    </p>
+                  )}
 
-
-                    <label className="font-bold block mb-2">Activo:</label>
-                    {isEditing ? (
-                      <select
-                        value={editedProduct.active ? "Sí" : "No"}
-                        onChange={(e) =>
-                          handleInputChange("active", e.target.value === "Sí")
-                        }
-                        className={`border border-rosybrown rounded p-1 mb-2 ${
-                          isEditing ? "bg-rosybrown-light" : ""
-                        }`}
-                      >
-                        <option value="Sí">Sí</option>
-                        <option value="No">No</option>
-                      </select>
-                    ) : (
-                      <p>{selectedProduct.active ? "Sí" : "No"}</p>
-                    )}
-                  </>
-                ) : (
+                  <label className="block mb-2 font-bold">Activo:</label>
+                  {isEditing ? (
+                    <select
+                      value={editedProduct.active ? "Sí" : "No"}
+                      onChange={(e) =>
+                        handleInputChange("active", e.target.value === "Sí")
+                      }
+                      className={`border border-rosybrown rounded p-1 mb-2 ${
+                        isEditing ? "bg-rosybrown-light" : ""
+                      }`}
+                    >
+                      <option value="Sí">Sí</option>
+                      <option value="No">No</option>
+                    </select>
+                  ) : (
+                    <p>{selectedProduct.active ? "Sí" : "No"}</p>
+                  )}
+                </>
+              ) : (
                 <>
                   <p>
                     <span className="font-bold">Precio:</span>{" "}
@@ -590,10 +568,8 @@ const ProductsPage = () => {
           )}
         </Modal>
       </div>
-    </LayoutAdmin>
+    </>
   );
 };
 
 export default ProductsPage;
-
-
