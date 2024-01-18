@@ -165,7 +165,7 @@ export default function UnificadoShop() {
       <div className="w-full products-container">
         <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
         <div className="flex flex-wrap items-center justify-around gap-10">
-          {Array.isArray(filteredProducts) ? (
+          { Array.isArray(filteredProducts) && filteredProducts?.length ? (
             filteredProducts
               ?.filter((product) => product.active) // Filtra productos activos
               ?.map((product, index) => (
