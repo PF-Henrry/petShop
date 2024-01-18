@@ -20,10 +20,6 @@
   .userRate-slider-container {
     @apply w-full py-4 bg-white rounded-lg shadow-md;
 
-    .userRate-slider {
-      @apply mx-2;
-    }
-
     .userRate-info-container {
       @apply px-16 py-4;
 
