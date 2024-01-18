@@ -35,14 +35,14 @@ const SalesPage = () => {
             <h1>Lista de Ventas</h1>
             <p>
               Total de ventas:{" "}
-              {Array.isArray(totalVentas) && totalVentas
+              {Array.isArray(totalVentas) && totalVentas.length
                 ?.filter((item) => item.status === true)
                 ?.map((item) => item.items.length)
                 ?.reduce((a, b) => a + b)}
             </p>
 
             <section className="flex flex-wrap gap-5">
-              {Array.isArray(totalVentas) &&
+              {Array.isArray(totalVentas) && totalVentas.length && 
                 totalVentas
                   .filter((item) => item?.status === true)
                   .map((item) => (

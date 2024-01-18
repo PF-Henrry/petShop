@@ -57,10 +57,10 @@ const DashboardInicio = () => {
     const getVentasPorMes = () => {
       if (!totalVentas) return;
 
-      const carritosConVentas = Array.isArray(totalVentas) && totalVentas.filter(
-        (carrito) => carrito.status === true
+      const carritosConVentas = Array.isArray(totalVentas) && totalVentas.length && totalVentas.filter(
+        (carrito) => carrito?.status === true
       );
-
+        if(!carritosConVentas) return
       const ventasAgrupadasPorMes = carritosConVentas.reduce((acc, carrito) => {
         const fecha = new Date(carrito.fecha);
         const mes = fecha.getMonth();
@@ -124,7 +124,7 @@ const DashboardInicio = () => {
                       Ventas totales
                     </Typography>
                     <Typography variant="h4">
-                      {!Array.isArray(totalVentas) || !totalVentas.length
+                      {!Array.isArray(totalVentas) || !totalVentas.length || !totalVentas
                         ? "Cargando..."
                         : totalVentas
                             ?.filter((item) => item.status === true)
