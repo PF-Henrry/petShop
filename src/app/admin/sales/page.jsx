@@ -30,22 +30,22 @@ const SalesPage = () => {
   return (
     <>
       <div>
-        {!totalVentas && !Array.isArray(totalVentas) ? (
+        {!totalVentas ? (
           <p>No se encontraron datos </p>
         ) : (
           <>
             <h1>Lista de Ventas</h1>
             <p>
               Total de ventas:{" "}
-              {Array.isArray(totalVentas) && totalVentas.length &&
+              {Array.isArray(totalVentas) &&
               totalVentas
-                ?.filter((item) => item.status === true)
-                ?.map((item) => item.items.length)
+                ?.filter((item) => item?.status === true)
+                ?.map((item) => item?.items?.length)
                 ?.reduce((a, b) => a + b)}
             </p>
 
             <section className="flex flex-wrap gap-5">
-              {Array.isArray(totalVentas) && totalVentas.length &&
+              {Array.isArray(totalVentas)  &&
               totalVentas
                   .filter((item) => item?.status === true)
                   .map((item) => (
