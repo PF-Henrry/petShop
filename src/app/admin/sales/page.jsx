@@ -31,7 +31,7 @@ const SalesPage = () => {
     <>
       <div>
         {!totalVentas && !Array.isArray(totalVentas) && !totalVentas?.length ? (
-          <Loader />
+          <p>No se encontraron datos</p>
         ) : (
           <>
             <h1>Lista de Ventas</h1>
