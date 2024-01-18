@@ -12,10 +12,11 @@ const SalesPage = () => {
     const getCarts = async () => {
       try {
         const response = await fetch("../api/users/carts");
-        if(!response.ok) return getCarts();
-        const newCarts = await response.json();
-        if(Array.isArray(newCarts))
-        setTotalVentas(newCarts);
+        if(response.ok){
+          const newCarts = await response.json();
+          if(Array.isArray(newCarts))
+          setTotalVentas(newCarts);
+        }
       } catch (error) {
         console.error("Error al obtener usuarios: ", error);
       } finally {
