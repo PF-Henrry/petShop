@@ -5,7 +5,7 @@ import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
 import Loader from "@/components/Loader/Loader";
 
 const SalesPage = () => {
-  const [totalVentas, setTotalVentas] = useState(0);
+  const [totalVentas, setTotalVentas] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -28,21 +28,21 @@ const SalesPage = () => {
   return (
     <>
       <div>
-        {totalVentas === 0 ? (
+        {totalVentas && !Array.isArray(totalVentas) ? (
           <Loader />
         ) : (
           <>
             <h1>Lista de Ventas</h1>
             <p>
               Total de ventas:{" "}
-              {totalVentas
+              {Array.isArray(totalVentas) && totalVentas
                 ?.filter((item) => item.status === true)
-                .map((item) => item.items.length)
-                .reduce((a, b) => a + b)}
+                ?.map((item) => item.items.length)
+                ?.reduce((a, b) => a + b)}
             </p>
 
             <section className="flex flex-col gap-5">
-              {totalVentas &&
+              {Array.isArray(totalVentas) &&
                 totalVentas
                   .filter((item) => item?.status === true)
                   .map((item) => (

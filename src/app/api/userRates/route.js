@@ -1,9 +1,5 @@
 import { NextResponse } from "next/server";
 
-export async function GET() {
-  return NextResponse.json(userRates);
-}
-
 const userRates = [
   {
     id: 1,
@@ -186,5 +182,8 @@ const userRates = [
       "La petshop no cumplió con mis expectativas. La veterinaria fue aceptable, pero esperaba más.",
   },
 ];
+export async function GET() {
+  return NextResponse.json(userRates);
+}
 
-export default userRates;
+

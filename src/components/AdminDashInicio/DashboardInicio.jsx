@@ -42,6 +42,7 @@ const DashboardInicio = () => {
 
         const responseProducts = await fetch("api/products");
         const dataProducts = await responseProducts.json();
+        if(Array.isArray(dataProducts))
         setNumProductos(dataProducts.length);
       } catch (error) {
         console.error("Error al obtener usuarios: ", error);
@@ -56,7 +57,7 @@ const DashboardInicio = () => {
     const getVentasPorMes = () => {
       if (!totalVentas) return;
 
-      const carritosConVentas = totalVentas.filter(
+      const carritosConVentas = Array.isArray(totalVentas) && totalVentas.filter(
         (carrito) => carrito.status === true
       );
 
