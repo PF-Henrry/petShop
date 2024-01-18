@@ -54,7 +54,8 @@ export const useProductStore = create((set, get) => ({
   },
 
   setProducts: (products) => {
-    localStorage.setItem("products", JSON.stringify(products));
+    localStorage.setItem("products", JSON.stringify([...products]));
+    console.log('esto se guarda en products',products)
     set({ products })
   },
 

@@ -40,6 +40,7 @@ export default function UnificadoShop() {
     const fetchData = async () => {
       try {
         const storedRatings = localStorage.getItem("ratings");
+        const storeProducts = localStorage.getItem("products");
         const userID = session?.user?.id;
         if (userID) {
           updateFavorites(userID);
@@ -48,8 +49,10 @@ export default function UnificadoShop() {
         const response = await fetch("api/products");
         const data = await response.json();
 
+        if(storeProducts) setProductsStore(JSON.parse(storeProducts));
+        else setProductsStore(data)
+
         setOriginalProductsCopy(data);
-        setProductsStore(data);
 
         if (!storedRatings) {
           const randomRatings = data.map(() => generateRandomRating());
@@ -75,16 +78,16 @@ export default function UnificadoShop() {
       return data;
     }
 
-    return data.filter(
+    return data?.filter(
       (product) =>
-        product.name.toLowerCase().includes(filterQuery.toLowerCase()) ||
-        product.category[0]?.name
-          .toLowerCase()
-          .includes(filterQuery.toLowerCase()) ||
-        product.brand?.name.toLowerCase().includes(filterQuery.toLowerCase()) ||
-        product.species[0]?.name
-          .toLowerCase()
-          .includes(filterQuery.toLowerCase())
+        product?.name.toLowerCase().includes(filterQuery.toLowerCase()) ||
+        product?.category[0]?.name
+          ?.toLowerCase()
+          ?.includes(filterQuery.toLowerCase()) ||
+        product?.brand?.name.toLowerCase().includes(filterQuery.toLowerCase()) ||
+        product?.species[0]?.name
+          ?.toLowerCase()
+          ?.includes(filterQuery.toLowerCase())
     );
   };
 
@@ -162,10 +165,10 @@ export default function UnificadoShop() {
       <div className="w-full products-container">
         <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
         <div className="flex flex-wrap items-center justify-around gap-10">
-          {filteredProducts.length ? (
+          {Array.isArray(filteredProducts) ? (
             filteredProducts
-              .filter((product) => product.active) // Filtra productos activos
-              .map((product, index) => (
+              ?.filter((product) => product.active) // Filtra productos activos
+              ?.map((product, index) => (
                 <CardProduct
                   key={product?._id}
                   id={product?._id}
