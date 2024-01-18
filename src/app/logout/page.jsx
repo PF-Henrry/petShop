@@ -27,7 +27,7 @@ const Logout = () => {
   };
 
   const handleCancel = () => {
-    router.back();
+    router.push('/');
   };
 
   return (

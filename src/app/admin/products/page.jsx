@@ -27,8 +27,8 @@ const CategorySelect = ({ categories, selectedCategory, onSelectCategory }) => (
 const SpeciesSelect = ({ species, selectedSpecies, onSelectSpecies }) => (
   <select onChange={(e) => onSelectSpecies(e.target.value)}>
     <option value="">Selecciona una especie</option>
-    {species &&
-      species.map((specie) => (
+    {species && 
+      species?.map((specie) => (
         <option key={specie._id} value={specie?._id}>
           {specie?.name}
         </option>
@@ -39,9 +39,9 @@ const SpeciesSelect = ({ species, selectedSpecies, onSelectSpecies }) => (
 const BrandSelect = ({ brands, selectedBrand, onSelectBrand }) => (
   <select onChange={(e) => onSelectBrand(e.target.value)}>
     <option value="">Selecciona una marca</option>
-    {brands.map((brand) => (
-      <option key={brand._id} value={brand._id}>
-        {brand.name}
+    {brands?.map((brand) => (
+      <option key={brand?._id} value={brand?._id}>
+        {brand?.name}
       </option>
     ))}
   </select>
@@ -90,9 +90,9 @@ const ProductsPage = () => {
             throw new Error("Error al obtener información de filtros");
           }
           const data = await response.json();
-          setCategories(data.category);
-          setSpecies(data.specie);
-          setBrands(data.brand);
+          setCategories(data?.category);
+          setSpecies(data?.specie);
+          setBrands(data?.brand);
           setError(null);
         } catch (error) {
           console.error(error.message);
@@ -104,7 +104,7 @@ const ProductsPage = () => {
     fetchProductDetails();
   }, [isEditing]);
 
-  const filteredProducts = products.filter((product) => {
+  const filteredProducts =  products?.filter((product) => {
     const productName = product.name.toLowerCase();
     const searchTermLower = searchTerm.toLowerCase();
     const searchWords = searchTermLower.split(" ");
@@ -174,8 +174,8 @@ const ProductsPage = () => {
       }
 
       // Actualiza la lista de productos después de eliminar
-      const updatedProducts = products.filter(
-        (product) => product._id !== productId
+      const updatedProducts = products?.filter(
+        (product) => product?._id !== productId
       );
       fetchProducts();
       closeModal(); // Cierra el modal después de eliminar
@@ -188,7 +188,7 @@ const ProductsPage = () => {
     try {
       console.log("Estoy aca");
 
-      if (!editedProduct.query) {
+      if (!editedProduct?.query) {
         editedProduct.query = { _id: editedProduct._id };
       }
 
@@ -268,24 +268,24 @@ const ProductsPage = () => {
 
         {error && <div className="mb-4 text-red-500">{error}</div>}
 
-        {!isLoading && filteredProducts.length === 0 && !error && (
+        {!isLoading && !Array.isArray(filteredProducts) && filteredProducts?.length === 0 && !error && (
           <div className="mb-4">
             <p>No se encontraron coincidencias con {searchTerm}.</p>
           </div>
         )}
 
-        {!isLoading && filteredProducts.length > 0 && (
+        {!isLoading && Array.isArray(filteredProducts) && filteredProducts.length > 0 && (
           <div className="flex">
             <div className="w-1/2 pr-4">
               <h2 className="mb-2 text-lg font-semibold">Activos</h2>
               <ul className="overflow-y-scroll max-h-[65vh]">
-                {activeProducts.map((product) => (
+                {Array.isArray(activeProducts) && activeProducts.map((product) => (
                   <li
                     key={product._id}
                     className="p-2 mb-2 transition-all duration-300 ease-in-out rounded cursor-pointer hover:bg-pink-100 hover:text-black"
                     onClick={() => openModal(product)}
                   >
-                    <span className="hover:font-bold">{product.name}</span>
+                    <span className="hover:font-bold">{product?.name}</span>
                     <p className="text-sm">
                       Stock disponible:{" "}
                       <span
@@ -304,21 +304,21 @@ const ProductsPage = () => {
             <div className="w-1/2 pl-4">
               <h2 className="mt-4 mb-2 text-lg font-semibold">No Activos</h2>
               <ul className="overflow-y-scroll max-h-[65vh]">
-                {inactiveProducts.map((product) => (
+                {Array.isArray(inactiveProducts) && inactiveProducts.map((product) => (
                   <li
                     key={product._id}
                     className="p-2 mb-2 transition-all duration-300 ease-in-out rounded cursor-pointer hover:bg-pink-100 hover:text-black"
                     onClick={() => openModal(product)}
                   >
-                    <span className="hover:font-bold">{product.name}</span>
+                    <span className="hover:font-bold">{product?.name}</span>
                     <p className="text-sm">
                       Stock disponible:{" "}
                       <span
                         className={
-                          product.stock > 0 ? "text-green-500" : "text-red-500"
+                          product?.stock > 0 ? "text-green-500" : "text-red-500"
                         }
                       >
-                        {product.stock}
+                        {product?.stock}
                       </span>
                     </p>
                   </li>
@@ -381,7 +381,7 @@ const ProductsPage = () => {
                       </button>
                       <button
                         className="px-2 py-1 ml-2 text-white bg-red-500 rounded"
-                        onClick={() => deleteProduct(selectedProduct._id)}
+                        onClick={() => deleteProduct(selectedProduct?._id)}
                       >
                         <Trash size={32} />
                       </button>
@@ -392,17 +392,17 @@ const ProductsPage = () => {
 
               <p>
                 <span className="font-bold">Stock disponible:</span>{" "}
-                {selectedProduct.stock}
+                {selectedProduct?.stock}
               </p>
 
               {isEditing ? (
                 <>
                   <div className="mb-4">
                     <span className="block mb-2 font-bold">Imagen:</span>
-                    {editedProduct.image && (
+                    {editedProduct?.image && (
                       <Image
-                        src={editedProduct.image}
-                        alt={selectedProduct.name}
+                        src={editedProduct?.image}
+                        alt={selectedProduct?.name}
                         width={300}
                         height={300}
                         className="rounded-lg"
@@ -418,11 +418,11 @@ const ProductsPage = () => {
                   <label className="block mb-2 font-bold">Precio:</label>
                   <input
                     type="number"
-                    value={editedProduct.price}
+                    value={editedProduct?.price}
                     onChange={(e) => handleInputChange("price", e.target.value)}
                     className="p-1 mb-2 border rounded border-rosybrown"
                   />
-                  {formError.price ? (
+                  {formError?.price ? (
                     <p className="text-red-500">{formError.price}</p>
                   ) : (
                     <p>
@@ -433,13 +433,13 @@ const ProductsPage = () => {
                   <label className="block mb-2 font-bold">Detalle:</label>
                   <input
                     type="text"
-                    value={editedProduct.detail}
+                    value={editedProduct?.detail}
                     onChange={(e) =>
                       handleInputChange("detail", e.target.value)
                     }
                     className="p-1 mb-2 border rounded border-rosybrown"
                   />
-                  {formError.detail ? (
+                  {formError?.detail ? (
                     <p className="text-red-500">{formError.detail}</p>
                   ) : (
                     <p>
@@ -452,8 +452,8 @@ const ProductsPage = () => {
                     categories={categories}
                     selectedCategory={
                       editedProduct
-                        ? editedProduct.category
-                        : selectedProduct.category
+                        ? editedProduct?.category
+                        : selectedProduct?.category
                     }
                     onSelectCategory={(value) =>
                       handleInputChange("category", value)

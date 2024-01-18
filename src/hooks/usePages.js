@@ -54,9 +54,10 @@ export const useProductStore = create((set, get) => ({
   },
 
   setProducts: (products) => {
+    set({ products: products })
+    if(products?.length < 109)
     localStorage.setItem("products", JSON.stringify([...products]));
     console.log('esto se guarda en products',products)
-    set({ products })
   },
 
   getProducts: () => {
@@ -101,16 +102,23 @@ export const useProductStore = create((set, get) => ({
     return currentPage;
   },
 
-  setOriginalProducts: (products) => set({ originalProducts: [...products] }),
+  setOriginalProducts: (products) => {
+    const newProducts = products.filter(product => product.active)
+    console.log(newProducts)
+
+    set({ originalProducts: [...newProducts] })
+  },
 
   resetFilters: () =>
-    set((state) => ({
+    {
+      localStorage.removeItem("products");
+      return set((state) => ({
       filter: {
         category: null,
         species: null,
         brand: null,
       },
-    })),
+    }))},
 
     addToCart: (product) => {
       

@@ -50,14 +50,14 @@ export default function UnificadoShop() {
 
         const response = await fetch("api/products");
         const data = await response.json();
-
+        const newData = data.filter(data => data.active);
         if (storeProducts) setProductsStore(JSON.parse(storeProducts));
-        else setProductsStore(data);
+        else setProductsStore(newData);
 
-        setOriginalProductsCopy(data);
+        setOriginalProductsCopy(newData);
 
         if (!storedRatings) {
-          const randomRatings = data.map(() => generateRandomRating());
+          const randomRatings = newData.map(() => generateRandomRating());
           setRatings(randomRatings);
           localStorage.setItem("ratings", JSON.stringify(randomRatings));
         }
@@ -107,6 +107,7 @@ export default function UnificadoShop() {
     setProductsStore(originalProductsCopy);
     setFilteredProducts(getArrayPage());
     localStorage.removeItem("filteredProducts");
+    localStorage.removeItem("products");
   }, [setFilter, setProductsStore, originalProductsCopy, getArrayPage]);
 
   useEffect(() => {

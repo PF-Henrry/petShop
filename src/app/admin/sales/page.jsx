@@ -5,16 +5,18 @@ import LayoutAdmin from "@/components/LayoutAdmin/LayoutAdmin";
 import Loader from "@/components/Loader/Loader";
 
 const SalesPage = () => {
-  const [totalVentas, setTotalVentas] = useState(0);
+  const [totalVentas, setTotalVentas] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const getCarts = async () => {
       try {
-        const response = await fetch("../api/users/carts");
-        const newCarts = await response.json();
-        console.log(newCarts);
-        setTotalVentas(newCarts);
+        const response = await fetch("/api/users/carts");
+        if(response.ok){
+          const newCarts = await response.json();
+          if(Array.isArray(newCarts))
+          setTotalVentas(newCarts);
+        }
       } catch (error) {
         console.error("Error al obtener usuarios: ", error);
       } finally {
@@ -28,38 +30,39 @@ const SalesPage = () => {
   return (
     <>
       <div>
-        {totalVentas === 0 ? (
-          <Loader />
+        {!totalVentas ? (
+          <p>No se encontraron datos </p>
         ) : (
           <>
             <h1>Lista de Ventas</h1>
             <p>
               Total de ventas:{" "}
-              {totalVentas
-                ?.filter((item) => item.status === true)
-                .map((item) => item.items.length)
-                .reduce((a, b) => a + b)}
+              {Array.isArray(totalVentas) &&
+              totalVentas
+                ?.filter((item) => item?.status === true)
+                ?.map((item) => item?.items?.length)
+                ?.reduce((a, b) => a + b)}
             </p>
 
-            <section className="flex flex-col gap-5">
-              {totalVentas &&
-                totalVentas
+            <section className="flex flex-wrap gap-5">
+              {Array.isArray(totalVentas)  &&
+              totalVentas
                   .filter((item) => item?.status === true)
                   .map((item) => (
                     <div
-                      key={item._id}
+                      key={item?._id}
                       className="p-10 bg-white rounded-lg shadow-md"
                     >
-                      <p>Order ID: {item.orderID}</p>
-                      <p>Cart ID: {item._id}</p>
+                      <p>Order ID: {item?.orderID}</p>
+                      <p>Cart ID: {item?._id}</p>
                       <span>
                         <p>User Data</p>
-                        <p>ID: {item.userID?._id}</p>
-                        <p>Name: {item.userID?.name}</p>
+                        <p>ID: {item?.userID?._id}</p>
+                        <p>Name: {item?.userID?.name}</p>
                       </span>
-                      <p>Created at: {item.fecha}</p>
-                      <p>Items count: {item.items.length}</p>
-                      <p>Amount: {item.amount}</p>
+                      <p>Created at: {item?.fecha}</p>
+                      <p>Items count: {item?.items?.length}</p>
+                      <p>Amount: {item?.amount}</p>
                     </div>
                   ))}
             </section>
