@@ -26,7 +26,7 @@ const SalesPage = () => {
   }, []);
 
   return (
-    <LayoutAdmin>
+    <>
       <div>
         {totalVentas === 0 ? (
           <Loader />
@@ -66,7 +66,7 @@ const SalesPage = () => {
           </>
         )}
       </div>
-    </LayoutAdmin>
+    </>
   );
 };
 

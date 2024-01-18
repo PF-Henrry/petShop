@@ -25,8 +25,11 @@ const Cart = () => {
   const cartProducts = useProductStore((state) => state.cartProducts);
   const updateOrderState = useProductStore((state) => state.updateOrderState);
   const [total, setTotal] = useState(0);
-  const [insufficientStockProducts, setInsufficientStockProducts] = useState([]);
-  const [showInsufficientStockMessage, setShowInsufficientStockMessage] = useState(false);
+  const [insufficientStockProducts, setInsufficientStockProducts] = useState(
+    []
+  );
+  const [showInsufficientStockMessage, setShowInsufficientStockMessage] =
+    useState(false);
   const router = useRouter();
 
   const { data: session, status } = useSession();
@@ -102,16 +105,16 @@ const Cart = () => {
   };
 
   const handleScrollToMessage = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleCloseInsufficientStockMessage = (productId) => {
     const updatedInsufficientStockProducts = insufficientStockProducts.filter(
       (product) => product.id !== productId
     );
-  
+
     setInsufficientStockProducts(updatedInsufficientStockProducts);
-  
+
     if (updatedInsufficientStockProducts.length === 0) {
       setShowInsufficientStockMessage(false);
     }
@@ -123,33 +126,34 @@ const Cart = () => {
         console.error("No se pudo obtener el userID de la sesión");
         return;
       }
-  
+
       // Filtra todos los productos sin stock
       const insufficientStockProducts = cartProducts.filter(
         (product) => product.quantity > product.stock
       );
-  
+
       if (insufficientStockProducts.length > 0) {
         // Actualiza el estado con la lista de productos sin stock
         setInsufficientStockProducts(insufficientStockProducts);
-        
+
         // Muestra el mensaje de stock insuficiente
         setShowInsufficientStockMessage(true);
         handleScrollToMessage();
         return;
       }
-  
+
       const totalAmount = calculateTotal(cartProducts);
-  
+
       const products = cartProducts.map((product) => ({
         _id: product.id,
         name: product.name,
         price: product.price,
         count: product.quantity,
       }));
-  
-      const address = cartProducts.length > 0 ? cartProducts[0].deliveryMethod : {};
-  
+
+      const address =
+        cartProducts.length > 0 ? cartProducts[0].deliveryMethod : {};
+
       const response = await fetch("/api/mercadopago/create-order", {
         method: "POST",
         headers: {
@@ -157,18 +161,18 @@ const Cart = () => {
         },
         body: JSON.stringify({ userID, products, totalAmount, address }),
       });
-  
+
       if (!response.ok) {
         throw new Error("Error al crear la orden");
       }
-  
+
       const result = await response.json();
-  
+
       updateOrderState({
         orderID: result.id,
         status: "pending",
       });
-  
+
       clearCart();
       window.location.href = result.url;
     } catch (error) {
@@ -176,7 +180,6 @@ const Cart = () => {
     }
   };
 
- 
   const priceFormatter = new Intl.NumberFormat("es-AR", {
     style: "currency",
     currency: "ARS",
@@ -186,24 +189,27 @@ const Cart = () => {
 
   return (
     <div className="cart-container">
-
-{insufficientStockProducts.length > 0 && (
-  <div className="mb-4">
-    {insufficientStockProducts.map((product) => (
-      <div key={product.id} className="flex items-center p-4 mb-4 text-white bg-red-500 rounded insufficient-stock-message">
-        <p className="flex-grow">
-          No hay suficiente stock para el producto: {product.name}. Stock disponible: {product.stock}
-        </p>
-        <button
-          onClick={() => handleCloseInsufficientStockMessage(product.id)}
-          className="close-message-button"
-        >
-          <X size={20} color="white" />
-        </button>
-      </div>
-    ))}
-  </div>
-)}
+      {insufficientStockProducts.length > 0 && (
+        <div className="mb-4">
+          {insufficientStockProducts.map((product) => (
+            <div
+              key={product?.id}
+              className="flex items-center p-4 mb-4 text-white bg-red-500 rounded insufficient-stock-message"
+            >
+              <p className="flex-grow">
+                No hay suficiente stock para el producto: {product?.name}. Stock
+                disponible: {product?.stock}
+              </p>
+              <button
+                onClick={() => handleCloseInsufficientStockMessage(product?.id)}
+                className="close-message-button"
+              >
+                <X size={20} color="white" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="nav-breadcrumbs">
         <Breadcrumbs
@@ -223,7 +229,7 @@ const Cart = () => {
         Carrito de Compras <ShoppingCartSimple size={40} />
       </h2>
 
-      {cartProducts.length === 0 ? (
+      {!cartProducts.length ? (
         <div className="empty-cart">
           <p className="empty-cart-text">
             El carrito está vacío
@@ -241,9 +247,9 @@ const Cart = () => {
         </div>
       ) : (
         <div className="cart-items">
-          {cartProducts.map((product) => (
+          {cartProducts?.map((product) => (
             <CartItem
-              key={product.id}
+              key={product?.id}
               product={product}
               removeFromCart={removeFromCart}
               updateQuantity={updateQuantity}
@@ -326,8 +332,8 @@ const CartItem = ({
         <figure>
           <Link href={`/shop/${product.id}`}>
             <Image
-              src={product.image}
-              alt={product.name}
+              src={product?.image}
+              alt={product?.name}
               width={150}
               height={150}
             />
@@ -352,7 +358,7 @@ const CartItem = ({
 
       <label className=" item-quantity">
         <p className="quantity-label">Cantidad:</p>
-        <select value={product.quantity} onChange={handleQuantityChange}>
+        <select value={product?.quantity} onChange={handleQuantityChange}>
           {[...Array(10).keys()].map((num) => (
             <option key={num + 1} value={num + 1}>
               {num + 1}
@@ -374,7 +380,7 @@ const CartItem = ({
       <div className="cart-item-responsive">
         <label className="item-quantity">
           <p className="quantity-label">Cantidad:</p>
-          <select value={product.quantity} onChange={handleQuantityChange}>
+          <select value={product?.quantity} onChange={handleQuantityChange}>
             {[...Array(10).keys()].map((num) => (
               <option key={num + 1} value={num + 1}>
                 {num + 1}

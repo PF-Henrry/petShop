@@ -12,6 +12,14 @@ import {
 } from "@/utils/regex";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
+import "./EditProfile.css";
+import {
+  CameraPlus,
+  Trash,
+  TrashSimple,
+  WarningCircle,
+} from "@phosphor-icons/react/dist/ssr";
+import { FloppyDisk } from "@phosphor-icons/react";
 
 const defaultImage =
   "http://res.cloudinary.com/kimeipetshop/image/upload/v1703619038/rzhvjkorlhzd8nkp8h6n.png";
@@ -178,18 +186,83 @@ const EditProfileForm = ({
       enableReinitialize // Permite reinicializar los valores cuando cambia la propiedad initialValues
     >
       {({ isSubmitting, isValid }) => (
-        <Form className="max-w-5xl p-8 mx-auto my-8 border border-gray-300 rounded shadow bg-customPrimary">
-          <div className="mb-4">
-            <div className="flex flex-col items-center justify-center">
-              <label htmlFor="upload-image-input">
-                <Image
-                  name="img"
-                  src={userImageToShow}
-                  alt="Imagen de perfil"
-                  width={250}
-                  height={250}
-                  className="rounded-full cursor-pointer"
-                />
+        <Form className="edit-profile-form-container">
+          <div className="edit-profile-form-section1">
+            <div className="edit-personal-data-container">
+              <p className="edit-personal-data-title">Datos Personales</p>
+
+              <section className="edit-personal-data-section">
+                <span className="edit-personal-data-input">
+                  <InputLabel htmlFor="name" className="">
+                    Nombre
+                  </InputLabel>
+                  <Field
+                    name="name"
+                    as={TextField}
+                    fullWidth
+                    disabled={!editable}
+                  />
+                  <ErrorMessage
+                    name="name"
+                    component="p"
+                    className="edit-personal-data-error"
+                  />
+                </span>
+
+                <span className="edit-personal-data-input">
+                  <InputLabel htmlFor="lastname" className="">
+                    Apellido
+                  </InputLabel>
+                  <Field
+                    name="lastname"
+                    as={TextField}
+                    fullWidth
+                    disabled={!editable}
+                  />
+                  <ErrorMessage
+                    name="lastname"
+                    component="p"
+                    className="edit-personal-data-error"
+                  />
+                </span>
+
+                <span className="edit-personal-data-input">
+                  <InputLabel htmlFor="username" className="">
+                    Nombre de Usuario
+                  </InputLabel>
+                  <Field
+                    name="username"
+                    as={TextField}
+                    fullWidth
+                    disabled={!editable}
+                  />
+                  <ErrorMessage
+                    name="username"
+                    component="p"
+                    className="edit-personal-data-error"
+                  />
+                </span>
+              </section>
+            </div>
+
+            <div className="upload-image-container">
+              <p className="upload-image-title">Foto de Perfil</p>
+              <label
+                htmlFor="upload-image-input"
+                className="upload-image-input"
+              >
+                <figure>
+                  <Image
+                    name="img"
+                    src={userImageToShow}
+                    alt="Imagen de perfil"
+                    width={250}
+                    height={250}
+                    className="rounded-full cursor-pointer"
+                  />
+                </figure>
+
+                <CameraPlus size={32} className="upload-image-icon" />
               </label>
               <input
                 type="file"
@@ -197,185 +270,114 @@ const EditProfileForm = ({
                 onChange={handleImageChange}
                 disabled={!editable}
                 id="upload-image-input"
-                className="mb-2"
+                className="hidden"
               />
               {selectedImage && (
                 <button
                   type="button"
                   onClick={handleRemoveImage}
-                  className={`text-${
-                    editable ? "red-500" : "gray-500"
-                  } no-underline cursor-pointer`}
+                  className="remove-image-btn"
                   disabled={!editable}
                 >
-                  Eliminar Imagen
+                  Eliminar Imagen{" "}
+                  <TrashSimple
+                    size={20}
+                    className="remove-image-icon"
+                    weight="fill"
+                  />
                 </button>
               )}
             </div>
+          </div>
 
+          <div className="edit-profile-form-section2">
+            <span>
+              <p className="edit-address-title">Dirección de Envío</p>
+              <p className="edit-address-subtitle">
+                Para envíos fuera de CABA, contactar al vendedor
+                <WarningCircle size={15} />
+              </p>
+            </span>
+
+            <section className="edit-address-section1">
+              <span className="edit-address-input">
+                <InputLabel htmlFor="adress">Dirección (calle y n°)</InputLabel>
+                <Field
+                  name="adress"
+                  as={TextField}
+                  fullWidth
+                  disabled={!editable}
+                />
+                <ErrorMessage
+                  name="adress"
+                  component="p"
+                  className="edit-address-error"
+                />
+              </span>
+
+              <span className="edit-address-input">
+                <InputLabel htmlFor="codeP">Código Postal</InputLabel>
+                <Field
+                  name="codeP"
+                  as={TextField}
+                  fullWidth
+                  disabled={!editable}
+                />
+                <ErrorMessage
+                  name="codeP"
+                  component="p"
+                  className="edit-address-error"
+                />
+              </span>
+            </section>
+
+            <section className="edit-address-section2">
+              <span className="edit-address-input">
+                <InputLabel htmlFor="city">Localidad</InputLabel>
+                <Field
+                  name="city"
+                  as={TextField}
+                  fullWidth
+                  disabled={!editable}
+                />
+                <ErrorMessage
+                  name="city"
+                  component="p"
+                  className="edit-address-error"
+                />
+              </span>
+
+              <span className="edit-address-input">
+                <InputLabel htmlFor="province">Provincia</InputLabel>
+                <Field
+                  name="province"
+                  as={TextField}
+                  fullWidth
+                  disabled={!editable}
+                />
+                <ErrorMessage
+                  name="province"
+                  component="p"
+                  className="edit-address-error"
+                />
+              </span>
+            </section>
+          </div>
+
+          <span className="edit-profile-form-button-container">
             <Button
               type="submit"
               variant="outlined"
               disabled={!editable || isSubmitting || !isValid}
               style={{ borderColor: "grey" }}
-              className={`text-black
-              py-2 px-4 rounded focus:outline-none focus:shadow-outline
-              active:shadow-md active:translate-y-1 block mx-auto w-1/4 mt-8 hover:bg-customSecondary`}
+              className={`edit-profile-form-button ${
+                !editable || isSubmitting || !isValid ? "disabled" : ""
+              }`}
             >
               Guardar
+              <FloppyDisk size={32} className="edit-profile-btn-icon" />
             </Button>
-
-            <p className="mb-4 text-xl font-bold">Datos Personales:</p>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col">
-                <InputLabel htmlFor="name" className="mb-1 text-sm font-bold">
-                  Nombre:
-                </InputLabel>
-                <Field
-                  name="name"
-                  as={TextField}
-                  fullWidth
-                  disabled={!editable}
-                />
-                <ErrorMessage
-                  name="name"
-                  component="div"
-                  style={{ color: "red" }}
-                />
-              </div>
-
-              <div className="flex flex-col">
-                <InputLabel
-                  htmlFor="lastname"
-                  className="mb-1 text-sm font-bold"
-                >
-                  Apellido:
-                </InputLabel>
-                <Field
-                  name="lastname"
-                  as={TextField}
-                  fullWidth
-                  disabled={!editable}
-                />
-                <ErrorMessage
-                  name="lastname"
-                  component="div"
-                  style={{ color: "red" }}
-                />
-              </div>
-
-              <div className="flex flex-col">
-                <InputLabel
-                  htmlFor="username"
-                  className="mb-1 text-sm font-bold"
-                >
-                  Nombre de Usuario:
-                </InputLabel>
-                <Field
-                  name="username"
-                  as={TextField}
-                  fullWidth
-                  disabled={!editable}
-                />
-                <ErrorMessage
-                  name="username"
-                  component="div"
-                  style={{ color: "red" }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="mb-4">
-            <p className="mb-1 text-xl font-bold">Dirección de Envío:</p>
-            <p className="mt-1 mb-3 text-sm text-gray-500">
-              Para envíos fuera de CABA, contactar al vendedor
-            </p>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col">
-                <InputLabel htmlFor="adress" className="mb-1 text-sm font-bold">
-                  Dirección (calle y n°):
-                </InputLabel>
-                <Field
-                  name="adress"
-                  as={TextField}
-                  fullWidth
-                  disabled={!editable}
-                />
-                <ErrorMessage
-                  name="adress"
-                  component="div"
-                  style={{ color: "red" }}
-                />
-              </div>
-
-              <div className="flex flex-col">
-                <InputLabel htmlFor="codeP" className="mb-1 text-sm font-bold">
-                  Código Postal:
-                </InputLabel>
-                <Field
-                  name="codeP"
-                  as={TextField}
-                  fullWidth
-                  disabled={!editable}
-                />
-                <ErrorMessage
-                  name="codeP"
-                  component="div"
-                  style={{ color: "red" }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="mb-4">
-            <div className="flex flex-col">
-              <InputLabel htmlFor="city" className="mb-1 text-sm font-bold">
-                Localidad:
-              </InputLabel>
-              <Field
-                name="city"
-                as={TextField}
-                fullWidth
-                disabled={!editable}
-              />
-              <ErrorMessage
-                name="city"
-                component="div"
-                style={{ color: "red" }}
-              />
-            </div>
-          </div>
-          <div>
-            <div className="flex flex-col">
-              <InputLabel htmlFor="province" className="mb-1 text-sm font-bold">
-                Provincia:
-              </InputLabel>
-              <Field
-                name="province"
-                as={TextField}
-                fullWidth
-                disabled={!editable}
-              />
-              <ErrorMessage
-                name="province"
-                component="div"
-                style={{ color: "red" }}
-              />
-            </div>
-          </div>
-
-          <Button
-            type="submit"
-            variant="outlined"
-            disabled={!editable || isSubmitting || !isValid}
-            style={{ borderColor: "grey" }}
-            className={`text-black
-              py-2 px-4 rounded focus:outline-none focus:shadow-outline
-              active:shadow-md active:translate-y-1 block mx-auto w-1/4 mt-8 hover:bg-customSecondary`}
-          >
-            Guardar
-          </Button>
+          </span>
         </Form>
       )}
     </Formik>

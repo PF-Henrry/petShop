@@ -1,22 +1,55 @@
-@import "tailwindcss/base";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
 
 .userRate-container {
-  @apply flex flex-col items-start gap-3 w-[80%];
+  @apply w-[80%];
 
   .userRate-title {
     @apply text-[#7A8D9B] text-base;
   }
-  .userRate-info-container {
-    @apply bg-white p-7 shadow-md flex flex-row items-center w-full rounded-xl;
 
-    .user-name {
-      @apply text-base font-semibold pb-1;
-    }
+  .userRate-slider-container {
+    @apply w-full py-4 bg-white rounded-lg shadow-md;
 
-    .user-rate {
-      @apply text-black text-sm pb-1;
+    .userRate-info-container {
+      @apply px-16 py-4;
+
+      .userRate-info-card {
+        @apply flex flex-row items-center gap-8 py-4;
+
+        & figure {
+          @apply flex items-center justify-center w-32 h-32 overflow-hidden rounded-full shadow-md bg-slate-50;
+
+          & img {
+            @apply object-cover w-full h-full;
+          }
+        }
+
+        .userRate-info {
+          @apply flex flex-col items-start justify-between w-full gap-2 p-4 shadow-md bg-slate-50 rounded-xl;
+
+          .userRate-name {
+            @apply text-[#143146] font-semibold text-2xl uppercase;
+          }
+
+          .userRate-rate-container {
+            @apply flex flex-col gap-4;
+
+            .userRate-rate {
+              @apply text-[#0d1d29] text-lg;
+            }
+          }
+        }
+      }
     }
   }
 
@@ -45,5 +78,51 @@
     }
   }
   @media (max-width: 768px) {
+  }
+}
+
+.nextArrow {
+  @apply right-0 z-20 flex items-center w-auto h-full;
+
+  &::before {
+    @apply text-[#143146] text-4xl flex items-center h-[50%] duration-200 bg-[rgba(20,49,70,0.23)] rounded-s-xl p-1 backdrop-blur-sm opacity-0;
+  }
+
+  &:hover {
+    &::before {
+      @apply text-[#2d638b] bg-[rgba(20,49,70,0.3)] backdrop-blur-sm;
+    }
+  }
+
+  &::before:active {
+    @apply bg-[rgba(20,49,70,0.4)];
+  }
+}
+
+.prevArrow {
+  @apply left-0 z-20 flex items-center w-auto h-full;
+
+  &::before {
+    @apply text-[#143146] text-4xl flex items-center h-[50%] duration-200 bg-[rgba(20,49,70,0.23)] rounded-e-xl p-1 backdrop-blur-sm opacity-0;
+  }
+
+  &:hover {
+    &::before {
+      @apply text-[#2d638b] bg-[rgba(20,49,70,0.3)] backdrop-blur-sm;
+    }
+  }
+
+  &::before:active {
+    @apply bg-[rgba(20,49,70,0.4)];
+  }
+}
+
+.userRate-container .userRate-slider:hover {
+  .nextArrow::before {
+    @apply opacity-100;
+  }
+
+  .prevArrow::before {
+    @apply opacity-100;
   }
 }

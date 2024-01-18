@@ -118,7 +118,7 @@ try {
     const idUser = new Types.ObjectId(id);
     const findUserFavorite = await favorite.findOne({userID:idUser}).populate({
       path: 'products',
-      select: 'name price detail image _id',
+      select: 'name price detail image active stock _id',
       populate: {
       path: 'brand species category',
       select: 'name _id'}

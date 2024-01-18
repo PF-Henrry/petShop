@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useCallback, useEffect, useState } from "react";
 import CardProduct from "@/components/CardsProducts/CardProduct";
 import SearchBar from "@/components/SearchBar/SearchBarCatalogo";
 import CatalogCarousel from "@/components/CatalogCarousel/CatalogCarousel";
@@ -13,9 +13,9 @@ import {
 } from "@/hooks/usePages";
 
 import { useSession } from "next-auth/react";
-
 import "./ShopStyles.css";
 import Loading from "../loading";
+import { WarningCircle } from "@phosphor-icons/react/dist/ssr";
 
 export default function UnificadoShop() {
   const { data: session, status: sessionStatus } = useSession();
@@ -41,33 +41,28 @@ export default function UnificadoShop() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const storeProducts = localStorage.getItem("storeProducts");
         const storedRatings = localStorage.getItem("ratings");
+        const storeProducts = localStorage.getItem("products");
         const userID = session?.user?.id;
         if (userID) {
           updateFavorites(userID);
         }
 
-        if (storeProducts && storedRatings) {
-          setRatings(JSON.parse(storedRatings));
-          setProductsStore(JSON.parse(storeProducts));
-          setFilteredProducts(getArrayPage());
-          setOriginalProductsCopy(JSON.parse(storeProducts));
-        } else {
-          const response = await fetch("api/products");
-          const data = await response.json();
+        const response = await fetch("api/products");
+        const data = await response.json();
 
-          setProductsStore(data);
+        if (storeProducts) setProductsStore(JSON.parse(storeProducts));
+        else setProductsStore(data);
 
-          if (!storedRatings) {
-            const randomRatings = data.map(() => generateRandomRating());
-            setRatings(randomRatings);
-            localStorage.setItem("ratings", JSON.stringify(randomRatings));
-          }
+        setOriginalProductsCopy(data);
 
-          setFilteredProducts(getArrayPage());
-          setOriginalProductsCopy(data);
+        if (!storedRatings) {
+          const randomRatings = data.map(() => generateRandomRating());
+          setRatings(randomRatings);
+          localStorage.setItem("ratings", JSON.stringify(randomRatings));
         }
+
+        setFilteredProducts(getArrayPage());
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -85,16 +80,18 @@ export default function UnificadoShop() {
       return data;
     }
 
-    return data.filter(
+    return data?.filter(
       (product) =>
-        product.name.toLowerCase().includes(filterQuery.toLowerCase()) ||
-        product.category[0]?.name
+        product?.name.toLowerCase().includes(filterQuery.toLowerCase()) ||
+        product?.category[0]?.name
+          ?.toLowerCase()
+          ?.includes(filterQuery.toLowerCase()) ||
+        product?.brand?.name
           .toLowerCase()
           .includes(filterQuery.toLowerCase()) ||
-        product.brand?.name.toLowerCase().includes(filterQuery.toLowerCase()) ||
-        product.species[0]?.name
-          .toLowerCase()
-          .includes(filterQuery.toLowerCase())
+        product?.species[0]?.name
+          ?.toLowerCase()
+          ?.includes(filterQuery.toLowerCase())
     );
   };
 
@@ -105,13 +102,13 @@ export default function UnificadoShop() {
     localStorage.setItem("filteredProducts", JSON.stringify(filtered));
   };
 
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     setFilter({ name: "name", value: "" });
     setProductsStore(originalProductsCopy);
     setFilteredProducts(getArrayPage());
     localStorage.removeItem("filteredProducts");
-  };
-  
+  }, [setFilter, setProductsStore, originalProductsCopy, getArrayPage]);
+
   useEffect(() => {
     const handleKeyPress = (event) => {
       if (event.key === "Backspace") {
@@ -164,36 +161,55 @@ export default function UnificadoShop() {
   const generateRandomRating = () => Math.floor(Math.random() * 5) + 1;
 
   return (
-    <div className="relative container-shop">
-      <CatalogCarousel />
-      <InfoSection />
-      <SearchBar onSearch={handleSearch} onClear={handleClear} />
-      <NavPages />
-      <div className="w-full products-container">
-        <Filter handleOnChange={handleOnChange} handleOnClick={handleOnClick} />
-        <div className="flex flex-wrap items-center justify-around gap-10">
-          {filteredProducts.length ? (
-            filteredProducts.map((product, index) => (
-              <CardProduct
-                key={product?._id}
-                id={product?._id}
-                name={product?.name}
-                price={product?.price}
-                detail={product?.detail}
-                image={product?.image}
-                brand={product?.brand?.name}
-                specie={product?.species[0]?.name}
-                category={product?.category[0]?.name}
-                stock={product?.stock}
-                rating={ratings[index]}
-              />
-            ))
-          ) : (
-            <p>No products found</p>
-          )}
+    <>
+      {sessionStatus === "loading" || !originalProductsCopy?.length ? (
+        <Loading />
+      ) : (
+        <div className="relative container-shop">
+          <CatalogCarousel />
+          <InfoSection />
+          <SearchBar onSearch={handleSearch} onClear={handleClear} />
+          <NavPages />
+          <div className="w-full products-container">
+            <Filter
+              handleOnChange={handleOnChange}
+              handleOnClick={handleOnClick}
+            />
+            <div className="products-container-cards">
+              {Array.isArray(filteredProducts) && filteredProducts?.length ? (
+                filteredProducts
+                  ?.filter((product) => product.active) // Filtra productos activos
+                  ?.map((product, index) => (
+                    <CardProduct
+                      key={product?._id}
+                      id={product?._id}
+                      name={product?.name}
+                      price={product?.price}
+                      detail={product?.detail}
+                      image={product?.image}
+                      brand={product?.brand?.name}
+                      specie={product?.species[0]?.name}
+                      category={product?.category[0]?.name}
+                      stock={product?.stock}
+                      rating={ratings[index]}
+                    />
+                  ))
+              ) : (
+                <span className="products-not-found-shop">
+                  <p className="products-not-found-title">
+                    No se encontraron coincidencias con la búsqueda
+                    <WarningCircle size={32} />
+                  </p>
+                  <p className="products-not-found-subtitle">
+                    Inténtalo de nuevo.
+                  </p>
+                </span>
+              )}
+            </div>
+          </div>
+          <NavPages />
         </div>
-      </div>
-      <NavPages />
-    </div>
+      )}
+    </>
   );
 }

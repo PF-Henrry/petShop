@@ -11,10 +11,26 @@
 }
 
 .container-shop {
-  @apply flex min-h-screen flex-col items-center justify-between px-28 py-10;
+  @apply flex flex-col items-center justify-between py-10 px-28;
 
   .products-container {
-    @apply flex flex-row p-6 gap-10;
+    @apply flex flex-row justify-center gap-10 p-6;
+
+    .products-container-cards {
+      @apply flex flex-wrap items-center justify-around gap-10;
+    }
+  }
+
+  .products-not-found-shop {
+    @apply w-full h-full bg-[#143146] flex flex-col justify-center items-center gap-4 p-12 rounded-lg shadow-md;
+
+    .products-not-found-title {
+      @apply w-full text-3xl font-bold text-[#eee0dd] flex flex-row gap-2 items-center;
+    }
+
+    .products-not-found-subtitle {
+      @apply w-full text-lg text-[#DABEB6] text-center;
+    }
   }
 
   @media (max-width: 1240px) {
@@ -27,7 +43,7 @@
   @media (max-width: 858px) {
     @apply px-3;
     .products-container {
-      @apply flex flex-col p-6 gap-10;
+      @apply flex flex-col gap-10 p-6;
     }
   }
 

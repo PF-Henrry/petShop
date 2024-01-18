@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+.admin-dash-container {
+  @apply flex items-center justify-center w-full h-full m-auto;
+
+  .container-admin-dash {
+    @apply flex flex-col items-center justify-center w-full h-full p-6;
+
+    .dash-stats-container {
+      @apply flex flex-row justify-between w-full h-full p-6;
+    }
+  }
+}

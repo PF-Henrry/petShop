@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { conn, connectDB } from "@/libs/mongodb";
 import Products from "@/models/products";
 import { Types } from "mongoose";
+import { getServerSession } from "next-auth";
+import Users from "@/models/users";
 // obtener producto por id.
 
 export async function GET(request, { params }) {
@@ -72,3 +74,19 @@ export async function PUT(request,{params}){
     }
 
 }
+
+export async function DELETE(request,{params}){
+    try {
+      if(!conn.isConnected) await connectDB();
+      const session = await getServerSession();
+      if(!session) throw TypeError('Unauthorized access');
+       const findUser = await Users.findOne({email:session.user.email});
+      if(findUser.role !== 2) throw TypeError('Unauthorized access');
+      
+        const id = new Types.ObjectId(params.id);
+        const result = await Products.findByIdAndDelete(id);
+        if(result) return NextResponse.json(result,{status:200})
+    } catch (error) {
+        return NextResponse.json(error.message,{status:400})
+    }
+} 

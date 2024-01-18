@@ -14,7 +14,7 @@ import "./footer.css";
 
 export default function Footer() {
   return (
-    <footer className="bottom-0 w-full flex flex-col items-center justify-center mt-12">
+    <footer className="bottom-0 flex flex-col items-center justify-center w-full">
       <div className="backToTop">
         <ToTopBtnFooter />
       </div>
@@ -33,7 +33,7 @@ export default function Footer() {
               <details className="detail">
                 <summary>
                   Redes sociales
-                  <CaretDown size={12} className="detail-caret inline" />
+                  <CaretDown size={12} className="inline detail-caret" />
                 </summary>
                 <ol>
                   <li>
