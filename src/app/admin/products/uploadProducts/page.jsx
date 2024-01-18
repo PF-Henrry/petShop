@@ -38,6 +38,8 @@ function UploadImage() {
       if (file) {
         const imageUrl = await getImageDataUrl(file);
         setUrl(imageUrl);
+
+        setForm({ ...form, image: true });
       }
     } catch (error) {
       showNotify('error', 'Error al cargar imagen');
@@ -93,6 +95,7 @@ function UploadImage() {
     }
   };
   
+  //VALIDATION
 
     const [formError, setFormError] = useState({});
 
@@ -101,8 +104,13 @@ function UploadImage() {
       price: "",
       detail: "",
       brand: "",
+      category: "",
+      specie: "",
+      image: "",
     },
     )
+
+    
   
     const handleValidation = () => {
       const errors = validations(form)
@@ -140,10 +148,10 @@ function UploadImage() {
   
     useEffect(() => {
       handleValidation();
-      console.log("ejecutando use effect")
+      
     }, [form]);
   
-   
+  //VALIDATION
 
   return (
     <LayoutAdmin>
@@ -152,9 +160,10 @@ function UploadImage() {
 
           <form onSubmit={(e) => handleOnSubmit(e)} className="grid grid-cols-2 gap-4 items-center">
             <div>
+              <br/>
               <label htmlFor="image" className="block text-sm font-medium text-gray-700">
                 Imagen:
-              </label>
+              
               <input
                 type="file"
                 id="image"
@@ -162,7 +171,16 @@ function UploadImage() {
                 onChange={(e) => handleOnChange(e)}
                 className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
               />
+              
               {url && <Image src={url} alt='image_upload' width={150} height={100} />}
+              {formError.image ? 
+               (<p className="text-red-500">{formError.image}</p>) : 
+               (
+               <p>
+               <br />
+               </p>
+               )} 
+              </label>
             </div>
             <label className="block text-sm font-medium text-gray-700 mt-4">
                 Nombre del Producto
@@ -173,7 +191,7 @@ function UploadImage() {
                   onChange={handleFormData}
                   className="mt-1 p-2 border border-gray-300 rounded focus:outline-none focus:border-indigo-500 block w-full sm:text-sm"
                 />
-
+               
                {formError.name ? 
                (<p className="text-red-500">{formError.name}</p>) : 
                (
@@ -240,15 +258,16 @@ function UploadImage() {
                   </option>
                 ))}
               </select>
-            </label>
 
-               {/* {formError.brand ? 
+              {formError.brand ? 
                (<p className="text-red-500">{formError.brand}</p>) : 
                (
                <p>
                <br />
                </p>
-               )} */}
+               )}
+
+            </label>
              
             <div className="col-span-2">
             <label className="block text-sm font-medium text-gray-700 mt-4">
@@ -266,6 +285,15 @@ function UploadImage() {
                   </option>
                 ))}
               </select>
+
+              {formError.category ? 
+               (<p className="text-red-500">{formError.category}</p>) : 
+               (
+               <p>
+               <br />
+               </p>
+               )}
+
             </label>
 
             <label className="block text-sm font-medium text-gray-700 mt-4">
@@ -283,7 +311,17 @@ function UploadImage() {
                   </option>
                 ))}
               </select>
+
+              {formError.specie ? 
+               (<p className="text-red-500">{formError.specie}</p>) : 
+               (
+               <p>
+               <br />
+               </p>
+               )}
+
             </label>
+            <br/>
 
             
               <button
