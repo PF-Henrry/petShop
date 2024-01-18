@@ -9,7 +9,7 @@ import Loading from "@/app/loading";
 const DashboardInicio = () => {
   const [numUsersReg, setNumUsersReg] = useState(null);
   const [numProductos, setNumProductos] = useState(null);
-  const [totalVentas, setTotalVentas] = useState(0);
+  const [totalVentas, setTotalVentas] = useState(null);
 
   useEffect(() => {
     const getCarts = async () => {
@@ -95,7 +95,7 @@ const DashboardInicio = () => {
 
   return (
     <>
-      {totalVentas === null || numUsersReg === null || numProductos === null || Array.isArray(totalVentas) ? (
+      {totalVentas === null || numUsersReg === null || numProductos === null  ? (
         <Loading />
       ) : (
         <>
