@@ -29,7 +29,7 @@ const SalesPage = () => {
   return (
     <>
       <div>
-        {totalVentas && !Array.isArray(totalVentas) ? (
+        {!totalVentas && !Array.isArray(totalVentas) && totalVentas.length ? (
           <Loader />
         ) : (
           <>
