@@ -1,10 +1,12 @@
 import { Resend } from 'resend';
 import banner from '@/public/assets/banner _catalogo.png';
 
-const resend = new Resend('re_UrwqDCWg_EJ2ktxQJCpazphSjqFQtJpeQ');
 
 export async function sendEmail(email, username) {
   try {
+    const {RESEND_API_KEY} = process.env
+    const resend = new Resend(RESEND_API_KEY);
+
     console.log(email,username)
     const { data, error } = await resend.emails.send({
       from: 'Kimey <onboarding@resend.dev>',
