@@ -2,7 +2,26 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+
+
+First,
+
+Environment Variables
+NEXT_URL_FRONT
+NEXT_URL_BACK
+DB_URI
+NEXTAUTH_SECRET
+FACEBOOK_CLIENT_ID
+FACEBOOK_CLIENT_SECRET
+GOOGLE_CLIENT_ID
+GOOGLE_CLIENT_SECRET
+API_CLOUDINARY_SECRET
+API_CLOUDINARY_KEY
+API_CLOUDINARY_CLOUDNAME
+MERCADO_PAGO_TOKEN
+RESEND_API_KEY
+
+Second run the development server:
 
 ```bash
 npm run dev
