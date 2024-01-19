@@ -7,6 +7,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 First,
 
 Environment Variables
+```javascript
 NEXT_URL_FRONT
 NEXT_URL_BACK
 DB_URI
@@ -20,7 +21,7 @@ API_CLOUDINARY_KEY
 API_CLOUDINARY_CLOUDNAME
 MERCADO_PAGO_TOKEN
 RESEND_API_KEY
-
+```
 Second run the development server:
 
 ```bash
